@@ -1,1 +1,1 @@
-[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.7)](https://travis-ci.org/stopsopa/validator)
+[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.8)](https://travis-ci.org/stopsopa/validator)
