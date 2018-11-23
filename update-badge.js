@@ -10,7 +10,7 @@ const package = require('./package');
 process.stdout.write(`\n`);
 process.stdout.write('update badge -> package.version:');
 process.stdout.write(JSON.stringify(package.version, null, 4));
-process.stdout.write(`\n`);
+process.stdout.write(`\n\n`);
 
 const README_md = path.resolve(__dirname, 'README.md');
 

@@ -64,7 +64,7 @@ if [ "$DIFF" != "" ] || [ "$1" = "force" ]; then
     npm version patch
 
                             node update-badge.js
-                            # git add package.json
+                            git add README.md
                             git commit --amend --no-edit
 
     git push $ORIGIN $REMOTEBRANCH
