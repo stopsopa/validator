@@ -1,6 +1,9 @@
 u:
 	@/bin/bash update.sh
 
+uf:
+	@/bin/bash update.sh force
+
 h:
 	@/bin/bash test.sh --help
 
