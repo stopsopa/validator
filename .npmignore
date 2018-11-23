@@ -8,3 +8,6 @@
 /update.sh
 /update-badge.sh
 /.travis.yml
+/coverage/
+/local.txt
+/.idea/
