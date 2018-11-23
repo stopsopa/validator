@@ -12,8 +12,7 @@ if [ "$1" = "--help" ]; then
 cat << EOF
 
     /bin/bash $0 --help
-    /bin/bash $0 --help
-
+    /bin/bash $0 --watchAll
 
 EOF
 
