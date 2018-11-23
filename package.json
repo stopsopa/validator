@@ -2,7 +2,7 @@
   "name": "@stopsopa/validator",
   "version": "0.0.9",
   "description": "",
-  "main": "index.js",
+  "main": "validator/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,6 +24,8 @@
   },
   "jest": {
     "verbose": true,
-    "bail": true
+    "bail": true,
+    "collectCoverage": true,
+    "coverageReporters": ["json", "html"]
   }
 }

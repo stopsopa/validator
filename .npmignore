@@ -1,3 +1,10 @@
 /test/jest/
 /update.sh
 /update-badge.js
+/test/
+/Makefile
+/README.md
+/test.sh
+/update.sh
+/update-badge.sh
+/.travis.yml
