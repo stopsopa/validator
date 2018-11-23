@@ -1,6 +1,6 @@
 {
   "name": "@stopsopa/validator",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "main": "validator/index.js",
   "scripts": {
@@ -26,6 +26,9 @@
     "verbose": true,
     "bail": true,
     "collectCoverage": true,
-    "coverageReporters": ["json", "html"]
+    "coverageReporters": [
+      "json",
+      "html"
+    ]
   }
 }
