@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/stopsopa/validator/issues"
   },
-  "homepage": "https://github.com/stopsopa/validator#readme"
+  "homepage": "https://github.com/stopsopa/validator#readme",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  },
+  "jest": {
+    "verbose": true,
+    "bail": true
+  }
 }
