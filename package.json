@@ -19,10 +19,6 @@
     "url": "https://github.com/stopsopa/validator/issues"
   },
   "homepage": "https://github.com/stopsopa/validator#readme",
-  "devDependencies": {
-    "coveralls": "^3.0.2",
-    "jest": "^23.6.0"
-  },
   "jest": {
     "verbose": true,
     "bail": true,

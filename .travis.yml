@@ -42,7 +42,8 @@ env:
 #  - "sh -e /etc/init.d/xvfb start"
 #  - sleep 3 # give xvfb some time to start
 
-#before_script:
+before_script:
+  - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
 #  - mkdir origin
 #  - mv * origin/ || true
 #  - mv .* origin/ || true

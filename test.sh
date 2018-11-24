@@ -19,8 +19,27 @@ EOF
     exit 0
 fi
 
+JEST=""
+
+if [ -f node_modules/.bin/jest ]; then  # exist
+
+    JEST="node node_modules/.bin/jest"
+fi
+
+jest -v > /dev/null
+
+if [ "$JEST" = "" ] && [ "$?" = "0" ]; then
+
+    JEST="jest"
+else
+
+    red "\n    Can't detect jest, install globally: \n   npm install jest -g\n\n";
+
+    exit 1;
+fi
+
 TEST="$(cat <<END
-node node_modules/.bin/jest \
+$JEST \
 $@ \
 --bail \
 --verbose \
