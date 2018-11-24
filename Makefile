@@ -1,10 +1,10 @@
 u: # update npm and git (generates new tag)
 	@/bin/bash update.sh
 
-uf: # update even if there is nothing new commited
+uf: # update even if there is nothing new committed
 	@/bin/bash update.sh force
 
-h: # show any help is available
+h: # show any help that is available
 	@/bin/bash test.sh --help
 
 t: # just run tests once
