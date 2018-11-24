@@ -93,5 +93,5 @@ if [ "$DIFF" != "" ] || [ "$1" = "force" ]; then
 
 else
 
-    red "\n\n    Nothing new to publish, \n        run 'make update-force' if you're sure that there is still that should be published\n\n";
+    red "\n\n    Nothing new to publish, \n        run 'make uf' if you're sure that there is still something that should be published\n\n";
 fi
