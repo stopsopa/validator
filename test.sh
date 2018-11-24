@@ -19,24 +19,49 @@ EOF
     exit 0
 fi
 
+echo "lets's list";
+ls -la
+echo "lets's list node_modules";
+ls -la node_modules/.bin/
+
 JEST=""
 
 if [ -f node_modules/.bin/jest ]; then  # exist
 
+    green "node_modules/.bin/jest - exists"
+
     JEST="node node_modules/.bin/jest"
-fi
-
-jest -v > /dev/null
-
-if [ "$JEST" = "" ] && [ "$?" = "0" ]; then
-
-    JEST="jest"
 else
 
-    red "\n    Can't detect jest, install globally: \n   npm install jest -g\n\n";
-
-    exit 1;
+    green "node_modules/.bin/jest - doesn't exist"
 fi
+
+if [ "$JEST" = "" ]; then
+
+    green "local jest - not found"
+
+    jest -v > /dev/null
+
+    STAT="$?"
+
+    green "(jest -v) status: $STAT";
+
+    if [ "$STAT" = "0" ]; then
+
+        green "global jest - found"
+
+        JEST="jest"
+    else
+
+        red "\n    Can't detect jest, install globally: \n   npm install jest -g\n\n";
+
+        exit 1;
+    fi
+else
+
+    green "local jest - found"
+fi
+
 
 TEST="$(cat <<END
 $JEST \
