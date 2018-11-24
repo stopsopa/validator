@@ -24,7 +24,6 @@
     "bail": true,
     "collectCoverage": true,
     "coverageReporters": [
-      "json",
       "html",
       "lcov"
     ],

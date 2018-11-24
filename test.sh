@@ -19,11 +19,6 @@ EOF
     exit 0
 fi
 
-echo "lets's list";
-ls -la
-echo "lets's list node_modules";
-ls -la node_modules/.bin/
-
 JEST=""
 
 if [ -f node_modules/.bin/jest ]; then  # exist
