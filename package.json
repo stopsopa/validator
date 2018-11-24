@@ -29,6 +29,9 @@
     "coverageReporters": [
       "json",
       "html"
+    ],
+    "collectCoverageFrom": [
+      "validator/**/*.{js,jsx}"
     ]
   }
 }

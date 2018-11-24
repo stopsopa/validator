@@ -3,11 +3,13 @@
 /update-badge.js
 /test/
 /Makefile
-/README.md
 /test.sh
 /update.sh
 /update-badge.sh
 /.travis.yml
 /coverage/
+/stopsopa-validator*
 /local.txt
 /.idea/
+/server.js
+/yarn.lock

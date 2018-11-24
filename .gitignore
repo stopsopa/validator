@@ -3,3 +3,4 @@ yarn-error*
 /.idea/
 /local.txt
 /coverage/
+/stopsopa-validator*
