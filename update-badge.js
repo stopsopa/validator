@@ -26,29 +26,34 @@ let content = fs.readFileSync(README_md).toString();
 
 content = content.split("\n");
 
-let reg = /^\[!\[Build Status\]/;
+let regnpm = /^\[!\[Build Status\]/;
+let regcov = /^\[!\[Coverage Status\]/;
 
-let done = false;
+const n = 'v' + package.version;
+
+let done = 0;
+
 for (let i = 0, l = content.length ; i < l ; i += 1 ) {
 
-    if (reg.test(content[i])) {
-
-        const n = 'v' + package.version;
+    if (regnpm.test(content[i]) || regcov.test(content[i])) {
 
         content[i] = content[i].replace(/v\d+\.\d+\.\d+/g, n);
 
         if (content[i].indexOf(n) > -1) {
 
-            done = true;
+            done += 1;
         }
 
-        break;
+        if ( done === 2) {
+
+            break;
+        }
     }
 }
 
-if ( ! done ) {
+if ( done !== 2 ) {
 
-    throw `Badge not found or invalid in file '${README_md}'`;
+    throw `Badges not found, invalid badges or missing badges in file '${README_md}'`;
 
     process.exit(2);
 }
