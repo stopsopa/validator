@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/stopsopa/validator#readme",
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "jest": "^23.6.0"
   },
   "jest": {
@@ -28,7 +29,8 @@
     "collectCoverage": true,
     "coverageReporters": [
       "json",
-      "html"
+      "html",
+      "lcov"
     ],
     "collectCoverageFrom": [
       "validator/**/*.{js,jsx}"
