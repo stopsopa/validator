@@ -1,2 +1,14 @@
+/**
+ * import validator, { test } from '@stopsopa/validator';
+ *
+ * @param data
+ * @param constraints
+ * @param options
+ * @returns {string}
+ */
 
-module.exports = (a, b) => a + b;
+const validator = (data, constraints, options) => {
+    return 'main validator...';
+}
+
+module.exports  = validator;
