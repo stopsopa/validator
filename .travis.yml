@@ -70,7 +70,7 @@ script:
 
 
 after_success:
-  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js
+  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v
 
 ##  - rm -rf test/examples/__*
 ##  - node driver.js
