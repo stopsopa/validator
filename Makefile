@@ -12,6 +12,7 @@ t: # just run tests once
 
 tw: # run tests in watch mode
 	@/bin/bash test.sh --watchAll
+	# @/bin/bash test.sh --watch
 
 c: # run local server to browse coverage
 	node server.js --log 15 --dir coverage
