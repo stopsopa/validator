@@ -1,10 +1,5 @@
 language: node_js
 dist: trusty
-#addons:
-#  apt:
-#    packages:
-#      # This is required to run new chrome on old trusty
-#      - libnss3
 node_js:
   - '8'
   - '9'
@@ -16,76 +11,21 @@ branches:
   except:
     - master
 
-#cache: yarn
+cache: yarn
 
 env:
   global:
     - TRAVIS=true
-#    - SAUCE_USERNAME="stopsopa-test"
-#    - secure: "K2MLPPelyXQpsibcMvaYkOuHGB3FxV2JFDVQThtG/bweucCYMX8hdQAWQHC+blLuJ60R4xpEnQ12grHKPWdUMPBK4l2ro5gPTIaRuFYGHOyj4enp9u88ejTMs9n1WI0tGq38uqtlUGqbIgevMdDzPHNEf2Y1pn5hr7Mh3afvJWP/W/pZBE96W7x2N+MpXTC/FugQeZV5ujobEJ0OloWP5pSDw3tWS8WbmDwV4h3GD4TDi+JNQyltbE5vKFlYkf2GaCB2p5UtmmSokVrfGi+TqpgT2JIiZNl/BTiPgd7IQI7wYHdGewxPBvam6+Tl0GuNLRDHeShckX2D8CD9tVIU4bskpXS4ZRBF0bpGYYX77dij4S2XnoDJ0PQKYKNfsUmvZM0JWIZtMjYHEcGhu9V/jRJCM68TNQpVLpZ4FWDI0XfWcH1QQVEYD1PDb8UU4bcudhfyt9ahy5ukmH7Pu2U2JV5ANYo95QTmAYzYfpREn9gX79O3Qu/KGnzN0KXVJ6H1ZDu4RQsUNd00s+D9vhhR3zztDfCI/mvzGkCD7QHYgFeFlOJKoEA55xRGMmiD8KQ5FEYWoKeV/xKkEAnDuzLogLYVgYIEd9/+mdDSYRVMvI/u5sRQ6U1UFp2IuvqGybmzcASj2SkLNOGv+WKNmHQ9j7bPZx3W05NKpJ1h31hgK9o="
-
-    # https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-#  matrix:
-#    - PLATFORM="macOS 10.12"  BROWSER="chrome"            VERSION="65.0"
-#    - PLATFORM="macOS 10.13"  BROWSER="chrome"            VERSION="65.0"
-#    - PLATFORM="macOS 10.12"  BROWSER="firefox"           VERSION="59.0"
-#    - PLATFORM="macOS 10.13"  BROWSER="firefox"           VERSION="59.0"
-
-#    - PLATFORM="Windows 10"   BROWSER="chrome"            VERSION="65.0"
-#    - PLATFORM="Windows 10"   BROWSER="firefox"           VERSION="59.0"
-#    - PLATFORM="Windows 10"   BROWSER="MicrosoftEdge"     VERSION="16.16299"
-#    - PLATFORM="Windows 10"   BROWSER="internet explorer" VERSION="11.103"
-
-# https://docs.travis-ci.com/user/gui-and-headless-browsers/#Using-xvfb-directly
-#before_install:
-#  - "export DISPLAY=:99.0"
-#  - "sh -e /etc/init.d/xvfb start"
-#  - sleep 3 # give xvfb some time to start
 
 before_script:
   - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
-#  - mkdir origin
-#  - mv * origin/ || true
-#  - mv .* origin/ || true
-#  - mv origin/.travis.sh .
-#  - mv origin/.check-npm-version.sh .
-#  - /bin/bash .check-npm-version.sh
-#  - ls -la
-##  - npx --ignore-existing roderic .
-##  - npx roderic .
-##  - ls -la
-##  - ls -la react/node_modules/
-##  - ls -la puppeteer/node_modules/
-##  - (source .env && cd puppeteer && node configReader.js --param)
-##  - (source .env && cd puppeteer && yarn)
-##  - curl -v https://saucelabs.com/ -I
-###  - make testserver & disown
-###  - sleep 2
-##  - wget https://chromedriver.storage.googleapis.com/2.36/chromedriver_linux64.zip
-##  - unzip chromedriver_linux64.zip
-##  - chmod a+x chromedriver
 
 script:
   - /bin/bash test.sh
 
-
 after_success:
-  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v
+  # - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v
+  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js
 
-##  - rm -rf test/examples/__*
-##  - node driver.js
-#  - echo "$PLATFORM $BROWSER $VERSION"
-#  - node node_modules/.bin/jest --verbose --runInBand --modulePathIgnorePatterns "test/project"
-##  - node node_modules/.bin/jest --verbose --runInBand test/examples/006
-##  - node node_modules/.bin/jest --verbose --runInBand test/examples/008 -t "subscribed to wrong event"
-#  - /bin/bash test.sh --target travis
-#  - printenv
-#  - foo=TEST_VAR
-#  - eval echo \${$foo} > test.log
-#  - sed -r -e 's/^.{2}/&#/' test.log
 
-#addons:
-#  sauce_connect: true
-##    username: "stopsopa-test"
-##  jwt:
-##    secure: "L39kinFOFke3MjOlFPN0sUM1KyTS0B2xb0Q6UdUY4gMt6XkNarfpNtwyzMnnsWHPRClQQILeDQzBt8hTeq4QIIbxW2bkFkiQo+XL+Bve5XUsmzlRDSp5BYO8UMmyCUdAmFjct3UX7WSf3yY1uKWGxXpO0MJqjmjfEwzhILMwzu2UfNxo4Vw59hDcLhXq+x5EASWDcKQPi/Uej+GkoNWYYsQk0u2qB6e1dx/2xy5yIXTKFB5QwjzzuisR8ljS8tr47+y2kKEAIJG+cCvzVqUBkjv4QxN/eZ2AGAo49FeuhSTY0EgCN40t8OsihCHllkVdKd9s6czUAYEsWRTO5bcrE6nto0l/nzyps25+92omxtRjwqI5ghoMbsNgKUnx1WgdMGPzCacNGmeCUjWzv244cC00Zt7aFJ+oRE3nCpYO1A6SivS3KsIwCzYepSHCgzClCUlC/jjClYuu7j/L1q91D+phdp5/36TZIPN2u5QowN0B2GnqIKvSJXImNMv0wi5yWV2rJIlI8lY7v6mZdmUUU5JRNaFdZbwzLLB+DCxaMOHX+Lcsdvlq2Fut7XOcrXFE9plyPp04S/NhLvm3xlI7BghXjriJH4j9pFC1igVuCksdhT1aSuXm8emvXktowi/F91IcXBENQwgHk119YcSWIeewT4nwekbGmpKmtkmwJlI="
+
