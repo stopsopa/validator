@@ -1,41 +1,36 @@
 
-const arrayIntersect    = require('../utils/arrayIntersect');
-
-const isObject          = require('../utils/isObject');
-
 const Existence         = require('../prototypes/Existence');
 
-const def = {
-    fields                  : [],
-    allowExtraFields        : false,
-    allowMissingFields      : false,
-    extraFieldsMessage      : 'This field was not expected.',
-    missingFieldsMessage    : 'This field is missing.',
-};
+const Constraint         = require('../prototypes/Constraint');
 
-const Required = function (opt) {
+const Required = function (opt, extra) {
 
-    if (isObject(opt)) {
+    this.cls = 'Required';
 
-        if ( arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0 ) {
+    this.setExtra(extra);
 
-            opt = Object.assign({}, def, {
-                fileds  : opt,
-            });
-        }
-    }
-    else {
+    if (opt instanceof Existence) {
 
-        opt = Object.assign({}, def);
+        throw `Component passed as an option to Require|Option component can't be another Require or Option componnent`;
     }
 
+    if (opt instanceof Constraint) {
 
+        opt = [opt];
+    }
 
+    this.setOptions(opt);
 }
+
 Required.prototype = Object.create(Existence.prototype);
 Required.prototype.constructor = Required;
 
-// Collection.MISSING_FIELD_ERROR = '2fa2158c-2a7f-484b-98aa-975522539ff8';
-// Collection.NO_SUCH_FIELD_ERROR = '7703c766-b5d5-4cef-ace7-ae0dd82304e9';
+Required.prototype.validate = function (value, context) {
+    return Promise.resolve('Required');
+}
+
+Required.prototype.getChildren = function () {
+    return this.getOptions();
+}
 
 module.exports = Required;

@@ -3,6 +3,14 @@ const isArray = require('./utils/isArray');
 
 const Context = require('./logic/Context');
 
+const connectAndSort = require('./logic/connectAndSort');
+
+const Constraint        = require('./prototypes/Constraint');
+
+const Existence        = require('./prototypes/Existence');
+
+const Required      = require('./constraints/Required');
+
 /**
  * import validator, { test } from '@stopsopa/validator';
  *
@@ -12,18 +20,47 @@ const Context = require('./logic/Context');
  * @returns {string}
  */
 
-const validator = (value, constraints, options) => {
+const validator = (value, constraints, extra) => {
 
-    if ( ! isArray(constraints) ) {
+    // constraints = constraints.getChildren();
 
-        constraints = [constraints];
+    const context       = new Context(value, extra);
+
+    const connected     = connectAndSort(value, constraints, context);
+
+    // console.log(`\n+\n`+JSON.stringify(connected)+`\n++++\n\n`);
+
+    let promise = Promise.resolve();
+
+    // console.log(`\n\n\ni before: `+connected.length+`\n\n`);
+
+    while (connected.length) {
+
+        // console.log(`\n\n\ni: `+connected.length+`\n\n`);
+
+        // connected.shift();
+
+        // return Promise.all(connected.shift());
+
+        (function (list) {
+
+            // console.log('l: ' + l)
+
+            promise = promise.then(() => Promise.all(list.map(c => c())));
+
+        }(connected.shift()))
+
     }
 
-    const context = new Context();
+    return promise.then(data => {
 
-    return Promise.all(constraints.map(c => c.validate(value, context)))
-        .then(() => context.getViolations())
-    ;
+        if (extra && extra.debug) {
+
+            console.log(`\n\n\n\n\n\n\n`, 'validate.then: ', data, `\n\n\n\n\n\n\n`);
+        }
+
+        return context.getViolations();
+    });
 }
 
 module.exports  = validator;

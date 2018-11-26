@@ -17,6 +17,8 @@ const def = {
 
 const Length = function () {
 
+    this.cls = 'Length';
+
     let args = Array.prototype.slice.call(arguments);
 
     if ( args.length === 0) {
@@ -25,6 +27,8 @@ const Length = function () {
     }
 
     let opt = args[0];
+
+    this.setExtra(args[1]);
 
     if (Number.isInteger(opt)) {
 
@@ -48,7 +52,7 @@ const Length = function () {
         throw `Length: Either option "min" or "max" must be given for constraint`;
     }
 
-    this._opt = opt;
+    this.setOptions(opt);
 }
 
 Length.prototype = Object.create(Constraint.prototype);
@@ -59,46 +63,53 @@ Length.prototype.TOO_LONG_ERROR             = 'TOO_LONG_ERROR';
 
 Length.prototype.validate = function (value, context) {
 
-    const opt = this._opt;
+    const opt = this.getOptions();
 
-    if (typeof value !== 'string') {
+    return new Promise((resolve, reject) => {
 
-        return;
-    }
+        setTimeout(() => {
 
-    const length = value.length;
+            if (typeof value !== 'string') {
 
-    if (typeof opt.max !== 'undefined' && length > opt.max) {
+                return resolve('Length');
+            }
 
-        context
-            .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage)
-            .atPath(null)
-            .setParameter('{{ value }}', value)
-            .setParameter('{{ limit }}', opt.max)
-            .setInvalidValue(value)
-            .setCode(Length.prototype.TOO_LONG_ERROR)
-            .addViolation()
-        ;
+            const length = value.length;
 
-        return;
-    }
+            if (typeof opt.max !== 'undefined' && length > opt.max) {
 
-    if (typeof opt.min !== 'undefined' && length < opt.min) {
+                context
+                    .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage)
+                    .atPath(null)
+                    .setParameter('{{ value }}', value)
+                    .setParameter('{{ limit }}', opt.max)
+                    .setInvalidValue(value)
+                    .setCode(Length.prototype.TOO_LONG_ERROR)
+                    .addViolation()
+                ;
 
-        context
-            .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage)
-            .atPath(null)
-            .setParameter('{{ value }}', value)
-            .setParameter('{{ limit }}', opt.min)
-            .setInvalidValue(value)
-            .setCode(Length.prototype.TOO_SHORT_ERROR)
-            .addViolation()
-        ;
+                return resolve('Length');
+            }
 
-        return;
-    }
+            if (typeof opt.min !== 'undefined' && length < opt.min) {
 
-    return Promise.resolve();
+                context
+                    .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage)
+                    .atPath(null)
+                    .setParameter('{{ value }}', value)
+                    .setParameter('{{ limit }}', opt.min)
+                    .setInvalidValue(value)
+                    .setCode(Length.prototype.TOO_SHORT_ERROR)
+                    .addViolation()
+                ;
+
+                return resolve('Length');
+            }
+
+            return resolve('Length');
+        }, 1000);
+
+    });
 }
 
 module.exports = Length;

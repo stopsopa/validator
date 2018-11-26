@@ -5,13 +5,9 @@ const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');
 
-const def = {
-    message    : 'This value should be null.',
-};
+const All = function (opt, extra) {
 
-const IsNull = function (opt, extra) {
-
-    this.cls = 'IsNull';
+    this.cls = 'All';
 
     this.setExtra(extra);
 
@@ -22,15 +18,13 @@ const IsNull = function (opt, extra) {
         }
     }
 
-    this.setOptions(Object.assign({}, def, opt));
+    this.setOptions(opt || []);
 }
 
-IsNull.prototype = Object.create(Constraint.prototype);
-IsNull.prototype.constructor = IsNull;
+All.prototype = Object.create(Constraint.prototype);
+All.prototype.constructor = All;
 
-IsNull.prototype.NOT_NULL_ERROR = 'NOT_NULL_ERROR';
-
-IsNull.prototype.validate = function (value, context) {
+All.prototype.validate = function (value, context) {
 
     const opt = this.getOptions();
 
@@ -43,16 +37,16 @@ IsNull.prototype.validate = function (value, context) {
                     .buildViolation(opt.message)
                     .atPath(null)
                     // .setParameter('{{ value }}', $this->formatValue($value))
-                    .setCode(IsNull.prototype.NOT_NULL_ERROR)
+                    .setCode(All.prototype.NOT_NULL_ERROR)
                     .setInvalidValue(value)
                     .addViolation()
                 ;
             }
 
             // reject('reject');
-            resolve('IsNull');
+            resolve('All');
         }, 1000);
     });
 };
 
-module.exports = IsNull;
+module.exports = All;

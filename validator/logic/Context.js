@@ -1,14 +1,15 @@
 
 const ViolationBuilder = require('./ViolationBuilder');
 
-const Context = function () {
+const Context = function (rootData, extra = {}) {
 
     this.violations = [];
 
-//     $this->context->buildViolation($constraint->message)
-// ->setParameter('{{ value }}', $this->formatValue($value))
-// ->setCode(IsNull::NOT_NULL_ERROR)
-// ->addViolation();
+    this.rootData   = rootData;
+
+    this.extra      = extra || {};
+
+    this.stack      = {};
 };
 
 Context.prototype.buildViolation = function () {
@@ -17,7 +18,7 @@ Context.prototype.buildViolation = function () {
 
     if ( args.length === 0 ) {
 
-        throw `new Context(message): message not specified`;
+        throw `new Context(message).buildViolation(message): message not specified`;
     }
 
     return new ViolationBuilder(args[0], this);
@@ -25,8 +26,38 @@ Context.prototype.buildViolation = function () {
 Context.prototype.addViolation = function (path, message, code, invalidValue) {
     this.violations.push([path, message, code, invalidValue]);
 };
+Context.prototype.addTrigger = function (async = 0, trigger) {
+
+    if ( ! this.stack[async] ) {
+
+        this.stack[async] = [];
+    }
+
+    this.stack[async].push(trigger);
+
+    return this;
+}
+Context.prototype.getTriggers = function () {
+
+    const list = Object.keys(this.stack).sort().reduce((acc, key) => {
+
+        this.stack[key].length && acc.push(this.stack[key]);
+
+        return acc;
+    }, []);
+
+    this.stack = {};
+
+    return list;
+}
 Context.prototype.getViolations = function () {
     return this.violations;
+}
+Context.prototype.getRoot = function () {
+    return this.rootData;
+}
+Context.prototype.getExtra = function () {
+    return this.extra || {};
 }
 
 module.exports = Context;
