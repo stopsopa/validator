@@ -1,5 +1,5 @@
 
-const Constraint = function (opt) {
+const Constraint = function () {
 
 };
 
@@ -32,11 +32,28 @@ Constraint.prototype.errorNames = function () {
 Constraint.prototype.collectionValidator = false;
 
 Constraint.prototype.getOptions = function () {
-    return this._opt || {};
+
+    // if (this.cls) {
+    //
+    //     console.log(JSON.stringify({
+    //         get: this.cls,
+    //         data: this.opt,
+    //     }, null, 4))
+    // }
+
+    return this.opt;
 }
 Constraint.prototype.setOptions = function (opt) {
-    // console.log(`\n\n\n\n`+JSON.stringify(opt, null, 4)+`\n\n\n`);
-    this._opt = opt;
+
+    this.opt = opt;
+
+    // if (this.cls) {
+    //
+    //     console.log(JSON.stringify({
+    //         setcls: this,
+    //     }, null, 4));
+    // }
+
     return this;
 }
 
@@ -48,8 +65,19 @@ Constraint.prototype.getExtra = function () {
     return this._extra;
 }
 
-Constraint.prototype.getChildren = function () {
-    return [];
-}
+// Constraint.prototype.validate = function (value, context) {}
+Constraint.prototype.validate = false;
+
+// Constraint.prototype.validateChildren = function (value, context) {}
+Constraint.prototype.validateChildren = false
+
+// Constraint.prototype.toJSON = function () {
+//
+//     const obj = Object.assign({}, this);
+//
+//     delete obj.opt;
+//
+//     return obj;
+// }
 
 module.exports = Constraint;

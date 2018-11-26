@@ -5,6 +5,8 @@ const Constraint         = require('../prototypes/Constraint');
 
 const Optional = function (opt, extra) {
 
+    Constraint.apply(this, arguments); // call super constructor.
+
     this.cls = 'Optional';
 
     this.setExtra(extra);
@@ -25,12 +27,8 @@ const Optional = function (opt, extra) {
 Optional.prototype = Object.create(Existence.prototype);
 Optional.prototype.constructor = Optional;
 
-Optional.prototype.validate = function (value, context) {
-    return Promise.resolve('Optional');
-}
-
-Optional.prototype.getChildren = function () {
-    return this.getOptions();
-}
+// Optional.prototype.validate = function (value, context) {
+//     return Promise.resolve('Optional');
+// }
 
 module.exports = Optional;

@@ -1,34 +1,84 @@
 
 const Existence         = require('../prototypes/Existence');
 
+const Constraint         = require('../prototypes/Constraint');
+
 const isArray           = require('../utils/isArray');
 
-const connectAndSort = function (value, constraints, context) {
+const connectAndSort = function (value, constraints, context, final = false) {
 
     if ( constraints instanceof Existence ) {
 
         throw `connectAndSort(): Validator shouldn't be at this stage of type 'Existence'`;
     }
 
+    if ( constraints instanceof Constraint) {
+
+        if ( ! isArray(constraints) ) {
+
+            constraints = [constraints];
+        }
+    }
+
     if ( ! isArray(constraints) ) {
 
-        constraints = [constraints];
+        return;
     }
 
     for (let i = 0, l = constraints.length ; i < l ; i += 1 ) {
 
-        (function (async, i, t) {
+        if (constraints[i] instanceof Existence) {
 
-            t = () => constraints[i].validate(value, context);
+            continue;
+        }
 
-            t.toString = t.toJSON = () => `+${async}+`;
+        try {
 
-            context.addTrigger(async, t)
+            if (constraints[i].validate) {
 
-        }(constraints[i].getOptions().async, i));
+                (function (async, i, t) {
+
+                    t = () => constraints[i].validate(value, context);
+
+                    t.toString = t.toJSON = () => `validate:${async}`;
+
+                    context.addTrigger(async, t)
+
+                }(constraints[i].getOptions().async, i));
+            }
+        }
+        catch (e) {
+
+            console.log(e + '')
+            console.log(`\n\n\n\n\n`+JSON.stringify(constraints, null, 4)+`\n\n\n\n`);
+        }
+
+        if (constraints[i].validateChildren) {
+
+            // console.log('test deep 1: ', JSON.stringify(constraints[i].getOptions().fields.b.getOptions()[0].getOptions(), null, 4));
+            // console.log('test deep 2: ', JSON.stringify(constraints[i].getOptions(), null, 4));
+
+            constraints[i].validateChildren(value, context);
+
+            // value.forEach(value => {
+            //
+            //     (function (async, i, t) {
+            //
+            //         t = () => constraints[i].validateChildren(value, context);
+            //
+            //         t.toString = t.toJSON = () => `validate:${async}`;
+            //
+            //         context.addTrigger(async, t)
+            //
+            //     }(constraints[i].getOptions().async, i));
+            // })
+        }
     }
 
-    return context.getTriggers();
+    if (final) {
+
+        return context.getTriggers();
+    }
 }
 
 module.exports = connectAndSort;

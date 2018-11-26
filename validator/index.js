@@ -22,11 +22,11 @@ const Required      = require('./constraints/Required');
 
 const validator = (value, constraints, extra) => {
 
-    // constraints = constraints.getChildren();
+    // constraints = constraints.validateChildren();
 
     const context       = new Context(value, extra);
 
-    const connected     = connectAndSort(value, constraints, context);
+    const connected     = connectAndSort(value, constraints, context, true);
 
     // console.log(`\n+\n`+JSON.stringify(connected)+`\n++++\n\n`);
 
@@ -54,10 +54,10 @@ const validator = (value, constraints, extra) => {
 
     return promise.then(data => {
 
-        if (extra && extra.debug) {
-
-            console.log(`\n\n\n\n\n\n\n`, 'validate.then: ', data, `\n\n\n\n\n\n\n`);
-        }
+        // if (extra && extra.debug) {
+        //
+        //     console.log('validate.then: ', data);
+        // }
 
         return context.getViolations();
     });

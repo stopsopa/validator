@@ -13,6 +13,22 @@ const Required          = require('../constraints/Required');
 
 const Optional          = require('../constraints/Optional');
 
+const connectAndSort    = require('../logic/connectAndSort');
+
+const isArray           = require('../utils/isArray');
+
+
+
+function unique(pattern) { // node.js require('crypto').randomBytes(16).toString('hex');
+    pattern || (pattern = 'xyxyxy');
+    return pattern.replace(/[xy]/g,
+        function(c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+}
+
 const def = {
     fields                  : [],
     allowExtraFields        : false,
@@ -23,7 +39,9 @@ const def = {
 
 const Collection = function (opt, extra) {
 
-    this.cls = 'Collection';
+    Constraint.apply(this, arguments); // call super constructor.
+
+    this.cls = 'Collection:' + unique();
 
     this.setExtra(extra);
 
@@ -31,7 +49,7 @@ const Collection = function (opt, extra) {
 
         if ( arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0 ) {
 
-            opt = Object.assign(def, {
+            opt = Object.assign({}, def, {
                 fields  : opt,
             });
         }
@@ -55,9 +73,7 @@ const Collection = function (opt, extra) {
         return acc;
     }, {});
 
-
-
-    console.log(`\n\n\n\n\n\n\n\n\nCollection construct: `+JSON.stringify(opt, null, 4)+`\n\n\n\n\n\n\n`);
+    // console.log(`\n\n\n\n\n\n\n\n\nCollection construct: `+JSON.stringify(opt, null, 4)+`\n\n\n\n\n\n\n`);
 
     this.setOptions(opt);
 }
@@ -72,7 +88,7 @@ Collection.prototype.validate = function (value, context) {
 
     const opt = this.getOptions();
 
-    console.log(`\n\n\n\n\n\n\n\n\nopt: `+JSON.stringify(opt, null, 4)+`\n\n\n\n\n\n\n`);
+    // console.log(`\n\n\n\n\n\n\n\n\nopt: `+JSON.stringify(opt, null, 4)+`\n\n\n\n\n\n\n`);
 
     // return Promise.resolve()
 
@@ -94,7 +110,7 @@ Collection.prototype.validate = function (value, context) {
                     keys.forEach(field => {
 
                         context
-                            .buildViolation(opt.missingFieldsMessage)
+                            .buildViolation(opt.missingFieldsMessage + ' a')
                             .atPath(field)
                             .setParameter('{{ field }}', field)
                             .setCode(Collection.prototype.MISSING_FIELD_ERROR)
@@ -157,9 +173,20 @@ Collection.prototype.validate = function (value, context) {
     });
 };
 
-Collection.prototype.getChildren = function () {
+Collection.prototype.validateChildren = function (value, context) {
 
-    return this.getOptions().fields || [];
+    const opt = this.getOptions();
+
+    if (isObject(value)) {
+
+        let tmp;
+
+        Object.keys(value).forEach(name => {
+            if (tmp = opt.fields[name]) {
+                connectAndSort(value[name], tmp.getOptions(), context);
+            }
+        });
+    }
 }
 
 module.exports = Collection;

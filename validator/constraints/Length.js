@@ -17,6 +17,8 @@ const def = {
 
 const Length = function () {
 
+    Constraint.apply(this, arguments); // call super constructor.
+
     this.cls = 'Length';
 
     let args = Array.prototype.slice.call(arguments);

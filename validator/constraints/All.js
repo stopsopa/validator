@@ -7,6 +7,8 @@ const Constraint        = require('../prototypes/Constraint');
 
 const All = function (opt, extra) {
 
+    Constraint.apply(this, arguments); // call super constructor.
+
     this.cls = 'All';
 
     this.setExtra(extra);
@@ -23,6 +25,8 @@ const All = function (opt, extra) {
 
 All.prototype = Object.create(Constraint.prototype);
 All.prototype.constructor = All;
+
+All.prototype.collectionValidator = true;
 
 All.prototype.validate = function (value, context) {
 
