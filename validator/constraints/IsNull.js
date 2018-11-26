@@ -11,9 +11,9 @@ const def = {
 
 const IsNull = function (opt, extra) {
 
-    Constraint.apply(this, arguments); // call super constructor.
-
     this.cls = 'IsNull';
+
+    Constraint.apply(this, arguments); // call super constructor.
 
     this.setExtra(extra);
 

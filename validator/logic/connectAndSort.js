@@ -1,7 +1,7 @@
 
 const Existence         = require('../prototypes/Existence');
 
-const Constraint         = require('../prototypes/Constraint');
+const Constraint        = require('../prototypes/Constraint');
 
 const isArray           = require('../utils/isArray');
 
@@ -9,7 +9,7 @@ const connectAndSort = function (value, constraints, context, final = false) {
 
     if ( constraints instanceof Existence ) {
 
-        throw `connectAndSort(): Validator shouldn't be at this stage of type 'Existence'`;
+        throw `connectAndSort(): Validator shouldn't be at this stage of type 'Existence'(Require or Optional), specify rather regular array of multiple validators`;
     }
 
     if ( constraints instanceof Constraint) {

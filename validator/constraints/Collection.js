@@ -30,7 +30,7 @@ function unique(pattern) { // node.js require('crypto').randomBytes(16).toString
 }
 
 const def = {
-    fields                  : [],
+    fields                  : {},
     allowExtraFields        : false,
     allowMissingFields      : false,
     extraFieldsMessage      : 'This field was not expected.',
@@ -57,6 +57,11 @@ const Collection = function (opt, extra) {
     else {
 
         opt = Object.assign({}, def);
+    }
+
+    if ( Object.keys(opt.fields).length === 0) {
+
+        throw `Describe at least one field in "fields" parameter`;
     }
 
     opt.fields = Object.keys(opt.fields).reduce((acc, field) => {

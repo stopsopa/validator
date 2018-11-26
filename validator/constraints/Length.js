@@ -3,7 +3,7 @@ const arrayIntersect    = require('../utils/arrayIntersect');
 
 const isObject          = require('../utils/isObject');
 
-const Constraint         = require('../prototypes/Constraint');
+const Constraint        = require('../prototypes/Constraint');
 
 const def = {
     maxMessage: 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
@@ -17,11 +17,11 @@ const def = {
 
 const Length = function () {
 
-    Constraint.apply(this, arguments); // call super constructor.
-
     this.cls = 'Length';
 
     let args = Array.prototype.slice.call(arguments);
+
+    Constraint.apply(this, args); // call super constructor.
 
     if ( args.length === 0) {
 

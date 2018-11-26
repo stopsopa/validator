@@ -36,11 +36,21 @@ it('collection-nested allowExtraFields = false & allowMissingFields = false: bot
 
     const errors = await validator({
         a       : false, // checking existance not value
-        b       : {second: 'level'}
+        b       : {
+            second: 'level',
+        },
+        d       : {
+            e : null,
+            f : true,
+        }
     }, new Collection({
         a   : new Required(),
         b   : new Collection({
-            c   : new Required()
+            c : new Required()
+        }),
+        d   : new Collection({
+            e : new IsNull(),
+            f : new IsNull(),
         })
     }));
 
@@ -66,6 +76,12 @@ it('collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     {
                         "second": "level"
                     }
+                ],
+                [
+                    null,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    true
                 ]
             ]
         )

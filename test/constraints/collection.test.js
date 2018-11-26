@@ -14,31 +14,6 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-it('Collection', () => {
-
-    var k = new Collection();
-
-    expect(
-        JSON.stringify(
-            k.errorNames()
-        )
-    ).toBe(
-        JSON.stringify(
-            {
-                // MISSING_FIELD_ERROR: Collection.prototype.MISSING_FIELD_ERROR,
-                // NO_SUCH_FIELD_ERROR: Collection.prototype.NO_SUCH_FIELD_ERROR,
-                MISSING_FIELD_ERROR: 'MISSING_FIELD_ERROR',
-                NO_SUCH_FIELD_ERROR: 'NO_SUCH_FIELD_ERROR',
-            }
-        )
-    );
-
-
-
-    // expect(k.validate()).toBe('test');
-});
-
-
 it('collection allowExtraFields = false & allowMissingFields = false: both', async () => {
 
     const errors = await validator({
@@ -129,9 +104,11 @@ it('collection allowExtraFields = false & allowMissingFields = false: missing', 
 it('collection allowExtraFields = false & allowMissingFields = false: extra', async () => {
 
     const errors = await validator({
+        test    : null,
         dwa     : true,
         raz     : false, // checking existance not value
     }, new Collection({
+        test: new IsNull(),
         // raz     : new Required(),
         // dwa     : new Required(),
     }), {
@@ -151,6 +128,7 @@ it('collection allowExtraFields = false & allowMissingFields = false: extra', as
                     "This field was not expected.",
                     "NO_SUCH_FIELD_ERROR",
                     {
+                        "test": null,
                         "dwa": true,
                         "raz": false
                     }
@@ -160,6 +138,7 @@ it('collection allowExtraFields = false & allowMissingFields = false: extra', as
                     "This field was not expected.",
                     "NO_SUCH_FIELD_ERROR",
                     {
+                        "test": null,
                         "dwa": true,
                         "raz": false
                     }
@@ -168,4 +147,127 @@ it('collection allowExtraFields = false & allowMissingFields = false: extra', as
         )
     );
 
+});
+
+it('key - collection - no options', async () => {
+
+    expect.assertions(1);
+
+    try {
+
+        const errors = await validator('test', new Collection());
+    }
+    catch (e) {
+
+        expect(e + '').toBe('Describe at least one field in "fields" parameter');
+    }
+});
+
+it('key - collection - array option', async () => {
+
+    expect.assertions(1);
+
+    try {
+
+        const errors = await validator('test', new Collection([]));
+    }
+    catch (e) {
+
+        expect(e + '').toBe('Describe at least one field in "fields" parameter');
+    }
+});
+
+it('key - collection - empty object option', async () => {
+
+    expect.assertions(1);
+
+    try {
+
+        const errors = await validator('test', new Collection({}));
+    }
+    catch (e) {
+
+        expect(e + '').toBe('Describe at least one field in "fields" parameter');
+    }
+});
+
+it('key - collection - IsNull() used as a function', async () => {
+
+    expect.assertions(1);
+
+    try {
+        const errors = await validator('test', new Collection({
+            test: IsNull()
+        }));
+    }
+    catch (e) {
+
+        expect(e + '').toBe("Don't use IsNull() as a function, create instance new IsNull()");
+    }
+});
+
+it('key - collection - string but expect object with field', async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator('test', new Collection({
+        test: new IsNull()
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify(
+            []
+        )
+    );
+});
+
+it('key - collection - used together with other constrain', async () => {
+
+    expect.assertions(1);
+
+    try {
+        const errors = await validator('test', new Required([
+            new IsNull(),
+            new Collection({
+                test: new IsNull()
+            })
+        ]));
+    }
+    catch (e) {
+
+        expect(e + '').toBe("connectAndSort(): Validator shouldn't be at this stage of type 'Existence'(Require or Optional), specify rather regular array of multiple validators");
+    }
+});
+
+it('key - collection - used together with other constrain', async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator('test', [
+        new IsNull(),
+        new Collection({
+            test: new IsNull()
+        })
+    ]);
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify(
+            [
+                [
+                    null,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        )
+    );
 });

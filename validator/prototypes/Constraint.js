@@ -1,6 +1,9 @@
 
 const Constraint = function () {
 
+    if ( ! (this instanceof Constraint) )
+        throw `Don't use ${this.cls}() as a function, create instance new ${this.cls}()`;
+
 };
 
 const sufix         = '_ERROR';
@@ -58,11 +61,11 @@ Constraint.prototype.setOptions = function (opt) {
 }
 
 Constraint.prototype.setExtra = function (extra) {
-    this._extra = extra;
+    this.extra = extra;
     return this;
 }
 Constraint.prototype.getExtra = function () {
-    return this._extra;
+    return this.extra;
 }
 
 // Constraint.prototype.validate = function (value, context) {}
