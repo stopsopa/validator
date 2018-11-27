@@ -11,11 +11,11 @@ const each              = require('../utils/each');
 
 const connectAndSort = function (value, constraints, context, path, final = false) {
 
-    process.stdout.write(`\n --connectAndSort-- \n`);
+    // process.stdout.write(`\n --connectAndSort-- \n`);
 
     if ( constraints instanceof Existence ) {
 
-        process.stdout.write(`\n ext out \n`);
+        // process.stdout.write(`\n ext out \n`);
 
         return connectAndSort(value, constraints.getOptions(), context, path, final);
     }
@@ -24,7 +24,7 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
         if ( ! isArray(constraints) ) {
 
-            process.stdout.write(`\n wrap in array \n`);
+            // process.stdout.write(`\n wrap in array \n`);
 
             constraints = [constraints];
         }
@@ -34,7 +34,7 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
         if (final) {
 
-            process.stdout.write(`\n final 1 \n`);
+            // process.stdout.write(`\n final 1 \n`);
 
             return context.getTriggers();
         }
@@ -44,11 +44,11 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
     for (let i = 0, l = constraints.length ; i < l ; i += 1 ) {
 
-        process.stdout.write(`\n loop ${i} \n`);
+        // process.stdout.write(`\n loop ${i} \n`);
 
         if (constraints[i] instanceof Existence) {
 
-            process.stdout.write(`\n ext in \n`);
+            // process.stdout.write(`\n ext in \n`);
 
             connectAndSort(value, constraints[i].getOptions(), context, path)
         }
@@ -56,20 +56,20 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
             const combine = (typeof path === 'undefined') ? name => name : name => path + '.' + name;
 
-            process.stdout.write(`\n all ${JSON.stringify(value, null, 4)} \n`);
+            // process.stdout.write(`\n all ${JSON.stringify(value, null, 4)} \n`);
 
             const allConstraints = constraints[i].getOptions();
 
             each(value, (v, name) => {
 
-                process.stdout.write(`\n each '${name}' -> '${combine(name)}'\n`);
+                // process.stdout.write(`\n each '${name}' -> '${combine(name)}'\n`);
 
                 connectAndSort(v, allConstraints, context, combine(name));
             });
         }
         else {
 
-            process.stdout.write(`\n validators \n`);
+            // process.stdout.write(`\n validators \n`);
 
             if (constraints[i].validate) {
 
@@ -88,7 +88,7 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
     if (final) {
 
-        process.stdout.write(`\n final 2 \n`);
+        // process.stdout.write(`\n final 2 \n`);
 
         return context.getTriggers();
     }
