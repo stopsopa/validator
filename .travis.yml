@@ -19,7 +19,7 @@ env:
 
 before_script:
   - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
-  - apt-get install tree
+  - sudo apt-get install tree
   - tree test
 
 script:
