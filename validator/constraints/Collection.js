@@ -39,9 +39,9 @@ const def = {
 
 const Collection = function (opt, extra) {
 
-    Constraint.apply(this, arguments); // call super constructor.
+    this.cls = 'Collection';
 
-    this.cls = 'Collection:' + unique();
+    Constraint.apply(this, arguments); // call super constructor.
 
     this.setExtra(extra);
 
@@ -89,7 +89,7 @@ Collection.prototype.constructor = Collection;
 Collection.prototype.MISSING_FIELD_ERROR = 'MISSING_FIELD_ERROR';
 Collection.prototype.NO_SUCH_FIELD_ERROR = 'NO_SUCH_FIELD_ERROR';
 
-Collection.prototype.validate = function (value, context) {
+Collection.prototype.validate = function (value, context, path) {
 
     const opt = this.getOptions();
 
@@ -116,7 +116,7 @@ Collection.prototype.validate = function (value, context) {
 
                         context
                             .buildViolation(opt.missingFieldsMessage + ' a')
-                            .atPath(field)
+                            .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
                             .setParameter('{{ field }}', field)
                             .setCode(Collection.prototype.MISSING_FIELD_ERROR)
                             .setInvalidValue(value)
@@ -138,7 +138,7 @@ Collection.prototype.validate = function (value, context) {
 
                             context
                                 .buildViolation(opt.missingFieldsMessage)
-                                .atPath(field)
+                                .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
                                 .setParameter('{{ field }}', field)
                                 .setCode(Collection.prototype.MISSING_FIELD_ERROR)
                                 .setInvalidValue(value)
@@ -162,7 +162,7 @@ Collection.prototype.validate = function (value, context) {
 
                             context
                                 .buildViolation(opt.extraFieldsMessage)
-                                .atPath(field)
+                                .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
                                 .setParameter('{{ field }}', field)
                                 .setCode(Collection.prototype.NO_SUCH_FIELD_ERROR)
                                 .setInvalidValue(value)
@@ -178,7 +178,7 @@ Collection.prototype.validate = function (value, context) {
     });
 };
 
-Collection.prototype.validateChildren = function (value, context) {
+Collection.prototype.validateChildren = function (value, context, path) {
 
     const opt = this.getOptions();
 
@@ -188,7 +188,12 @@ Collection.prototype.validateChildren = function (value, context) {
 
         Object.keys(value).forEach(name => {
             if (tmp = opt.fields[name]) {
-                connectAndSort(value[name], tmp.getOptions(), context);
+                connectAndSort(
+                    value[name],
+                    tmp.getOptions(),
+                    context,
+                    (typeof path === 'undefined') ? name : (path + '.' + name),
+                );
             }
         });
     }

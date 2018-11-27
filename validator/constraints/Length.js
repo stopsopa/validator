@@ -63,7 +63,7 @@ Length.prototype.constructor = Length;
 Length.prototype.TOO_SHORT_ERROR            = 'TOO_SHORT_ERROR';
 Length.prototype.TOO_LONG_ERROR             = 'TOO_LONG_ERROR';
 
-Length.prototype.validate = function (value, context) {
+Length.prototype.validate = function (value, context, path) {
 
     const opt = this.getOptions();
 
@@ -82,7 +82,7 @@ Length.prototype.validate = function (value, context) {
 
                 context
                     .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage)
-                    .atPath(null)
+                    .atPath(path)
                     .setParameter('{{ value }}', value)
                     .setParameter('{{ limit }}', opt.max)
                     .setInvalidValue(value)
@@ -97,7 +97,7 @@ Length.prototype.validate = function (value, context) {
 
                 context
                     .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage)
-                    .atPath(null)
+                    .atPath(path)
                     .setParameter('{{ value }}', value)
                     .setParameter('{{ limit }}', opt.min)
                     .setInvalidValue(value)

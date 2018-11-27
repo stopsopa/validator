@@ -5,7 +5,7 @@ const Constraint        = require('../prototypes/Constraint');
 
 const isArray           = require('../utils/isArray');
 
-const connectAndSort = function (value, constraints, context, final = false) {
+const connectAndSort = function (value, constraints, context, path, final = false) {
 
     if ( constraints instanceof Existence ) {
 
@@ -32,25 +32,17 @@ const connectAndSort = function (value, constraints, context, final = false) {
             continue;
         }
 
-        try {
+        if (constraints[i].validate) {
 
-            if (constraints[i].validate) {
+            (function (async, i, t) {
 
-                (function (async, i, t) {
+                t = () => constraints[i].validate(value, context, path);
 
-                    t = () => constraints[i].validate(value, context);
+                t.toString = t.toJSON = () => `validate:${async}`;
 
-                    t.toString = t.toJSON = () => `validate:${async}`;
+                context.addTrigger(async, t)
 
-                    context.addTrigger(async, t)
-
-                }(constraints[i].getOptions().async, i));
-            }
-        }
-        catch (e) {
-
-            console.log(e + '')
-            console.log(`\n\n\n\n\n`+JSON.stringify(constraints, null, 4)+`\n\n\n\n`);
+            }(constraints[i].getOptions().async, i));
         }
 
         if (constraints[i].validateChildren) {
@@ -58,7 +50,7 @@ const connectAndSort = function (value, constraints, context, final = false) {
             // console.log('test deep 1: ', JSON.stringify(constraints[i].getOptions().fields.b.getOptions()[0].getOptions(), null, 4));
             // console.log('test deep 2: ', JSON.stringify(constraints[i].getOptions(), null, 4));
 
-            constraints[i].validateChildren(value, context);
+            constraints[i].validateChildren(value, context, path);
 
             // value.forEach(value => {
             //

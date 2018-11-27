@@ -26,7 +26,7 @@ const validator = (value, constraints, extra) => {
 
     const context       = new Context(value, extra);
 
-    const connected     = connectAndSort(value, constraints, context, true);
+    const connected     = connectAndSort(value, constraints, context, extra ? extra.path : undefined, true);
 
     // console.log(`\n+\n`+JSON.stringify(connected)+`\n++++\n\n`);
 

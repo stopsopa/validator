@@ -32,7 +32,7 @@ IsNull.prototype.constructor = IsNull;
 
 IsNull.prototype.NOT_NULL_ERROR = 'NOT_NULL_ERROR';
 
-IsNull.prototype.validate = function (value, context) {
+IsNull.prototype.validate = function (value, context, path) {
 
     const opt = this.getOptions();
 
@@ -43,7 +43,7 @@ IsNull.prototype.validate = function (value, context) {
 
                 context
                     .buildViolation(opt.message)
-                    .atPath(null)
+                    .atPath(path)
                     // .setParameter('{{ value }}', $this->formatValue($value))
                     .setCode(IsNull.prototype.NOT_NULL_ERROR)
                     .setInvalidValue(value)

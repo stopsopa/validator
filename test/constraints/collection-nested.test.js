@@ -16,24 +16,6 @@ const Context       = require('../../validator/logic/Context');
 
 it('collection-nested allowExtraFields = false & allowMissingFields = false: both', async () => {
 
-
-    // var a = new Collection({
-    //     a: 'b'
-    // })
-    //
-    // console.log(`\n\n\nsee a: \n\n\n\n`, a);
-    //
-    // var b = new Collection({
-    //     c: 'd'
-    // })
-    //
-    // console.log(`\n\n\nsee b: \n\n\n\n`, b);
-    //
-    //
-    //
-    // return;
-
-
     const errors = await validator({
         a       : false, // checking existance not value
         b       : {
@@ -62,7 +44,7 @@ it('collection-nested allowExtraFields = false & allowMissingFields = false: bot
         JSON.stringify(
             [
                 [
-                    "c",
+                    "b.c",
                     "This field is missing.",
                     "MISSING_FIELD_ERROR",
                     {
@@ -70,7 +52,7 @@ it('collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     }
                 ],
                 [
-                    "second",
+                    "b.second",
                     "This field was not expected.",
                     "NO_SUCH_FIELD_ERROR",
                     {
@@ -78,7 +60,7 @@ it('collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     }
                 ],
                 [
-                    null,
+                    "d.f",
                     "This value should be null.",
                     "NOT_NULL_ERROR",
                     true

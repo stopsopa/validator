@@ -38,11 +38,6 @@ ViolationBuilder.prototype.addViolation = function() {
         throw `ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)`;
     }
 
-    if ( this.path === undefined ) {
-
-        throw `ViolationBuilder: this.path === undefined, call ViolationBuilder->atPath(path)`;
-    }
-
     let message = this.message;
 
     Object.keys(this.parameters).map(key => {
