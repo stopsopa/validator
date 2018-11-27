@@ -53,7 +53,7 @@ IsNull.prototype.validate = function (value, context, path) {
 
             // reject('reject');
             resolve('IsNull');
-        }, 1000);
+        }, 100);
     });
 };
 

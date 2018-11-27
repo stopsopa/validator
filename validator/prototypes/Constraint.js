@@ -32,7 +32,6 @@ Constraint.prototype.errorNames = function () {
 
     return Constraint.prototype._errorNames;
 }
-Constraint.prototype.collectionValidator = false;
 
 Constraint.prototype.getOptions = function () {
 

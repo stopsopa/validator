@@ -17,7 +17,7 @@ const connectAndSort    = require('../logic/connectAndSort');
 
 const isArray           = require('../utils/isArray');
 
-
+const each              = require('../utils/each');
 
 function unique(pattern) { // node.js require('crypto').randomBytes(16).toString('hex');
     pattern || (pattern = 'xyxyxy');
@@ -178,7 +178,7 @@ Collection.prototype.validate = function (value, context, path) {
             }
 
             resolve('Collection 2');
-        }, 1000);
+        }, 100);
     });
 };
 
@@ -186,31 +186,18 @@ Collection.prototype.validateChildren = function (value, context, path) {
 
     const opt = this.getOptions();
 
-    if (isArray(value)) {
+    let tmp;
 
-        value = value.map((v, i) => [v, i]).reduce((acc, v) => {
-
-            acc[v[1]] = v[0];
-
-            return acc;
-        }, {});
-    }
-
-    if (isObject(value)) {
-
-        let tmp;
-
-        Object.keys(value).forEach(name => {
-            if (tmp = opt.fields[name]) {
-                connectAndSort(
-                    value[name],
-                    tmp.getOptions(),
-                    context,
-                    (typeof path === 'undefined') ? name : (path + '.' + name),
-                );
-            }
-        });
-    }
+    each(value,(v, name) => {
+        if (tmp = opt.fields[name]) {
+            connectAndSort(
+                value[name],
+                tmp.getOptions(),
+                context,
+                (typeof path === 'undefined') ? name : (path + '.' + name),
+            );
+        }
+    });
 }
 
 module.exports = Collection;

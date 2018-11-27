@@ -109,7 +109,7 @@ Length.prototype.validate = function (value, context, path) {
             }
 
             return resolve('Length');
-        }, 1000);
+        }, 100);
 
     });
 }
