@@ -6,12 +6,6 @@ exports[`key - Collection - used together with other constrain require 1`] = `"[
 
 exports[`key - Collection - used together with other constrain require x2 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
 
-exports[`key - collection - used together with other constrain array 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
-
-exports[`key - collection - used together with other constrain require 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
-
-exports[`key - collection - used together with other constrain require x2 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
-
 exports[`stack overflow 1`] = `
 Array [
   Array [
