@@ -148,7 +148,7 @@ it('All - nested', async () => {
             [
                 [
                     "1.1.a",
-                    "This value should have exactly 1 character.|This value should have exactly 1 characters.",
+                    "This value should have exactly 1 character.",
                     "TOO_LONG_ERROR",
                     "c2"
                 ]

@@ -3,6 +3,7 @@ const ViolationBuilder = function (message, context) {
     this.parameters     = {};
     this.code           = undefined;
     this.path           = undefined;
+    this.plural         = false;
     this.invalidValue   = undefined;
     this.message        = message;
     this.context        = context;
@@ -25,6 +26,12 @@ ViolationBuilder.prototype.atPath = function (path) {
 
     return this;
 }
+ViolationBuilder.prototype.setPlural = function (plural) {
+
+    this.plural = plural;
+
+    return this;
+}
 ViolationBuilder.prototype.setInvalidValue = function (invalidValue) {
 
     this.invalidValue = invalidValue;
@@ -39,6 +46,16 @@ ViolationBuilder.prototype.addViolation = function() {
     }
 
     let message = this.message;
+
+    if (typeof message === 'string' && message.indexOf('|') > -1 && this.plural !== false && this.plural > -1) {
+
+        const split = message.split('|');
+
+        if (split.length > this.plural) {
+
+            message = split[this.plural];
+        }
+    }
 
     Object.keys(this.parameters).map(key => {
 

@@ -27,7 +27,7 @@ it('key - flat', async () => {
             [
                 [
                     null,
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "test"
                 ]
@@ -72,7 +72,7 @@ it('key - invalid collection, 1st level key', async () => {
             [
                 [
                     "test",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -102,7 +102,7 @@ it('key - invalid collection, 2st level key', async () => {
             [
                 [
                     "test.test2",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -132,7 +132,7 @@ it('key - invalid collection, 2st level key - behind Require 1', async () => {
             [
                 [
                     "test.test2",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -162,7 +162,7 @@ it('key - invalid collection, 2st level key - behind Require 2', async () => {
             [
                 [
                     "test.test2",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -194,7 +194,7 @@ it('key - invalid collection, 2st level key - behind Require 3', async () => {
             [
                 [
                     "test.test2",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -228,7 +228,7 @@ it('key - invalid collection, 2st level key - behind Require 4', async () => {
             [
                 [
                     "test.test2",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -266,7 +266,7 @@ it('key - invalid collection, 3st level key - behind Require 5', async () => {
             [
                 [
                     "test.test2.test3",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -316,7 +316,7 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field', a
                 ],
                 [
                     "test.test2.test3",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]
@@ -358,7 +358,7 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field, al
             [
                 [
                     "test.test2.test3",
-                    "This value should have exactly 6 character.|This value should have exactly 6 characters.",
+                    "This value should have exactly 6 characters.",
                     "TOO_SHORT_ERROR",
                     "abcde"
                 ]

@@ -39,8 +39,6 @@ const def = {
 
 const Collection = function (opt, extra) {
 
-    this.cls = 'Collection';
-
     Constraint.apply(this, arguments); // call super constructor.
 
     this.setExtra(extra);
@@ -178,7 +176,7 @@ Collection.prototype.validate = function (value, context, path) {
             }
 
             resolve('Collection 2');
-        }, 100);
+        }, 10);
     });
 };
 

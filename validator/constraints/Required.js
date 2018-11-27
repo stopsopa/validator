@@ -7,8 +7,6 @@ const Required = function (opt, extra) {
 
     Constraint.apply(this, arguments); // call super constructor.
 
-    this.cls = 'Required';
-
     this.setExtra(extra);
 
     this.setOptions(opt);

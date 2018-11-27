@@ -456,7 +456,7 @@ it('collection on array', async () => {
                 ],
                 [
                     "b.1.g",
-                    "This value should have exactly 23 character.|This value should have exactly 23 characters.",
+                    "This value should have exactly 23 characters.",
                     "TOO_SHORT_ERROR",
                     "h"
                 ]
@@ -479,6 +479,9 @@ it('collection on array 2', async () => {
             },
             {
                 g: 'h'
+            },
+            {
+                g: 'h1'
             }
         ],
         // b: {
@@ -499,6 +502,10 @@ it('collection on array 2', async () => {
             }),
             '1': new Collection({
                 g: new Length(2),
+                // e: new Length(2),
+            }),
+            '2': new Collection({
+                g: new Length(1),
                 // e: new Length(2),
             })
         })
@@ -522,9 +529,15 @@ it('collection on array 2', async () => {
                 ],
                 [
                     "b.1.g",
-                    "This value should have exactly 2 character.|This value should have exactly 2 characters.",
+                    "This value should have exactly 2 characters.",
                     "TOO_SHORT_ERROR",
                     "h"
+                ],
+                [
+                    "b.2.g",
+                    "This value should have exactly 1 character.",
+                    "TOO_LONG_ERROR",
+                    "h1"
                 ]
             ]
         )
@@ -572,7 +585,7 @@ it('collection on array 3', async () => {
                 ],
                 [
                     "1.g",
-                    "This value should have exactly 2 character.|This value should have exactly 2 characters.",
+                    "This value should have exactly 2 characters.",
                     "TOO_SHORT_ERROR",
                     "h"
                 ]

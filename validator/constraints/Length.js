@@ -15,9 +15,7 @@ const def = {
     // charset = 'UTF-8';
 };
 
-const Length = function () {
-
-    this.cls = 'Length';
+function Length() {
 
     let args = Array.prototype.slice.call(arguments);
 
@@ -83,6 +81,7 @@ Length.prototype.validate = function (value, context, path) {
                 context
                     .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage)
                     .atPath(path)
+                    .setPlural( (opt.max === 1) ? 0 : 1 )
                     .setParameter('{{ value }}', value)
                     .setParameter('{{ limit }}', opt.max)
                     .setInvalidValue(value)
@@ -98,6 +97,7 @@ Length.prototype.validate = function (value, context, path) {
                 context
                     .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage)
                     .atPath(path)
+                    .setPlural( (opt.min === 1) ? 0 : 1 )
                     .setParameter('{{ value }}', value)
                     .setParameter('{{ limit }}', opt.min)
                     .setInvalidValue(value)
@@ -109,7 +109,7 @@ Length.prototype.validate = function (value, context, path) {
             }
 
             return resolve('Length');
-        }, 100);
+        }, 10);
 
     });
 }

@@ -73,7 +73,7 @@ it('validator', async () => {
                 ],
                 [
                     null,
-                    "This value should have exactly 3 character.|This value should have exactly 3 characters.",
+                    "This value should have exactly 3 characters.",
                     Length.prototype.TOO_LONG_ERROR,
                     "test"
                 ]
@@ -109,7 +109,7 @@ it('groups', async () => {
                 ],
                 [
                     null,
-                    "This value should have exactly 3 character.|This value should have exactly 3 characters.",
+                    "This value should have exactly 3 characters.",
                     Length.prototype.TOO_LONG_ERROR,
                     "test"
                 ]

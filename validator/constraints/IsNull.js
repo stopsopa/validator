@@ -1,4 +1,6 @@
 
+'use strict';
+
 const arrayIntersect    = require('../utils/arrayIntersect');
 
 const isObject          = require('../utils/isObject');
@@ -10,8 +12,6 @@ const def = {
 };
 
 const IsNull = function (opt, extra) {
-
-    this.cls = 'IsNull';
 
     Constraint.apply(this, arguments); // call super constructor.
 
@@ -53,7 +53,7 @@ IsNull.prototype.validate = function (value, context, path) {
 
             // reject('reject');
             resolve('IsNull');
-        }, 100);
+        }, 10);
     });
 };
 

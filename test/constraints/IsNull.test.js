@@ -18,8 +18,4 @@ it('IsNull', () => {
             }
         )
     );
-
-
-
-    // expect(k.validate()).toBe('test');
 });

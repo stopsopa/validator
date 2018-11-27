@@ -22,45 +22,22 @@ const Required      = require('./constraints/Required');
 
 const validator = (value, constraints, extra) => {
 
-    // constraints = constraints.validateChildren();
-
     const context       = new Context(value, extra);
 
     const connected     = connectAndSort(value, constraints, context, extra ? extra.path : undefined, true);
 
-    // console.log(`\n+\n`+JSON.stringify(connected)+`\n++++\n\n`);
-
     let promise = Promise.resolve();
-
-    // console.log(`\n\n\ni before: `+connected.length+`\n\n`);
 
     while (connected.length) {
 
-        // console.log(`\n\n\ni: `+connected.length+`\n\n`);
-
-        // connected.shift();
-
-        // return Promise.all(connected.shift());
-
         (function (list) {
-
-            // console.log('l: ' + l)
 
             promise = promise.then(() => Promise.all(list.map(c => c())));
 
-        }(connected.shift()))
-
+        }(connected.shift()));
     }
 
-    return promise.then(data => {
-
-        // if (extra && extra.debug) {
-        //
-        //     console.log('validate.then: ', data);
-        // }
-
-        return context.getViolations();
-    });
+    return promise.then(() => context.getViolations());
 }
 
 module.exports  = validator;

@@ -1,9 +1,22 @@
 
-const Constraint = function () {
+'use strict';
 
-    if ( ! (this instanceof Constraint) )
-        throw `Don't use ${this.cls}() as a function, create instance new ${this.cls}()`;
+function Constraint() {
 
+    if ( ! (this instanceof Constraint) ) {
+
+        // https://stackoverflow.com/a/27462108
+        let name = 'UnknownConstraintsClass';
+
+        try {
+            const tmp = Error().stack.split(/\n/g).filter(a => /^\s*at /.test(a));
+            // console.log(tmp.map((a, i) => i + ':' + a).join("\n\n"));
+            name = tmp[1].replace(/.*\/([^\/]+)\.js.*/, '$1')
+        }
+        catch (e) {}
+
+        throw `Don't use ${name}() as a function, create instance new ${name}()`;
+    }
 };
 
 const sufix         = '_ERROR';
@@ -35,26 +48,11 @@ Constraint.prototype.errorNames = function () {
 
 Constraint.prototype.getOptions = function () {
 
-    // if (this.cls) {
-    //
-    //     console.log(JSON.stringify({
-    //         get: this.cls,
-    //         data: this.opt,
-    //     }, null, 4))
-    // }
-
     return this.opt;
 }
 Constraint.prototype.setOptions = function (opt) {
 
     this.opt = opt;
-
-    // if (this.cls) {
-    //
-    //     console.log(JSON.stringify({
-    //         setcls: this,
-    //     }, null, 4));
-    // }
 
     return this;
 }
@@ -71,15 +69,6 @@ Constraint.prototype.getExtra = function () {
 Constraint.prototype.validate = false;
 
 // Constraint.prototype.validateChildren = function (value, context) {}
-Constraint.prototype.validateChildren = false
-
-// Constraint.prototype.toJSON = function () {
-//
-//     const obj = Object.assign({}, this);
-//
-//     delete obj.opt;
-//
-//     return obj;
-// }
+Constraint.prototype.validateChildren = false;
 
 module.exports = Constraint;

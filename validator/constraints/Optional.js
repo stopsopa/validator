@@ -7,8 +7,6 @@ const Optional = function (opt, extra) {
 
     Constraint.apply(this, arguments); // call super constructor.
 
-    this.cls = 'Optional';
-
     this.setExtra(extra);
 
     this.setOptions(opt);
