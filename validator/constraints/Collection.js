@@ -45,6 +45,11 @@ const Collection = function (opt, extra) {
 
     this.setExtra(extra);
 
+    if (isArray(opt)) {
+
+        throw `Collection doesn't accept array as an main option`;
+    }
+
     if (isObject(opt)) {
 
         if ( arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0 ) {
@@ -93,10 +98,9 @@ Collection.prototype.validate = function (value, context, path) {
 
     const opt = this.getOptions();
 
-    // console.log(`\n\n\n\n\n\n\n\n\nopt: `+JSON.stringify(opt, null, 4)+`\n\n\n\n\n\n\n`);
+    // console.log(`\nopt: `+JSON.stringify(value, null, 4)+`\n`);
 
     // return Promise.resolve()
-
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -181,6 +185,16 @@ Collection.prototype.validate = function (value, context, path) {
 Collection.prototype.validateChildren = function (value, context, path) {
 
     const opt = this.getOptions();
+
+    if (isArray(value)) {
+
+        value = value.map((v, i) => [v, i]).reduce((acc, v) => {
+
+            acc[v[1]] = v[0];
+
+            return acc;
+        }, {});
+    }
 
     if (isObject(value)) {
 

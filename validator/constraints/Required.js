@@ -11,16 +11,6 @@ const Required = function (opt, extra) {
 
     this.setExtra(extra);
 
-    if (opt instanceof Existence) {
-
-        throw `Component passed as an option to Require|Option component can't be another Require or Option componnent`;
-    }
-
-    if (opt instanceof Constraint) {
-
-        opt = [opt];
-    }
-
     this.setOptions(opt);
 }
 
