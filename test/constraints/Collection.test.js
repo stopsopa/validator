@@ -14,7 +14,7 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-it('collection allowExtraFields = false & allowMissingFields = false: both', async () => {
+it('Collection allowExtraFields = false & allowMissingFields = false: both', async () => {
 
     expect.assertions(1);
 
@@ -63,7 +63,7 @@ it('collection allowExtraFields = false & allowMissingFields = false: both', asy
 
 });
 
-it('collection allowExtraFields = false & allowMissingFields = false: missing', async () => {
+it('Collection allowExtraFields = false & allowMissingFields = false: missing', async () => {
 
     expect.assertions(1);
 
@@ -104,7 +104,7 @@ it('collection allowExtraFields = false & allowMissingFields = false: missing', 
 
 });
 
-it('collection allowExtraFields = false & allowMissingFields = false: extra', async () => {
+it('Collection allowExtraFields = false & allowMissingFields = false: extra', async () => {
 
     expect.assertions(1);
 
@@ -154,7 +154,7 @@ it('collection allowExtraFields = false & allowMissingFields = false: extra', as
 
 });
 
-it('key - collection - no options', async () => {
+it('key - Collection - no options', async () => {
 
     expect.assertions(1);
 
@@ -168,7 +168,7 @@ it('key - collection - no options', async () => {
     }
 });
 
-it('key - collection - array option', async () => {
+it('key - Collection - array option', async () => {
 
     expect.assertions(1);
 
@@ -182,7 +182,7 @@ it('key - collection - array option', async () => {
     }
 });
 
-it('key - collection - empty object option', async () => {
+it('key - Collection - empty object option', async () => {
 
     expect.assertions(1);
 
@@ -196,7 +196,7 @@ it('key - collection - empty object option', async () => {
     }
 });
 
-it('key - collection - IsNull() used as a function', async () => {
+it('key - Collection - IsNull() used as a function', async () => {
 
     expect.assertions(1);
 
@@ -211,7 +211,7 @@ it('key - collection - IsNull() used as a function', async () => {
     }
 });
 
-it('key - collection - string but expect object with field', async () => {
+it('key - Collection - string but expect object with field', async () => {
 
     expect.assertions(1);
 
@@ -230,7 +230,7 @@ it('key - collection - string but expect object with field', async () => {
     );
 });
 
-it('key - collection - used together with other constrain array', async () => {
+it('key - Collection - used together with other constrain array', async () => {
 
     expect.assertions(2);
 
@@ -250,7 +250,7 @@ it('key - collection - used together with other constrain array', async () => {
     expect(errors[0][0]).toBeUndefined();
 });
 
-it('key - collection - used together with other constrain require', async () => {
+it('key - Collection - used together with other constrain require', async () => {
 
     expect.assertions(2);
 
@@ -270,7 +270,7 @@ it('key - collection - used together with other constrain require', async () => 
     expect(errors[0][0]).toBeUndefined();
 });
 
-it('key - collection - used together with other constrain require x2', async () => {
+it('key - Collection - used together with other constrain require x2', async () => {
 
     expect.assertions(2);
 
@@ -292,7 +292,7 @@ it('key - collection - used together with other constrain require x2', async () 
     expect(errors[0][0]).toBeUndefined();
 });
 
-it('collection-nested allowExtraFields = false & allowMissingFields = false: both', async () => {
+it('Collection-nested allowExtraFields = false & allowMissingFields = false: both', async () => {
 
     expect.assertions(1);
 
@@ -398,7 +398,7 @@ it('stack overflow', async () => {
     ).toMatchSnapshot();
 });
 
-it('collection on array', async () => {
+it('Collection on array', async () => {
 
     expect.assertions(1);
 
@@ -465,7 +465,7 @@ it('collection on array', async () => {
     );
 
 });
-it('collection on array 2', async () => {
+it('Collection on array 2', async () => {
 
     expect.assertions(1);
 
@@ -545,7 +545,7 @@ it('collection on array 2', async () => {
 
 });
 
-it('collection on array 3', async () => {
+it('Collection on array 3', async () => {
 
     expect.assertions(1);
 
@@ -593,4 +593,255 @@ it('collection on array 3', async () => {
         )
     );
 
+});
+
+it("Collection - allowMissingFields: false", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator({
+        a: null,
+    }, new Collection({
+        a: new IsNull(),
+        b: new Length(3),
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify(
+            [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
+        )
+    );
+});
+
+it("Collection - allowMissingFields: true", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator({
+        a: null,
+    }, new Collection({
+        fields: {
+            a: new IsNull(),
+            b: new Length(3),
+        },
+        allowMissingFields: true
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify(
+            []
+        )
+    );
+});
+
+
+it("Collection deep - allowMissingFields: false", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator({
+        a: {
+            b: {
+                c: 'abc',
+            }
+        },
+    }, new Collection({
+        a: new Collection({
+            b: new Collection({
+                c: new Length(3),
+                d: new Length(2),
+            })
+        })
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify(
+            [
+                [
+                    "a.b.d",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {
+                        "c": "abc"
+                    }
+                ]
+            ]
+        )
+    );
+});
+
+it("Collection deep - allowMissingFields: true", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator({
+        a: {
+            b: {
+                c: 'abc',
+            }
+        },
+    }, new Collection({
+        a: new Collection({
+            b: new Collection({
+                fields: {
+                    c: new Length(3),
+                    d: new Length(2),
+                },
+                allowMissingFields: true,
+            })
+        })
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify([])
+    );
+});
+
+it("Collection deep, no data (main level) - allowMissingFields: false", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator(undefined , new Collection({
+        a: new Collection({
+            b: new Collection({
+                fields: {
+                    c: new Length(3),
+                    d: new Length(2),
+                },
+                // allowMissingFields: true,
+            })
+        })
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify(
+            [
+                [
+                    "a",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    null
+                ]
+            ]
+        )
+    );
+});
+it("Collection deep, no data (main level) - allowMissingFields: true", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator(undefined , new Collection({
+        fields: {
+            a: new Collection({
+                b: new Collection({
+                    fields: {
+                        c: new Length(3),
+                        d: new Length(2),
+                    },
+                    allowMissingFields: true,
+                })
+            })
+        },
+        allowMissingFields: true,
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify([])
+    );
+});
+
+it("Collection deep, no data (deep level) - allowMissingFields: false", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator({
+        a: {
+            b: null,
+        },
+    }, new Collection({
+        a: new Collection({
+            b: new Collection({
+                fields: {
+                    c: new Length(3),
+                    d: new Length(2),
+                },
+                // allowMissingFields: true,
+            })
+        })
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify([
+            [
+                "a.b.c",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                null
+            ],
+            [
+                "a.b.d",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                null
+            ]
+        ])
+    );
+});
+
+
+it("Collection deep, no data (deep level) - allowMissingFields: true", async () => {
+
+    expect.assertions(1);
+
+    const errors = await validator({
+        a: {
+            b: null,
+        },
+    }, new Collection({
+        a: new Collection({
+            b: new Collection({
+                fields: {
+                    c: new Length(3),
+                    d: new Length(2),
+                },
+                allowMissingFields: true,
+            })
+        })
+    }));
+
+    expect(
+        JSON.stringify(
+            errors
+        )
+    ).toBe(
+        JSON.stringify([])
+    );
 });

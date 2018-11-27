@@ -28,6 +28,11 @@ ViolationBuilder.prototype.atPath = function (path) {
 }
 ViolationBuilder.prototype.setPlural = function (plural) {
 
+    if ( ! Number.isInteger(plural) || plural < 0 ) {
+
+        throw `ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty`
+    }
+
     this.plural = plural;
 
     return this;
@@ -64,8 +69,17 @@ ViolationBuilder.prototype.addViolation = function() {
         do {
 
             cp = message;
+            try {
 
             message = message.replace(key, this.parameters[key]);
+            }
+            catch (e) {
+
+                console.log(`\n\n\n`+JSON.stringify({
+                    e: e+'',
+                })+`\n\n\n`);
+            }
+
 
         } while (cp !== message);
     });

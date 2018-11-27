@@ -69,43 +69,41 @@ Length.prototype.validate = function (value, context, path) {
 
         setTimeout(() => {
 
-            if (typeof value !== 'string') {
+            if (typeof value === 'string') {
 
-                return resolve('Length');
-            }
+                const length = value.length;
 
-            const length = value.length;
+                if (typeof opt.max !== 'undefined' && length > opt.max) {
 
-            if (typeof opt.max !== 'undefined' && length > opt.max) {
+                    context
+                        .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage)
+                        .atPath(path)
+                        .setPlural( (opt.max === 1) ? 0 : 1 )
+                        .setParameter('{{ value }}', value)
+                        .setParameter('{{ limit }}', opt.max)
+                        .setInvalidValue(value)
+                        .setCode(Length.prototype.TOO_LONG_ERROR)
+                        .addViolation()
+                    ;
 
-                context
-                    .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage)
-                    .atPath(path)
-                    .setPlural( (opt.max === 1) ? 0 : 1 )
-                    .setParameter('{{ value }}', value)
-                    .setParameter('{{ limit }}', opt.max)
-                    .setInvalidValue(value)
-                    .setCode(Length.prototype.TOO_LONG_ERROR)
-                    .addViolation()
-                ;
+                    return resolve('Length');
+                }
 
-                return resolve('Length');
-            }
+                if (typeof opt.min !== 'undefined' && length < opt.min) {
 
-            if (typeof opt.min !== 'undefined' && length < opt.min) {
+                    context
+                        .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage)
+                        .atPath(path)
+                        .setPlural( (opt.min === 1) ? 0 : 1 )
+                        .setParameter('{{ value }}', value)
+                        .setParameter('{{ limit }}', opt.min)
+                        .setInvalidValue(value)
+                        .setCode(Length.prototype.TOO_SHORT_ERROR)
+                        .addViolation()
+                    ;
 
-                context
-                    .buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage)
-                    .atPath(path)
-                    .setPlural( (opt.min === 1) ? 0 : 1 )
-                    .setParameter('{{ value }}', value)
-                    .setParameter('{{ limit }}', opt.min)
-                    .setInvalidValue(value)
-                    .setCode(Length.prototype.TOO_SHORT_ERROR)
-                    .addViolation()
-                ;
-
-                return resolve('Length');
+                    return resolve('Length');
+                }
             }
 
             return resolve('Length');

@@ -21,7 +21,12 @@ Context.prototype.buildViolation = function () {
         throw `new Context(message).buildViolation(message): message not specified`;
     }
 
-    return new ViolationBuilder(args[0], this);
+    if (typeof args[0] !== 'string') {
+
+        throw `new Context(message).buildViolation(message): message arg must be string`;
+    }
+
+    return new ViolationBuilder(args[0] + '', this);
 }
 Context.prototype.addViolation = function (path, message, code, invalidValue) {
     this.violations.push([path, message, code, invalidValue]);

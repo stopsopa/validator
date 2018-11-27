@@ -19,16 +19,6 @@ const isArray           = require('../utils/isArray');
 
 const each              = require('../utils/each');
 
-function unique(pattern) { // node.js require('crypto').randomBytes(16).toString('hex');
-    pattern || (pattern = 'xyxyxy');
-    return pattern.replace(/[xy]/g,
-        function(c) {
-            var r = Math.random() * 16 | 0,
-                v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-}
-
 const def = {
     fields                  : {},
     allowExtraFields        : false,
@@ -48,18 +38,15 @@ const Collection = function (opt, extra) {
         throw `Collection doesn't accept array as an main option`;
     }
 
-    if (isObject(opt)) {
+    if (isObject(opt) && arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0) {
 
-        if ( arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0 ) {
-
-            opt = Object.assign({}, def, {
-                fields  : opt,
-            });
-        }
+        opt = Object.assign({}, def, {
+            fields  : opt,
+        });
     }
     else {
 
-        opt = Object.assign({}, def);
+        opt = Object.assign({}, def, opt);
     }
 
     if ( Object.keys(opt.fields).length === 0) {
@@ -108,16 +95,16 @@ Collection.prototype.validate = function (value, context, path) {
 
             const optFieldsIsObj    = isObject(value);
 
-            const keys              = optFieldsIsObj ? Object.keys(value) : [];
+            const keys              = optFieldsIsObj ? Object.keys(value || {}) : [];
 
             if ( ! value ) {
 
                 if ( ! opt.allowMissingFields ) {
 
-                    keys.forEach(field => {
+                    each(opt.fields, (v, field) => {
 
                         context
-                            .buildViolation(opt.missingFieldsMessage + ' a')
+                            .buildViolation(opt.missingFieldsMessage)
                             .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
                             .setParameter('{{ field }}', field)
                             .setCode(Collection.prototype.MISSING_FIELD_ERROR)
@@ -132,7 +119,7 @@ Collection.prototype.validate = function (value, context, path) {
 
             if (optFieldsIsObj) {
 
-                Object.keys(opt.fields).forEach(field => {
+                each(opt.fields, (v, field) => {
 
                     if (typeof value[field] === 'undefined') {
 
