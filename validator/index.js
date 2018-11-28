@@ -1,15 +1,19 @@
 
-const isArray = require('./utils/isArray');
+const isArray           = require('./utils/isArray');
 
-const Context = require('./logic/Context');
+const Context           = require('./logic/Context');
 
-const connectAndSort = require('./logic/connectAndSort');
+const connectAndSort    = require('./logic/connectAndSort');
 
 const Constraint        = require('./prototypes/Constraint');
 
-const Existence        = require('./prototypes/Existence');
+const Existence         = require('./prototypes/Existence');
 
-const Required      = require('./constraints/Required');
+const Required          = require('./constraints/Required');
+
+const delay             = require('./utils/delay');
+
+// const log               = require('../log/logn');
 
 /**
  * import validator, { test } from '@stopsopa/validator';
@@ -32,7 +36,24 @@ const validator = (value, constraints, extra) => {
 
         (function (list) {
 
-            promise = promise.then(() => Promise.all(list.map(c => c())));
+            promise = promise
+                .then(() => Promise.all(list.map(c => c())))
+                // .then(...delay.then(2500))
+                // .then(a => {
+                //
+                //     console.log(`\n\n\n\n\n`);
+                //     log.dump('resolved:', a);
+                //     console.log(`\n\n\n\n\n`);
+                //
+                //     return a;
+                // }, a => {
+                //
+                //     console.log(`\n\n\n\n\n`);
+                //     log.dump('rejected:', a);
+                //     console.log(`\n\n\n\n\n`);
+                //     return a;
+                // })
+            ;
 
         }(connected.shift()));
     }
