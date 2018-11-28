@@ -179,7 +179,6 @@ it('Collection allowExtraFields = false & allowMissingFields = false: extra', as
             ]
         )
     );
-
 });
 
 it('key - Collection - no options', async () => {
@@ -190,11 +189,11 @@ it('key - Collection - no options', async () => {
 
         let errors = await validator('test', new Collection());
 
-        errors = errors.getRaw();
+        errors.getRaw();
     }
     catch (e) {
 
-        expect(e + '').toBe('Describe at least one field in "fields" parameter');
+        expect(e + '').toBe("Collection accept only plain object as a first argument");
     }
 });
 
@@ -206,11 +205,11 @@ it('key - Collection - array option', async () => {
 
         let errors = await validator('test', new Collection([]));
 
-        errors = errors.getRaw();
+        errors.getRaw();
     }
     catch (e) {
 
-        expect(e + '').toBe('Collection doesn\'t accept array as an main option');
+        expect(e + '').toBe("Collection accept only plain object as a first argument");
     }
 });
 
@@ -222,7 +221,7 @@ it('key - Collection - empty object option', async () => {
 
         let errors = await validator('test', new Collection({}));
 
-        errors = errors.getRaw();
+        errors.getRaw();
     }
     catch (e) {
 
@@ -239,7 +238,7 @@ it('key - Collection - IsNull() used as a function', async () => {
             test: IsNull()
         }));
 
-        errors = errors.getRaw();
+        errors.getRaw();
     }
     catch (e) {
 

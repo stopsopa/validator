@@ -16,7 +16,7 @@ const Context       = require('../../validator/logic/Context');
 
 jest.setTimeout(30000);
 
-it("Collection async", async () => {
+it("validation async", async () => {
 
     expect.assertions(2);
 
@@ -71,7 +71,7 @@ it("Collection async", async () => {
     );
 });
 
-it("Collection async - reversed", async () => {
+it("validation async - reversed", async () => {
 
     expect.assertions(2);
 

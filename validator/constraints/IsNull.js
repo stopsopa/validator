@@ -51,8 +51,7 @@ IsNull.prototype.validate = function (value, context, path, extra) {
                 ;
             }
 
-            // reject('reject');
-            extra.reject ? reject('reject IsNull') : resolve('resolve IsNull');
+            extra.stop ? reject('stop IsNull') : resolve('resolve IsNull');
         }, 10);
     });
 };

@@ -58,7 +58,9 @@ const validator = (value, constraints, extra) => {
         }(connected.shift()));
     }
 
-    return promise.then(() => context.getViolations());
+    const end = () => context.getViolations();
+
+    return promise.then(end, end);
 }
 
 module.exports  = validator;

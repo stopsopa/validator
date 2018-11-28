@@ -86,7 +86,7 @@ Length.prototype.validate = function (value, context, path, extra) {
                         .addViolation()
                     ;
 
-                    return extra.reject ? reject('reject Length') : resolve('resolve Length');
+                    return extra.stop ? reject('stop Length') : resolve('resolve Length');
                 }
 
                 if (typeof opt.min !== 'undefined' && length < opt.min) {
@@ -102,7 +102,7 @@ Length.prototype.validate = function (value, context, path, extra) {
                         .addViolation()
                     ;
 
-                    return extra.reject ? reject('reject Length') : resolve('resolve Length');
+                    return extra.stop ? reject('stop Length') : resolve('resolve Length');
                 }
             }
 

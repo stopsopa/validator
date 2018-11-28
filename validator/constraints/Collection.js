@@ -33,9 +33,9 @@ const Collection = function (opt, extra) {
 
     this.setExtra(extra);
 
-    if (isArray(opt)) {
+    if ( ! isObject(opt) || opt instanceof Constraint) {
 
-        throw `Collection doesn't accept array as an main option`;
+        throw `Collection accept only plain object as a first argument`;
     }
 
     if (isObject(opt) && arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0) {
@@ -118,7 +118,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
                     });
                 }
 
-                return (error && extra.reject) ? reject('reject Collection1') : resolve('resolve Collection1');
+                return (error && extra.stop) ? reject('stop Collection1') : resolve('resolve Collection1');
             }
 
             if (optFieldsIsObj) {
@@ -169,7 +169,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
             }
 
 
-            (error && extra.reject) ? reject('reject Collection2') : resolve('resolve Collection2');
+            (error && extra.stop) ? reject('stop Collection2') : resolve('resolve Collection2');
         }, 10);
     });
 };
