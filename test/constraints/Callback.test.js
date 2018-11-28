@@ -18,34 +18,35 @@ it('Callback - main arg', async () => {
 
     const start = time();
 
-    let errors = await validator('test', new Callback((value, context, path, opt, extra) => {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
+    let errors = await validator(
+        'test',
+        new Callback(
+            (value, context, path, opt, extra) =>
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
 
-                if (value.length !== 5) {
+                        if (value.length !== 5) {
 
-                    context
-                        .buildViolation('Custom message: {{ callback }}.')
-                        .atPath(path)
-                        .setParameter('{{ callback }}', 'not equal')
-                        .setCode("CALLBACK_5")
-                        .setInvalidValue(value)
-                        .addViolation()
-                    ;
+                            context
+                                .buildViolation('Custom message: {{ callback }}.')
+                                .atPath(path)
+                                .setParameter('{{ callback }}', 'not equal')
+                                .setCode("CALLBACK_5")
+                                .setInvalidValue(value)
+                                .addViolation()
+                            ;
 
-                    if (extra.stop) {
+                            if (extra.stop) {
 
-                        return reject('reject Callback_5');
-                    }
-                }
+                                return reject('reject Callback_5');
+                            }
+                        }
 
-                resolve('resolve Callback_5');
-            }, 50);
-        });
-
-    }, {
-        extra: 'naha'
-    }));
+                        resolve('resolve Callback_5');
+                    }, 50);
+                })
+        )
+    );
 
     errors = errors.getRaw();
 
