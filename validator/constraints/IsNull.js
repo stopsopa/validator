@@ -52,7 +52,7 @@ IsNull.prototype.validate = function (value, context, path, extra) {
             }
 
             // reject('reject');
-            resolve('IsNull');
+            extra.reject ? reject('reject IsNull') : resolve('resolve IsNull');
         }, 10);
     });
 };

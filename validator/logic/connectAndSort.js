@@ -42,6 +42,8 @@ const connectAndSort = function (value, constraints, context, path, final = fals
         return;
     }
 
+    let extra;
+
     for (let i = 0, l = constraints.length ; i < l ; i += 1 ) {
 
         // process.stdout.write(`\n loop ${i} \n`);
@@ -71,22 +73,24 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
             // process.stdout.write(`\n validators \n`);
 
+            extra = constraints[i].getExtra();
+
             if (constraints[i].validate) {
 
                 context.addTrigger(
-                    constraints[i].getExtra().async,
+                    extra.async,
                     () => constraints[i].validate(
                         value,
                         context,
                         path,
-                        constraints[i].getExtra()
+                        extra
                     )
                 );
             }
 
             if (constraints[i].validateChildren) {
 
-                constraints[i].validateChildren(value, context, path);
+                constraints[i].validateChildren(value, context, path, extra);
             }
         }
     }

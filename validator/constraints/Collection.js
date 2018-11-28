@@ -90,6 +90,8 @@ Collection.prototype.validate = function (value, context, path, extra) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
 
+            let error = false;
+
             // console.log(`\n\n\n\n\n\ncon: `+JSON.stringify(opt.fields, null, 4)+`\n\n\n\n\n`);
             // process.exit(1);
 
@@ -111,10 +113,12 @@ Collection.prototype.validate = function (value, context, path, extra) {
                             .setInvalidValue(value)
                             .addViolation()
                         ;
+
+                        error = true;
                     });
                 }
 
-                return resolve('Collection 1');
+                return (error && extra.reject) ? reject('reject Collection1') : resolve('resolve Collection1');
             }
 
             if (optFieldsIsObj) {
@@ -133,6 +137,8 @@ Collection.prototype.validate = function (value, context, path, extra) {
                                 .setInvalidValue(value)
                                 .addViolation()
                             ;
+
+                            error = true;
                         }
                     }
                     else {
@@ -162,12 +168,13 @@ Collection.prototype.validate = function (value, context, path, extra) {
                 }
             }
 
-            resolve('Collection 2');
+
+            (error && extra.reject) ? reject('reject Collection2') : resolve('resolve Collection2');
         }, 10);
     });
 };
 
-Collection.prototype.validateChildren = function (value, context, path) {
+Collection.prototype.validateChildren = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
