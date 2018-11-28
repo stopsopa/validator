@@ -16,9 +16,9 @@ const Context       = require('../../validator/logic/Context');
 
 it('Collection allowExtraFields = false & allowMissingFields = false: both', async () => {
 
-    expect.assertions(1);
+    expect.assertions(2);
 
-    let errors = await validator({
+    const errors = await validator({
         extra   : false, // checking existance not value
         one     : 'two',
         three    : 'four',
@@ -30,11 +30,11 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
         // debug: true,
     });
 
-    errors = errors.getRaw();
+    const raw = errors.getRaw();
 
     expect(
         JSON.stringify(
-            errors
+            raw
         )
     ).toBe(
         JSON.stringify(
@@ -63,13 +63,25 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
         )
     );
 
+    const flat = errors.getFlat();
+
+    expect(
+        JSON.stringify(
+            flat
+        )
+    ).toBe(
+        JSON.stringify(
+            {"extra": ["This field was not expected."], "n": ["This field is missing."]}
+        )
+    );
+
 });
 
 it('Collection allowExtraFields = false & allowMissingFields = false: missing', async () => {
 
-    expect.assertions(1);
+    expect.assertions(2);
 
-    let errors = await validator({
+    const errors = await validator({
         // extra   : false, // checking existance not value
         // one     : 'two',
         // three    : 'four',
@@ -80,11 +92,11 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
         // debug: true,
     });
 
-    errors = errors.getRaw();
+    const raw = errors.getRaw();
 
     expect(
         JSON.stringify(
-            errors
+            raw
         )
     ).toBe(
         JSON.stringify(
@@ -102,6 +114,18 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
                     {}
                 ]
             ]
+        )
+    );
+
+    const flat = errors.getFlat();
+
+    expect(
+        JSON.stringify(
+            flat
+        )
+    ).toBe(
+        JSON.stringify(
+            {"one": ["This field is missing."], "two": ["This field is missing."]}
         )
     );
 
@@ -314,9 +338,9 @@ it('key - Collection - used together with other constrain require x2', async () 
 
 it('Collection-nested allowExtraFields = false & allowMissingFields = false: both', async () => {
 
-    expect.assertions(1);
+    expect.assertions(3);
 
-    let errors = await validator({
+    const errors = await validator({
         a       : false, // checking existance not value
         b       : {
             second: 'level',
@@ -336,11 +360,11 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
         })
     }));
 
-    errors = errors.getRaw();
+    const raw = errors.getRaw();
 
     expect(
         JSON.stringify(
-            errors
+            raw
         )
     ).toBe(
         JSON.stringify(
@@ -368,6 +392,54 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     true
                 ]
             ]
+        )
+    );
+
+    const flat = errors.getFlat();
+
+    expect(
+        JSON.stringify(
+            flat
+        )
+    ).toBe(
+        JSON.stringify(
+            {
+                "b.c": [
+                    "This field is missing."
+                ],
+                "b.second": [
+                    "This field was not expected."
+                ],
+                "d.f": [
+                    "This value should be null."
+                ]
+            }
+        )
+    );
+
+    const tree = errors.getTree();
+
+    expect(
+        JSON.stringify(
+            tree
+        )
+    ).toBe(
+        JSON.stringify(
+            {
+                "b": {
+                    "c": [
+                        "This field is missing."
+                    ],
+                    "second": [
+                        "This field was not expected."
+                    ]
+                },
+                "d": {
+                    "f": [
+                        "This value should be null."
+                    ]
+                }
+            }
         )
     );
 
