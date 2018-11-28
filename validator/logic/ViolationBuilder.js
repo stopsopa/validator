@@ -69,17 +69,8 @@ ViolationBuilder.prototype.addViolation = function() {
         do {
 
             cp = message;
-            try {
 
             message = message.replace(key, this.parameters[key]);
-            }
-            catch (e) {
-
-                console.log(`\n\n\n`+JSON.stringify({
-                    e: e+'',
-                })+`\n\n\n`);
-            }
-
 
         } while (cp !== message);
     });

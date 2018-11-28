@@ -101,7 +101,7 @@ Collection.prototype.validate = function (value, context, path) {
 
                 if ( ! opt.allowMissingFields ) {
 
-                    each(opt.fields, (v, field) => {
+                    Object.keys(opt.fields).forEach(field => {
 
                         context
                             .buildViolation(opt.missingFieldsMessage)
@@ -119,7 +119,7 @@ Collection.prototype.validate = function (value, context, path) {
 
             if (optFieldsIsObj) {
 
-                each(opt.fields, (v, field) => {
+                Object.keys(opt.fields).forEach(field => {
 
                     if (typeof value[field] === 'undefined') {
 

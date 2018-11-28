@@ -963,3 +963,49 @@ it("Collection deep, no data (deep level) - allowMissingFields: true", async () 
         JSON.stringify([])
     );
 });
+
+it('Collection - array as a root', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator('abc', [
+        new Required(new Length(4)),
+    ]);
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual([[undefined, "This value should have exactly 4 characters.", "TOO_SHORT_ERROR", "abc"]]);
+});
+
+it('Collection - no constraints true', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator('abc', true);
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual([]);
+});
+
+it('Collection - no constraints false', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator('abc', false);
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual([]);
+});
+
+it('Collection - no constraints undefined', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator('abc');
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual([]);
+});
