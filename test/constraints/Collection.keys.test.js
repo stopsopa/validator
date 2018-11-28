@@ -16,7 +16,9 @@ const Context       = require('../../validator/logic/Context');
 
 it('key - flat', async () => {
 
-    const errors = await validator('test', new Length(6));
+    let errors = await validator('test', new Length(6));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -38,11 +40,13 @@ it('key - flat', async () => {
 
 it('key - valid collection', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: 'abcdef'
     }, new Collection({
         test: new Length(6)
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -57,11 +61,13 @@ it('key - valid collection', async () => {
 
 it('key - invalid collection, 1st level key', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: 'abcde'
     }, new Collection({
         test: new Length(6)
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -83,7 +89,7 @@ it('key - invalid collection, 1st level key', async () => {
 
 it('key - invalid collection, 2st level key', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             test2: 'abcde'
         }
@@ -92,6 +98,8 @@ it('key - invalid collection, 2st level key', async () => {
             test2: new Length(6)
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -113,7 +121,7 @@ it('key - invalid collection, 2st level key', async () => {
 
 it('key - invalid collection, 2st level key - behind Require 1', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             test2: 'abcde'
         }
@@ -122,6 +130,8 @@ it('key - invalid collection, 2st level key - behind Require 1', async () => {
             test2: new Length(6)
         }))
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -143,7 +153,7 @@ it('key - invalid collection, 2st level key - behind Require 1', async () => {
 
 it('key - invalid collection, 2st level key - behind Require 2', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             test2: 'abcde'
         }
@@ -152,6 +162,8 @@ it('key - invalid collection, 2st level key - behind Require 2', async () => {
             test2: new Required(new Length(6))
         }))
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -173,7 +185,7 @@ it('key - invalid collection, 2st level key - behind Require 2', async () => {
 
 it('key - invalid collection, 2st level key - behind Require 3', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             test2: 'abcde'
         }
@@ -184,6 +196,8 @@ it('key - invalid collection, 2st level key - behind Require 3', async () => {
             })
         ])
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -205,7 +219,7 @@ it('key - invalid collection, 2st level key - behind Require 3', async () => {
 
 it('key - invalid collection, 2st level key - behind Require 4', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             test2: 'abcde'
         }
@@ -218,6 +232,8 @@ it('key - invalid collection, 2st level key - behind Require 4', async () => {
             })
         ])
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -239,7 +255,7 @@ it('key - invalid collection, 2st level key - behind Require 4', async () => {
 
 it('key - invalid collection, 3st level key - behind Require 5', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             test2: {
                 test3: 'abcde'
@@ -256,6 +272,8 @@ it('key - invalid collection, 3st level key - behind Require 5', async () => {
             })
         ])
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -277,7 +295,7 @@ it('key - invalid collection, 3st level key - behind Require 5', async () => {
 
 it('key - invalid collection, 3st level key - behind Require 4 - extra field', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             extra: null,
             test2: {
@@ -295,6 +313,8 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field', a
             })
         ])
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -327,7 +347,7 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field', a
 
 it('key - invalid collection, 3st level key - behind Require 4 - extra field, allowExtraFields', async () => {
 
-    const errors = await validator({
+    let errors = await validator({
         test: {
             extra: null,
             test2: {
@@ -348,6 +368,8 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field, al
             })
         ])
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(

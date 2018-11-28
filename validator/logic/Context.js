@@ -1,5 +1,7 @@
 
-const ViolationBuilder = require('./ViolationBuilder');
+const ViolationBuilder          = require('./ViolationBuilder');
+
+const ConstraintViolationList   = require('../logic/ConstraintViolationList');
 
 const Context = function (rootData, extra = {}) {
 
@@ -56,7 +58,7 @@ Context.prototype.getTriggers = function () {
     return list;
 }
 Context.prototype.getViolations = function () {
-    return this.violations;
+    return new ConstraintViolationList(this.violations);
 }
 Context.prototype.getRoot = function () {
     return this.rootData;

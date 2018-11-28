@@ -26,7 +26,9 @@ it('IsNull - custom message', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator('test', new IsNull('custom message'));
+    let errors = await validator('test', new IsNull('custom message'));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -50,7 +52,9 @@ it('IsNull - custom message', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator('test', new IsNull('custom message'));
+    let errors = await validator('test', new IsNull('custom message'));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(

@@ -20,7 +20,9 @@ it('All - empty', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator(null, new All());
+    let errors = await validator(null, new All());
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -37,7 +39,7 @@ it('All', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator([
+    let errors = await validator([
         {
             a: 'd',
             b: 'f',
@@ -53,6 +55,8 @@ it('All', async () => {
         b: new Length(1),
         c: new IsNull(),
     })));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -121,7 +125,7 @@ it('All - nested', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator([
+    let errors = await validator([
         [
             {
                 a: 'b'
@@ -138,6 +142,8 @@ it('All - nested', async () => {
     ], new All(new All(new Collection({
         a: new Length(1)
     }))));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(

@@ -17,7 +17,9 @@ const Context       = require('../validator/logic/Context');
 
 it('validator', async () => {
 
-    const errors = await validator('test', new IsNull());
+    let errors = await validator('test', new IsNull());
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -53,10 +55,12 @@ it('context message not specified', async () => {
 });
 it('validator', async () => {
 
-    const errors = await validator('test', [
+    let errors = await validator('test', [
         new IsNull(),
         new Length(3),
     ]);
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -83,7 +87,7 @@ it('validator', async () => {
 });
 it('groups', async () => {
 
-    const errors = await validator('test', [
+    let errors = await validator('test', [
         new IsNull({
             async: -20,
         }),
@@ -93,6 +97,8 @@ it('groups', async () => {
             async: 10,
         }),
     ]);
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(

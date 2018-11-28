@@ -18,7 +18,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         extra   : false, // checking existance not value
         one     : 'two',
         three    : 'four',
@@ -29,6 +29,8 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
     }), {
         // debug: true,
     });
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -67,7 +69,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         // extra   : false, // checking existance not value
         // one     : 'two',
         // three    : 'four',
@@ -78,6 +80,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
         // debug: true,
     });
 
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -108,7 +111,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: extra', as
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         test    : null,
         two     : true,
         one     : false, // checking existance not value
@@ -120,6 +123,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: extra', as
         // debug: true,
     });
 
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -160,7 +164,9 @@ it('key - Collection - no options', async () => {
 
     try {
 
-        const errors = await validator('test', new Collection());
+        let errors = await validator('test', new Collection());
+
+        errors = errors.getRaw();
     }
     catch (e) {
 
@@ -174,7 +180,9 @@ it('key - Collection - array option', async () => {
 
     try {
 
-        const errors = await validator('test', new Collection([]));
+        let errors = await validator('test', new Collection([]));
+
+        errors = errors.getRaw();
     }
     catch (e) {
 
@@ -188,7 +196,9 @@ it('key - Collection - empty object option', async () => {
 
     try {
 
-        const errors = await validator('test', new Collection({}));
+        let errors = await validator('test', new Collection({}));
+
+        errors = errors.getRaw();
     }
     catch (e) {
 
@@ -201,9 +211,11 @@ it('key - Collection - IsNull() used as a function', async () => {
     expect.assertions(1);
 
     try {
-        const errors = await validator('test', new Collection({
+        let errors = await validator('test', new Collection({
             test: IsNull()
         }));
+
+        errors = errors.getRaw();
     }
     catch (e) {
 
@@ -215,9 +227,11 @@ it('key - Collection - string but expect object with field', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator('test', new Collection({
+    let errors = await validator('test', new Collection({
         test: new IsNull()
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -234,12 +248,14 @@ it('key - Collection - used together with other constrain array', async () => {
 
     expect.assertions(2);
 
-    const errors = await validator('test', new Required([
+    let errors = await validator('test', new Required([
         new IsNull(),
         new Collection({
             test: new IsNull()
         })
     ]));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -254,12 +270,14 @@ it('key - Collection - used together with other constrain require', async () => 
 
     expect.assertions(2);
 
-    const errors = await validator('test', [
+    let errors = await validator('test', [
         new IsNull(),
         new Collection({
             test: new IsNull()
         })
     ]);
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -283,6 +301,8 @@ it('key - Collection - used together with other constrain require x2', async () 
         })
     ])));
 
+    errors = errors.getRaw();
+
     expect(
         JSON.stringify(
             errors
@@ -296,7 +316,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a       : false, // checking existance not value
         b       : {
             second: 'level',
@@ -315,6 +335,8 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
             f : new IsNull(),
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -389,7 +411,9 @@ it('stack overflow', async () => {
     //
     // process.stdout.write(`\n\n\n`);
 
-    const errors = await validator(data, constraints);
+    let errors = await validator(data, constraints);
+
+    errors = errors.getRaw();
 
     expect(
         // JSON.stringify(
@@ -402,7 +426,7 @@ it('Collection on array', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: 'test',
         z: 'te',
         // b: [
@@ -437,6 +461,8 @@ it('Collection on array', async () => {
         })
     }));
 
+    errors = errors.getRaw();
+
     expect(
         JSON.stringify(
             errors
@@ -469,7 +495,7 @@ it('Collection on array 2', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: 'test',
         z: 'te',
         b: [
@@ -511,6 +537,8 @@ it('Collection on array 2', async () => {
         })
     }));
 
+    errors = errors.getRaw();
+
     expect(
         JSON.stringify(
             errors
@@ -549,7 +577,7 @@ it('Collection on array 3', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator([
+    let errors = await validator([
         {
             c: 'd',
             e: 'f'
@@ -566,6 +594,8 @@ it('Collection on array 3', async () => {
             // e: new Length(2),
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -599,12 +629,14 @@ it("Collection - allowMissingFields: false", async () => {
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: null,
     }, new Collection({
         a: new IsNull(),
         b: new Length(3),
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -621,7 +653,7 @@ it("Collection - allowMissingFields: true", async () => {
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: null,
     }, new Collection({
         fields: {
@@ -630,6 +662,8 @@ it("Collection - allowMissingFields: true", async () => {
         },
         allowMissingFields: true
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -647,7 +681,7 @@ it("Collection deep - allowMissingFields: false", async () => {
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: {
             b: {
                 c: 'abc',
@@ -661,6 +695,8 @@ it("Collection deep - allowMissingFields: false", async () => {
             })
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -686,7 +722,7 @@ it("Collection deep - allowMissingFields: true", async () => {
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: {
             b: {
                 c: 'abc',
@@ -704,6 +740,8 @@ it("Collection deep - allowMissingFields: true", async () => {
         })
     }));
 
+    errors = errors.getRaw();
+
     expect(
         JSON.stringify(
             errors
@@ -717,7 +755,7 @@ it("Collection deep, no data (main level) - allowMissingFields: false", async ()
 
     expect.assertions(1);
 
-    const errors = await validator(undefined , new Collection({
+    let errors = await validator(undefined , new Collection({
         a: new Collection({
             b: new Collection({
                 fields: {
@@ -728,6 +766,8 @@ it("Collection deep, no data (main level) - allowMissingFields: false", async ()
             })
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -750,7 +790,7 @@ it("Collection deep, no data (main level) - allowMissingFields: true", async () 
 
     expect.assertions(1);
 
-    const errors = await validator(undefined , new Collection({
+    let errors = await validator(undefined , new Collection({
         fields: {
             a: new Collection({
                 b: new Collection({
@@ -765,6 +805,8 @@ it("Collection deep, no data (main level) - allowMissingFields: true", async () 
         allowMissingFields: true,
     }));
 
+    errors = errors.getRaw();
+
     expect(
         JSON.stringify(
             errors
@@ -778,7 +820,7 @@ it("Collection deep, no data (deep level) - allowMissingFields: false", async ()
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: {
             b: null,
         },
@@ -793,6 +835,8 @@ it("Collection deep, no data (deep level) - allowMissingFields: false", async ()
             })
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
@@ -821,7 +865,7 @@ it("Collection deep, no data (deep level) - allowMissingFields: true", async () 
 
     expect.assertions(1);
 
-    const errors = await validator({
+    let errors = await validator({
         a: {
             b: null,
         },
@@ -836,6 +880,8 @@ it("Collection deep, no data (deep level) - allowMissingFields: true", async () 
             })
         })
     }));
+
+    errors = errors.getRaw();
 
     expect(
         JSON.stringify(
