@@ -13,3 +13,4 @@
 /.idea/
 /server.js
 /yarn.lock
+/log/

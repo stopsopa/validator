@@ -1,6 +1,8 @@
 
 'use strict';
 
+const isObject = require('../utils/isObject');
+
 function Constraint() {
 
     // https://stackoverflow.com/a/27462108
@@ -50,7 +52,12 @@ Constraint.prototype.errorNames = function () {
 
 Constraint.prototype.getOptions = function () {
 
-    return this.opt;
+    if (isObject(this.opt)) {
+
+        return this.opt;
+    }
+
+    return {};
 }
 Constraint.prototype.setOptions = function (opt) {
 
@@ -60,11 +67,24 @@ Constraint.prototype.setOptions = function (opt) {
 }
 
 Constraint.prototype.setExtra = function (extra) {
+
     this.extra = extra;
+
     return this;
 }
 Constraint.prototype.getExtra = function () {
-    return this.extra;
+
+    if (isObject(this.extra)) {
+
+        return this.extra;
+    }
+
+    if (typeof this.extra === 'string') {
+
+        return this.extra;
+    }
+
+    return {};
 }
 
 // Constraint.prototype.validate = function (value, context) {}

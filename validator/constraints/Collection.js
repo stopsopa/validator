@@ -79,7 +79,7 @@ Collection.prototype.constructor = Collection;
 Collection.prototype.MISSING_FIELD_ERROR = 'MISSING_FIELD_ERROR';
 Collection.prototype.NO_SUCH_FIELD_ERROR = 'NO_SUCH_FIELD_ERROR';
 
-Collection.prototype.validate = function (value, context, path) {
+Collection.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 

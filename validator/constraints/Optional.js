@@ -15,7 +15,7 @@ const Optional = function (opt, extra) {
 Optional.prototype = Object.create(Existence.prototype);
 Optional.prototype.constructor = Optional;
 
-// Optional.prototype.validate = function (value, context) {
+// Optional.prototype.validate = function (value, context, path, extra) {
 //     return Promise.resolve('Optional');
 // }
 

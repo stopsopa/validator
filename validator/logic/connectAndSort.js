@@ -74,8 +74,13 @@ const connectAndSort = function (value, constraints, context, path, final = fals
             if (constraints[i].validate) {
 
                 context.addTrigger(
-                    constraints[i].getOptions().async,
-                    () => constraints[i].validate(value, context, path)
+                    constraints[i].getExtra().async,
+                    () => constraints[i].validate(
+                        value,
+                        context,
+                        path,
+                        constraints[i].getExtra()
+                    )
                 );
             }
 

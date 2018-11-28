@@ -32,7 +32,7 @@ IsNull.prototype.constructor = IsNull;
 
 IsNull.prototype.NOT_NULL_ERROR = 'NOT_NULL_ERROR';
 
-IsNull.prototype.validate = function (value, context, path) {
+IsNull.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 

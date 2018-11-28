@@ -35,12 +35,14 @@ Context.prototype.addViolation = function (path, message, code, invalidValue) {
 };
 Context.prototype.addTrigger = function (async = 0, trigger) {
 
-    if ( ! this.stack[async] ) {
+    if ( this.stack[async] ) {
 
-        this.stack[async] = [];
+        this.stack[async].push(trigger);
     }
+    else {
 
-    this.stack[async].push(trigger);
+        this.stack[async] = [trigger];
+    }
 
     return this;
 }
@@ -51,6 +53,7 @@ Context.prototype.getTriggers = function () {
         this.stack[key].length && acc.push(this.stack[key]);
 
         return acc;
+
     }, []);
 
     this.stack = {};
