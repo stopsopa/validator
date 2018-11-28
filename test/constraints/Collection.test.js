@@ -66,13 +66,13 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
     const flat = errors.getFlat();
 
     expect(
-        JSON.stringify(
+        // JSON.stringify(
             flat
-        )
-    ).toBe(
-        JSON.stringify(
+        // )
+    ).toEqual(
+        // JSON.stringify(
             {"extra": ["This field was not expected."], "n": ["This field is missing."]}
-        )
+        // )
     );
 
 });
@@ -120,13 +120,13 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
     const flat = errors.getFlat();
 
     expect(
-        JSON.stringify(
+        // JSON.stringify(
             flat
-        )
-    ).toBe(
-        JSON.stringify(
+        // )
+    ).toEqual(
+        // JSON.stringify(
             {"one": ["This field is missing."], "two": ["This field is missing."]}
-        )
+        // )
     );
 
 });
@@ -363,11 +363,11 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
     const raw = errors.getRaw();
 
     expect(
-        JSON.stringify(
+        // JSON.stringify(
             raw
-        )
-    ).toBe(
-        JSON.stringify(
+        // )
+    ).toEqual(
+        // JSON.stringify(
             [
                 [
                     "b.c",
@@ -392,17 +392,17 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     true
                 ]
             ]
-        )
+        // )
     );
 
     const flat = errors.getFlat();
 
     expect(
-        JSON.stringify(
+        // JSON.stringify(
             flat
-        )
-    ).toBe(
-        JSON.stringify(
+        // )
+    ).toEqual(
+        // JSON.stringify(
             {
                 "b.c": [
                     "This field is missing."
@@ -414,17 +414,17 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     "This value should be null."
                 ]
             }
-        )
+        // )
     );
 
     const tree = errors.getTree();
 
     expect(
-        JSON.stringify(
+        // JSON.stringify(
             tree
-        )
-    ).toBe(
-        JSON.stringify(
+        // )
+    ).toEqual(
+        // JSON.stringify(
             {
                 "b": {
                     "c": [
@@ -440,7 +440,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
                     ]
                 }
             }
-        )
+        // )
     );
 
 });
