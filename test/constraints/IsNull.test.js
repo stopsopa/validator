@@ -15,8 +15,7 @@ it('IsNull', () => {
     ).toBe(
         JSON.stringify(
             {
-                // NOT_NULL_ERROR: IsNull.prototype.NOT_NULL_ERROR,
-                NOT_NULL_ERROR: 'NOT_NULL_ERROR'
+                NOT_NULL_ERROR: IsNull.prototype.NOT_NULL_ERROR
             }
         )
     );

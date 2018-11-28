@@ -67,7 +67,7 @@ NotBlank.prototype.validate = function (value, context, path, extra) {
         }
     }
 
-    return Promie.resolve('resolve NotBlank');
+    return Promise.resolve('resolve NotBlank');
 };
 
 module.exports = NotBlank;

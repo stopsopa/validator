@@ -19,8 +19,7 @@ it('NotBlank', () => {
     ).toBe(
         JSON.stringify(
             {
-                // NOT_NULL_ERROR: NotBlank.prototype.NOT_NULL_ERROR,
-                IS_BLANK_ERROR: 'IS_BLANK_ERROR'
+                IS_BLANK_ERROR: NotBlank.prototype.IS_BLANK_ERROR,
             }
         )
     );

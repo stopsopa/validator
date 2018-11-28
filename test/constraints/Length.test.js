@@ -19,9 +19,8 @@ it('Length - error types', () => {
     ).toBe(
         JSON.stringify(
             {
-                // NOT_NULL_ERROR: IsNull.prototype.NOT_NULL_ERROR,
-                TOO_SHORT_ERROR: 'TOO_SHORT_ERROR',
-                TOO_LONG_ERROR: 'TOO_LONG_ERROR',
+                TOO_SHORT_ERROR : Length.prototype.TOO_SHORT_ERROR,
+                TOO_LONG_ERROR  : Length.prototype.TOO_LONG_ERROR,
             }
         )
     );
