@@ -28,8 +28,20 @@ it("validation stop", async () => {
     }, new Collection({
         a: new Collection({
             b: new Length(3, {async: -1, stop: true}),
+            // async: -1 - means it will be check first (because number is smaller, it could be also -100)
+
+            // stop: true - means if Lenght constrain will detect error then
+            // stop validators with bigger async value
+
+            // async groups in the way:
+            //      - group all validator with the same async value
+            //      - run in sequence group by group from smaller to bigger async
+
+            // stop means:
+            //      If one of validators will detect error
+            //      then don't check any validator with higher async
         }),
-        z: new Length(3),
+        z: new Length(3), // async no defined - so default is 0
     }));
 
     const raw = errors.getRaw();

@@ -88,7 +88,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
     // return Promise.resolve()
 
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
+        // setTimeout(() => {
 
             let error = false;
 
@@ -170,7 +170,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
 
 
             (error && extra.stop) ? reject('stop Collection2') : resolve('resolve Collection2');
-        }, 10);
+        // }, 10);
     });
 };
 

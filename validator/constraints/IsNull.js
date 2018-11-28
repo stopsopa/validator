@@ -37,7 +37,7 @@ IsNull.prototype.validate = function (value, context, path, extra) {
     const opt = this.getOptions();
 
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
+        // setTimeout(() => {
 
             if (value !== null) {
 
@@ -52,7 +52,7 @@ IsNull.prototype.validate = function (value, context, path, extra) {
             }
 
             extra.stop ? reject('stop IsNull') : resolve('resolve IsNull');
-        }, 10);
+        // }, 10);
     });
 };
 

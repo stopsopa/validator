@@ -67,7 +67,7 @@ Length.prototype.validate = function (value, context, path, extra) {
 
     return new Promise((resolve, reject) => {
 
-        setTimeout(() => {
+        // setTimeout(() => {
 
             if (typeof value === 'string') {
 
@@ -107,7 +107,7 @@ Length.prototype.validate = function (value, context, path, extra) {
             }
 
             return resolve('Length');
-        }, 10);
+        // }, 10);
 
     });
 }

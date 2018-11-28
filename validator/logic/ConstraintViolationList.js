@@ -1,5 +1,14 @@
 
-const set = require('../utils/set');
+const set       = require('../utils/set');
+
+const isArray   = require('../utils/isArray');
+
+/**
+ * https://stackoverflow.com/a/14438954
+ */
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+}
 
 function ConstraintViolationList (violations) {
 
@@ -48,6 +57,28 @@ ConstraintViolationList.prototype.getTree = function () {
 
         return acc;
     }, {});
+}
+
+ConstraintViolationList.prototype.findByCodes = function (codes) {
+
+    if ( ! isArray(codes) ) {
+
+        codes = [codes]
+    }
+
+    codes = codes.filter(onlyUnique);
+
+    let tmp = [];
+
+    for (let i = 0, l = codes.length ; i < l ; i += 1 ) {
+
+        tmp = tmp.concat(this.violations.filter(v => v[2] === codes[i]) || []);
+    }
+
+    return tmp;
+}
+ConstraintViolationList.prototype.count = function () {
+    return this.violations.length;
 }
 
 module.exports = ConstraintViolationList;
