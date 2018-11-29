@@ -43,7 +43,7 @@ it('Callback - main arg', async () => {
                         }
 
                         resolve('resolve Callback_5');
-                    }, 50);
+                    }, 50)
                 })
         )
     );

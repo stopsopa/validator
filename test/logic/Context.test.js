@@ -46,27 +46,25 @@ it('new Constraint().getExtra() ', async () => {
             new Callback(
                 (value, context, path, extra) =>
                     new Promise((resolve, reject) => {
-                        setTimeout(() => {
 
-                            if (value.length !== 5) {
+                        if (value.length !== 5) {
 
-                                context
-                                    .buildViolation(JSON.stringify(extra))
-                                    .atPath(path)
-                                    // .setParameter('{{ callback }}', 'not equal')
-                                    .setCode("CALLBACK_5")
-                                    .setInvalidValue(value)
-                                    .addViolation()
-                                ;
+                            context
+                                .buildViolation(JSON.stringify(extra))
+                                .atPath(path)
+                                // .setParameter('{{ callback }}', 'not equal')
+                                .setCode("CALLBACK_5")
+                                .setInvalidValue(value)
+                                .addViolation()
+                            ;
 
-                                if (extra.stop) {
+                            if (extra.stop) {
 
-                                    return reject('reject Callback_5');
-                                }
+                                return reject('reject Callback_5');
                             }
+                        }
 
-                            resolve('resolve Callback_5');
-                        }, 50);
+                        resolve('resolve Callback_5');
                     }),
                 {
                     extra: 'callback'
@@ -102,27 +100,25 @@ it('new Context().getExtra() ', async () => {
             new Callback(
                 (value, context, path, extra) =>
                     new Promise((resolve, reject) => {
-                        setTimeout(() => {
 
-                            if (value.length !== 5) {
+                        if (value.length !== 5) {
 
-                                context
-                                    .buildViolation(JSON.stringify(context.getExtra()))
-                                    .atPath(path)
-                                    // .setParameter('{{ callback }}', 'not equal')
-                                    .setCode("CALLBACK_5")
-                                    .setInvalidValue(value)
-                                    .addViolation()
-                                ;
+                            context
+                                .buildViolation(JSON.stringify(context.getExtra()))
+                                .atPath(path)
+                                // .setParameter('{{ callback }}', 'not equal')
+                                .setCode("CALLBACK_5")
+                                .setInvalidValue(value)
+                                .addViolation()
+                            ;
 
-                                if (extra.stop) {
+                            if (extra.stop) {
 
-                                    return reject('reject Callback_5');
-                                }
+                                return reject('reject Callback_5');
                             }
+                        }
 
-                            resolve('resolve Callback_5');
-                        }, 50);
+                        resolve('resolve Callback_5');
                     }),
                 {
                     extra: 'callback'
@@ -160,26 +156,24 @@ it('new Context().getRoot() ', async () => {
             new Callback(
                 (value, context, path, extra) =>
                     new Promise((resolve, reject) => {
-                        setTimeout(() => {
 
-                            if (value.length !== 5) {
+                        if (value.length !== 5) {
 
-                                context
-                                    .buildViolation(JSON.stringify(context.getRoot()))
-                                    .atPath(path)
-                                    .setCode("CALLBACK_5")
-                                    .setInvalidValue(value)
-                                    .addViolation()
-                                ;
+                            context
+                                .buildViolation(JSON.stringify(context.getRoot()))
+                                .atPath(path)
+                                .setCode("CALLBACK_5")
+                                .setInvalidValue(value)
+                                .addViolation()
+                            ;
 
-                                if (extra.stop) {
+                            if (extra.stop) {
 
-                                    return reject('reject Callback_5');
-                                }
+                                return reject('reject Callback_5');
                             }
+                        }
 
-                            resolve('resolve Callback_5');
-                        }, 50);
+                        resolve('resolve Callback_5');
                     }),
                 {
                     extra: 'callback'

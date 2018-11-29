@@ -14,8 +14,6 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-jest.setTimeout(30000);
-
 it("validation stop", async () => {
 
     expect.assertions(2);

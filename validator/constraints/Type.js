@@ -70,68 +70,60 @@ Type.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    // return new Promise((resolve, reject) => {
-    //
-    //     setTimeout(() => {
+    let type = opt.type;
 
-            let type = opt.type;
+    let valid = false;
 
-            let valid = false;
+    let arr = isArray(value);
 
-            let arr = isArray(value);
+    let obj = isObject(value);
 
-            let obj = isObject(value);
+    for (let i = 0, l = type.length ; i < l ; i += 1 ) {
 
-            for (let i = 0, l = type.length ; i < l ; i += 1 ) {
+        if (type[i] === 'array' && arr && !obj) {
 
-                if (type[i] === 'array' && arr && !obj) {
+            valid = true;
+            break;
+        }
 
-                    valid = true;
-                    break;
-                }
+        if (type[i] === 'object' && !arr && obj) {
 
-                if (type[i] === 'object' && !arr && obj) {
+            valid = true;
+            break;
+        }
 
-                    valid = true;
-                    break;
-                }
+        if (type[i] === 'integer' && Number.isInteger(value)) {
 
-                if (type[i] === 'integer' && Number.isInteger(value)) {
+            valid = true;
+            break;
+        }
 
-                    valid = true;
-                    break;
-                }
+        if ( ! obj && ! arr && typeof value === type[i]) {
 
-                if ( ! obj && ! arr && typeof value === type[i]) {
+            valid = true;
+            break;
+        }
+    }
 
-                    valid = true;
-                    break;
-                }
-            }
+    if ( ! valid ) {
 
-            if ( ! valid ) {
+        context
+            .buildViolation(opt.message)
+            .atPath(path)
+            .setParameter('{{ type }}', opt.type.join(', '))
+            .setCode(Type.prototype.INVALID_TYPE_ERROR)
+            .setInvalidValue(value)
+            .addViolation()
+        ;
 
-                context
-                    .buildViolation(opt.message)
-                    .atPath(path)
-                    .setParameter('{{ type }}', opt.type.join(', '))
-                    .setCode(Type.prototype.INVALID_TYPE_ERROR)
-                    .setInvalidValue(value)
-                    .addViolation()
-                ;
+        if (extra.stop) {
 
-                if (extra.stop) {
+            // return reject('stop Type');
+            return Promise.reject('stop Type');
+        }
+    }
 
-                    // return reject('stop Type');
-                    return Promise.reject('stop Type');
-                }
-            }
-
-            // return resolve('resolve Type');
-            return Promise.resolve('resolve Type');
-
-    //     }, 1500);
-    // })
+    return Promise.resolve('resolve Type');
 };
 
 Type.prototype.allowedTypes = 'undefined object boolean number string symbol function integer array'.split(' ');

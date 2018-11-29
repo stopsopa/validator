@@ -51,23 +51,3 @@ it('IsNull - custom message', async () => {
         ]
     );
 });
-
-it('IsNull - custom message', async () => {
-
-    expect.assertions(1);
-
-    let errors = await validator('test', new IsNull('custom message'));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                undefined,
-                "custom message",
-                "NOT_NULL_ERROR",
-                "test"
-            ]
-        ]
-    );
-});

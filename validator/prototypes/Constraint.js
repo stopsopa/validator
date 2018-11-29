@@ -50,17 +50,7 @@ Constraint.prototype.errorNames = function () {
     return Constraint.prototype._errorNames;
 }
 
-Constraint.prototype.getOptions = function (forceObject) {
-
-    if (forceObject) {
-
-        if (isObject(this.opt)) {
-
-            return this.opt;
-        }
-
-        return {};
-    }
+Constraint.prototype.getOptions = function () {
 
     return this.opt;
 }

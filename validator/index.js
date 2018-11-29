@@ -13,7 +13,7 @@ const Required          = require('./constraints/Required');
 
 const delay             = require('./utils/delay');
 
-// const log               = require('../log/logn');
+const log               = require('../log/logn');
 
 /**
  * import validator, { test } from '@stopsopa/validator';
@@ -29,6 +29,7 @@ const validator = (value, constraints, extra) => {
     const context       = new Context(value, extra);
 
     const connected     = connectAndSort(value, constraints, context, extra ? extra.path : undefined, true);
+
 
     let promise = Promise.resolve();
 

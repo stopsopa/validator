@@ -68,114 +68,59 @@ const Collection = function (opt, extra) {
         return acc;
     }, {});
 
-    // console.log(`\n\n\n\n\n\n\n\n\nCollection construct: `+JSON.stringify(opt, null, 4)+`\n\n\n\n\n\n\n`);
-
     this.setOptions(opt);
 }
 
 Collection.prototype = Object.create(Constraint.prototype);
 Collection.prototype.constructor = Collection;
 
-Collection.prototype.UNKNOWN_FIELD_ERROR = 'UNKNOWN_FIELD_ERROR';
+Collection.prototype.MISSING_FIELD_ERROR = 'MISSING_FIELD_ERROR';
 Collection.prototype.NO_SUCH_FIELD_ERROR = 'NO_SUCH_FIELD_ERROR';
 
 Collection.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    // console.log(`\nopt: `+JSON.stringify(value, null, 4)+`\n`);
+    if (isObject(value) || isArray(value)) {
 
-    // return Promise.resolve()
+        Object.keys(opt.fields).forEach(field => {
 
-    return new Promise((resolve, reject) => {
-        // setTimeout(() => {
+            if (typeof value[field] === 'undefined') {
 
-            // console.log(`\n\n\n\n\n\ncon: `+JSON.stringify(opt.fields, null, 4)+`\n\n\n\n\n`);
-            // process.exit(1);
+                if ( ! (opt.fields[field] instanceof Optional) && ! opt.allowMissingFields) {
 
-            const optFieldsIsObj    = isObject(value);
-
-            if ( ! optFieldsIsObj && ! isArray(value) ) {
-
-                return resolve('resolve Collection3');
-            }
-
-            let error = false;
-
-            const keys              = optFieldsIsObj ? Object.keys(value || {}) : [];
-
-            if ( ! value ) {
-
-                if ( ! opt.allowMissingFields ) {
-
-                    Object.keys(opt.fields).forEach(field => {
-
-                        context
-                            .buildViolation(opt.missingFieldsMessage)
-                            .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
-                            .setParameter('{{ field }}', field)
-                            .setCode(Collection.prototype.UNKNOWN_FIELD_ERROR)
-                            .setInvalidValue(value)
-                            .addViolation()
-                        ;
-
-                        error = true;
-                    });
-                }
-
-                return resolve('resolve Collection1');
-            }
-
-            if (optFieldsIsObj) {
-
-                Object.keys(opt.fields).forEach(field => {
-
-                    if (typeof value[field] === 'undefined') {
-
-                        if ( ! (opt.fields[field] instanceof Optional) && ! opt.allowMissingFields) {
-
-                            context
-                                .buildViolation(opt.missingFieldsMessage)
-                                .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
-                                .setParameter('{{ field }}', field)
-                                .setCode(Collection.prototype.UNKNOWN_FIELD_ERROR)
-                                .setInvalidValue(value)
-                                .addViolation()
-                            ;
-
-                            error = true;
-                        }
-                    }
-                    else {
-
-                        /**
-                         * Make nested validation
-                         */
-                    }
-                });
-
-                if ( ! opt.allowExtraFields ) {
-
-                    keys.forEach(field => {
-
-                        if (typeof opt.fields[field] === 'undefined') {
-
-                            context
-                                .buildViolation(opt.extraFieldsMessage)
-                                .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
-                                .setParameter('{{ field }}', field)
-                                .setCode(Collection.prototype.NO_SUCH_FIELD_ERROR)
-                                .setInvalidValue(value)
-                                .addViolation()
-                            ;
-                        }
-                    });
+                    context
+                        .buildViolation(opt.missingFieldsMessage)
+                        .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
+                        .setParameter('{{ field }}', field)
+                        .setCode(Collection.prototype.MISSING_FIELD_ERROR)
+                        .setInvalidValue(value)
+                        .addViolation()
+                    ;
                 }
             }
+        });
 
-            resolve('resolve Collection2');
-        // }, 10);
-    });
+        if ( ! opt.allowExtraFields ) {
+
+            each(value, (v, field) => {
+
+                if (typeof opt.fields[field] === 'undefined') {
+
+                    context
+                        .buildViolation(opt.extraFieldsMessage)
+                        .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
+                        .setParameter('{{ field }}', field)
+                        .setCode(Collection.prototype.NO_SUCH_FIELD_ERROR)
+                        .setInvalidValue(value)
+                        .addViolation()
+                    ;
+                }
+            });
+        }
+    }
+
+    return Promise.resolve('resolve Collection2');
 };
 
 Collection.prototype.validateChildren = function (value, context, path, extra) {

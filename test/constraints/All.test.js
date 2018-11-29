@@ -68,7 +68,7 @@ it('All', async () => {
                 [
                     "0.c",
                     "This field is missing.",
-                    "UNKNOWN_FIELD_ERROR",
+                    "MISSING_FIELD_ERROR",
                     {
                         "a": "d",
                         "b": "f",
@@ -101,19 +101,19 @@ it('All', async () => {
                 [
                     "1.a",
                     "This field is missing.",
-                    "UNKNOWN_FIELD_ERROR",
+                    "MISSING_FIELD_ERROR",
                     {}
                 ],
                 [
                     "1.b",
                     "This field is missing.",
-                    "UNKNOWN_FIELD_ERROR",
+                    "MISSING_FIELD_ERROR",
                     {}
                 ],
                 [
                     "1.c",
                     "This field is missing.",
-                    "UNKNOWN_FIELD_ERROR",
+                    "MISSING_FIELD_ERROR",
                     {}
                 ]
             ]

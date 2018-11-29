@@ -36,24 +36,19 @@ IsNull.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    return new Promise((resolve, reject) => {
-        // setTimeout(() => {
+    if (value !== null) {
 
-            if (value !== null) {
+        context
+            .buildViolation(opt.message)
+            .atPath(path)
+            // .setParameter('{{ value }}', $this->formatValue($value))
+            .setCode(IsNull.prototype.NOT_NULL_ERROR)
+            .setInvalidValue(value)
+            .addViolation()
+        ;
+    }
 
-                context
-                    .buildViolation(opt.message)
-                    .atPath(path)
-                    // .setParameter('{{ value }}', $this->formatValue($value))
-                    .setCode(IsNull.prototype.NOT_NULL_ERROR)
-                    .setInvalidValue(value)
-                    .addViolation()
-                ;
-            }
-
-            extra.stop ? reject('stop IsNull') : resolve('resolve IsNull');
-        // }, 10);
-    });
+    return extra.stop ? Promise.reject('stop IsNull') : Promise.resolve('resolve IsNull');
 };
 
 module.exports = IsNull;

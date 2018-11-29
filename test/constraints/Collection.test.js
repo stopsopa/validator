@@ -37,7 +37,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
             [
                 "n",
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {
                     "extra": false,
                     "one": "two",
@@ -87,13 +87,13 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
             [
                 "one",
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {}
             ],
             [
                 "two",
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {}
             ]
         ]
@@ -319,7 +319,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
             [
                 "b.c",
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {
                     "second": "level"
                 }
@@ -426,7 +426,7 @@ it('stack overflow', async () => {
             [
                 Array(1001).join(".").split(".").map(() => 'test').join('.'),
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {}
             ]
         ]
@@ -479,7 +479,7 @@ it('Collection on array', async () => {
             [
                 "b.0",
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {
                     "1": {
                         "g": "h"
@@ -632,7 +632,7 @@ it("Collection - allowMissingFields: false", async () => {
     errors = errors.getRaw();
 
     expect(errors).toEqual(
-        [["b", "This field is missing.", "UNKNOWN_FIELD_ERROR", {"a": null}]]
+        [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
     );
 });
 
@@ -682,7 +682,7 @@ it("Collection deep - allowMissingFields: false", async () => {
             [
                 "a.b.d",
                 "This field is missing.",
-                "UNKNOWN_FIELD_ERROR",
+                "MISSING_FIELD_ERROR",
                 {
                     "c": "abc"
                 }
@@ -810,3 +810,58 @@ it("Collection no data", async () => {
 
     expect(errors).toEqual([]);
 });
+
+it("Collection missing fields [part 1]", async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator({
+        a: {
+
+        }
+    } , new Collection({
+        a: new Collection({
+            b: new Collection({
+                fields: {
+                    c: new Length(3),
+                    d: new Length(2),
+                },
+                // allowMissingFields: true,
+            })
+        })
+    }));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual([["a.b", "This field is missing.", "MISSING_FIELD_ERROR", {}]]);
+});
+
+it("Collection missing fields [part 2]", async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator({
+        a: {
+
+        }
+    } , new Collection({
+        a: new Collection({
+            fields: {
+                b: new Collection({
+                    fields: {
+                        c: new Length(3),
+                        d: new Length(2),
+                    },
+                    // allowMissingFields: true,
+                })
+            },
+            allowMissingFields: true
+        })
+    }));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual([]);
+});
+
+
