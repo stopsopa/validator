@@ -267,7 +267,7 @@ it('Regex - not string value', async () => {
             }
         }
     }, new Collection({
-        z: new Regex(/two/, {async: -1, stop: true}),
+        z: new Regex(/two/),
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
@@ -277,6 +277,12 @@ it('Regex - not string value', async () => {
 
     expect(raw).toEqual(
         [
+            [
+                "z",
+                "This value is not valid.",
+                "REGEX_FAILED_ERROR",
+                false
+            ],
             [
                 "b.a",
                 "This collection should contain exactly 2 elements.",

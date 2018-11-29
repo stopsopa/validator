@@ -76,7 +76,7 @@ Regex.prototype.match = function (value, regex, match) {
         return match ? ret : !ret;
     }
 
-    return true;
+    return false;
 }
 
 module.exports = Regex;
