@@ -8,16 +8,28 @@ it('IsNull', () => {
 
     var k = new IsNull();
 
-    expect(
-        JSON.stringify(
-            k.errorNames()
-        )
-    ).toBe(
-        JSON.stringify(
-            {
-                NOT_NULL_ERROR: IsNull.prototype.NOT_NULL_ERROR
-            }
-        )
+    expect(k.errorNames()).toEqual({
+        NOT_NULL_ERROR: IsNull.prototype.NOT_NULL_ERROR
+    });
+});
+
+it('IsNull - custom message', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator('test', new IsNull('custom message'));
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual(
+        [
+            [
+                undefined,
+                "custom message",
+                "NOT_NULL_ERROR",
+                "test"
+            ]
+        ]
     );
 });
 
@@ -29,46 +41,14 @@ it('IsNull - custom message', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    null,
-                    "custom message",
-                    "NOT_NULL_ERROR",
-                    "test"
-                ]
+                undefined,
+                "custom message",
+                "NOT_NULL_ERROR",
+                "test"
             ]
-        )
-    );
-});
-
-it('IsNull - custom message', async () => {
-
-    expect.assertions(1);
-
-    let errors = await validator('test', new IsNull('custom message'));
-
-    errors = errors.getRaw();
-
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
-            [
-                [
-                    null,
-                    "custom message",
-                    "NOT_NULL_ERROR",
-                    "test"
-                ]
-            ]
-        )
+        ]
     );
 });

@@ -1,11 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`key - Collection - used together with other constrain array 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
-
-exports[`key - Collection - used together with other constrain require 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
-
-exports[`key - Collection - used together with other constrain require x2 1`] = `"[[null,\\"This value should be null.\\",\\"NOT_NULL_ERROR\\",\\"test\\"]]"`;
-
 exports[`stack overflow 1`] = `
 Array [
   Array [

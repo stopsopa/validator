@@ -32,47 +32,35 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
 
     const raw = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            raw
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(raw).toEqual(
+        [
             [
-                [
-                    "n",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    {
-                        "extra": false,
-                        "one": "two",
-                        "three": "four"
-                    }
-                ],
-                [
-                    "extra",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "extra": false,
-                        "one": "two",
-                        "three": "four"
-                    }
-                ]
+                "n",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                {
+                    "extra": false,
+                    "one": "two",
+                    "three": "four"
+                }
+            ],
+            [
+                "extra",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "extra": false,
+                    "one": "two",
+                    "three": "four"
+                }
             ]
-        )
+        ]
     );
 
     const flat = errors.getFlat();
 
-    expect(
-        // JSON.stringify(
-            flat
-        // )
-    ).toEqual(
-        // JSON.stringify(
-            {"extra": ["This field was not expected."], "n": ["This field is missing."]}
-        // )
+    expect(flat).toEqual(
+        {"extra": ["This field was not expected."], "n": ["This field is missing."]}
     );
 
 });
@@ -94,39 +82,27 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
 
     const raw = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            raw
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(raw).toEqual(
+        [
             [
-                [
-                    "one",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    {}
-                ],
-                [
-                    "two",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    {}
-                ]
+                "one",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                {}
+            ],
+            [
+                "two",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                {}
             ]
-        )
+        ]
     );
 
     const flat = errors.getFlat();
 
-    expect(
-        // JSON.stringify(
-            flat
-        // )
-    ).toEqual(
-        // JSON.stringify(
-            {"one": ["This field is missing."], "two": ["This field is missing."]}
-        // )
+    expect(flat).toEqual(
+        {"one": ["This field is missing."], "two": ["This field is missing."]}
     );
 
 });
@@ -149,35 +125,29 @@ it('Collection allowExtraFields = false & allowMissingFields = false: extra', as
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "two",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "test": null,
-                        "two": true,
-                        "one": false
-                    }
-                ],
-                [
-                    "one",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "test": null,
-                        "two": true,
-                        "one": false
-                    }
-                ],
-            ]
-        )
+                "two",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "test": null,
+                    "two": true,
+                    "one": false
+                }
+            ],
+            [
+                "one",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "test": null,
+                    "two": true,
+                    "one": false
+                }
+            ],
+        ]
     );
 });
 
@@ -256,18 +226,10 @@ it('key - Collection - string but expect object with field', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
-            []
-        )
-    );
+    expect(errors).toEqual([]);
 });
 
-it('key - Collection - used together with other constrain array', async () => {
+it('key - Collection - used together with other constraint array', async () => {
 
     expect.assertions(2);
 
@@ -280,13 +242,18 @@ it('key - Collection - used together with other constrain array', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toMatchSnapshot();
+    expect(errors).toEqual(
+        [
+            [
+                undefined,
+                "This value should be null.",
+                "NOT_NULL_ERROR",
+                "test"
+            ]
+        ]
+    )
 
-    expect(errors[0][0]).toBeUndefined();
+    expect(errors[0][0]).toEqual()
 });
 
 it('key - Collection - used together with other constrain require', async () => {
@@ -302,11 +269,16 @@ it('key - Collection - used together with other constrain require', async () => 
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toMatchSnapshot();
+    expect(errors).toEqual(
+        [
+            [
+                undefined,
+                "This value should be null.",
+                "NOT_NULL_ERROR",
+                "test"
+            ]
+        ]
+    )
 
     expect(errors[0][0]).toBeUndefined();
 });
@@ -326,11 +298,9 @@ it('key - Collection - used together with other constrain require x2', async () 
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toMatchSnapshot();
+    expect(errors).toEqual(
+        [[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]
+    );
 
     expect(errors[0][0]).toBeUndefined();
 });
@@ -361,85 +331,67 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
 
     const raw = errors.getRaw();
 
-    expect(
-        // JSON.stringify(
-            raw
-        // )
-    ).toEqual(
-        // JSON.stringify(
+    expect(raw).toEqual(
+        [
             [
-                [
-                    "b.c",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    {
-                        "second": "level"
-                    }
-                ],
-                [
-                    "b.second",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "second": "level"
-                    }
-                ],
-                [
-                    "d.f",
-                    "This value should be null.",
-                    "NOT_NULL_ERROR",
-                    true
-                ]
+                "b.c",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                {
+                    "second": "level"
+                }
+            ],
+            [
+                "b.second",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "second": "level"
+                }
+            ],
+            [
+                "d.f",
+                "This value should be null.",
+                "NOT_NULL_ERROR",
+                true
             ]
-        // )
+        ]
     );
 
     const flat = errors.getFlat();
 
-    expect(
-        // JSON.stringify(
-            flat
-        // )
-    ).toEqual(
-        // JSON.stringify(
-            {
-                "b.c": [
-                    "This field is missing."
-                ],
-                "b.second": [
-                    "This field was not expected."
-                ],
-                "d.f": [
-                    "This value should be null."
-                ]
-            }
-        // )
+    expect(flat).toEqual(
+        {
+            "b.c": [
+                "This field is missing."
+            ],
+            "b.second": [
+                "This field was not expected."
+            ],
+            "d.f": [
+                "This value should be null."
+            ]
+        }
     );
 
     const tree = errors.getTree();
 
-    expect(
-        // JSON.stringify(
-            tree
-        // )
-    ).toEqual(
-        // JSON.stringify(
-            {
-                "b": {
-                    "c": [
-                        "This field is missing."
-                    ],
-                    "second": [
-                        "This field was not expected."
-                    ]
-                },
-                "d": {
-                    "f": [
-                        "This value should be null."
-                    ]
-                }
+    expect(tree).toEqual(
+        {
+            "b": {
+                "c": [
+                    "This field is missing."
+                ],
+                "second": [
+                    "This field was not expected."
+                ]
+            },
+            "d": {
+                "f": [
+                    "This value should be null."
+                ]
             }
-        // )
+        }
     );
 
 });
@@ -486,11 +438,7 @@ it('stack overflow', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        // JSON.stringify(
-            errors
-        // )
-    ).toMatchSnapshot();
+    expect(errors).toMatchSnapshot();
 });
 
 it('Collection on array', async () => {
@@ -534,31 +482,25 @@ it('Collection on array', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "b.0",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    {
-                        "1": {
-                            "g": "h"
-                        }
+                "b.0",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                {
+                    "1": {
+                        "g": "h"
                     }
-                ],
-                [
-                    "b.1.g",
-                    "This value should have exactly 23 characters.",
-                    "TOO_SHORT_ERROR",
-                    "h"
-                ]
+                }
+            ],
+            [
+                "b.1.g",
+                "This value should have exactly 23 characters.",
+                "TOO_SHORT_ERROR",
+                "h"
             ]
-        )
+        ]
     );
 
 });
@@ -610,36 +552,30 @@ it('Collection on array 2', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "b.0.c",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "c": "d",
-                        "e": "f"
-                    }
-                ],
-                [
-                    "b.1.g",
-                    "This value should have exactly 2 characters.",
-                    "TOO_SHORT_ERROR",
-                    "h"
-                ],
-                [
-                    "b.2.g",
-                    "This value should have exactly 1 character.",
-                    "TOO_LONG_ERROR",
-                    "h1"
-                ]
+                "b.0.c",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "c": "d",
+                    "e": "f"
+                }
+            ],
+            [
+                "b.1.g",
+                "This value should have exactly 2 characters.",
+                "TOO_SHORT_ERROR",
+                "h"
+            ],
+            [
+                "b.2.g",
+                "This value should have exactly 1 character.",
+                "TOO_LONG_ERROR",
+                "h1"
             ]
-        )
+        ]
     );
 
 });
@@ -668,30 +604,24 @@ it('Collection on array 3', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "0.c",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "c": "d",
-                        "e": "f"
-                    }
-                ],
-                [
-                    "1.g",
-                    "This value should have exactly 2 characters.",
-                    "TOO_SHORT_ERROR",
-                    "h"
-                ]
+                "0.c",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "c": "d",
+                    "e": "f"
+                }
+            ],
+            [
+                "1.g",
+                "This value should have exactly 2 characters.",
+                "TOO_SHORT_ERROR",
+                "h"
             ]
-        )
+        ]
     );
 
 });
@@ -709,14 +639,8 @@ it("Collection - allowMissingFields: false", async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
-            [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
-        )
+    expect(errors).toEqual(
+        [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
     );
 });
 
@@ -736,15 +660,7 @@ it("Collection - allowMissingFields: true", async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
-            []
-        )
-    );
+    expect(errors).toEqual([]);
 });
 
 
@@ -769,23 +685,17 @@ it("Collection deep - allowMissingFields: false", async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "a.b.d",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    {
-                        "c": "abc"
-                    }
-                ]
+                "a.b.d",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                {
+                    "c": "abc"
+                }
             ]
-        )
+        ]
     );
 });
 
@@ -813,13 +723,7 @@ it("Collection deep - allowMissingFields: true", async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify([])
-    );
+    expect(errors).toEqual([]);
 });
 
 it("Collection deep, no data (main level) - allowMissingFields: false", async () => {
@@ -840,21 +744,15 @@ it("Collection deep, no data (main level) - allowMissingFields: false", async ()
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "a",
-                    "This field is missing.",
-                    "MISSING_FIELD_ERROR",
-                    null
-                ]
+                "a",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                undefined
             ]
-        )
+        ]
     );
 });
 it("Collection deep, no data (main level) - allowMissingFields: true", async () => {
@@ -878,13 +776,7 @@ it("Collection deep, no data (main level) - allowMissingFields: true", async () 
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify([])
-    );
+    expect(errors).toEqual([]);
 });
 
 it("Collection deep, no data (deep level) - allowMissingFields: false", async () => {
@@ -909,12 +801,8 @@ it("Collection deep, no data (deep level) - allowMissingFields: false", async ()
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify([
+    expect(errors).toEqual(
+        [
             [
                 "a.b.c",
                 "This field is missing.",
@@ -927,7 +815,7 @@ it("Collection deep, no data (deep level) - allowMissingFields: false", async ()
                 "MISSING_FIELD_ERROR",
                 null
             ]
-        ])
+        ]
     );
 });
 
@@ -954,13 +842,7 @@ it("Collection deep, no data (deep level) - allowMissingFields: true", async () 
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify([])
-    );
+    expect(errors).toEqual([]);
 });
 
 it('Collection - array as a root', async () => {

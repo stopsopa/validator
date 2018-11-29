@@ -12,18 +12,10 @@ it('Length - error types', () => {
 
     var k = new Length(3);
 
-    expect(
-        JSON.stringify(
-            k.errorNames()
-        )
-    ).toBe(
-        JSON.stringify(
-            {
-                TOO_SHORT_ERROR : Length.prototype.TOO_SHORT_ERROR,
-                TOO_LONG_ERROR  : Length.prototype.TOO_LONG_ERROR,
-            }
-        )
-    );
+    expect(k.errorNames()).toEqual({
+        TOO_SHORT_ERROR : Length.prototype.TOO_SHORT_ERROR,
+        TOO_LONG_ERROR  : Length.prototype.TOO_LONG_ERROR,
+    });
 });
 
 it('Length - no arg', () => {

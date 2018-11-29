@@ -12,17 +12,9 @@ it('Type', () => {
 
     var k = new Type('array');
 
-    expect(
-        JSON.stringify(
-            k.errorNames()
-        )
-    ).toBe(
-        JSON.stringify(
-            {
-                INVALID_TYPE_ERROR: Type.prototype.INVALID_TYPE_ERROR
-            }
-        )
-    );
+    expect(k.errorNames()).toEqual({
+        INVALID_TYPE_ERROR: Type.prototype.INVALID_TYPE_ERROR
+    });
 });
 
 it('Type - custom message', async () => {

@@ -12,17 +12,9 @@ it('NotBlank', () => {
 
     var k = new NotBlank();
 
-    expect(
-        JSON.stringify(
-            k.errorNames()
-        )
-    ).toBe(
-        JSON.stringify(
-            {
-                IS_BLANK_ERROR: NotBlank.prototype.IS_BLANK_ERROR,
-            }
-        )
-    );
+    expect(k.errorNames()).toEqual({
+        IS_BLANK_ERROR: NotBlank.prototype.IS_BLANK_ERROR,
+    });
 });
 
 it('NotBlank - custom message', async () => {
@@ -33,21 +25,15 @@ it('NotBlank - custom message', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    null,
-                    "custom message",
-                    "IS_BLANK_ERROR",
-                    ""
-                ]
+                undefined,
+                "custom message",
+                "IS_BLANK_ERROR",
+                ""
             ]
-        )
+        ]
     );
 });
 
