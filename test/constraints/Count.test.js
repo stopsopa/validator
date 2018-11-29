@@ -12,31 +12,32 @@ const Callback      = require('../../validator/constraints/Callback');
 
 const IsNull        = require('../../validator/constraints/IsNull');
 
-// it('Count', () => {
-//
-//     var k = new Count();
-//
-//     expect(k.errorNames()).toEqual({
-//         NOT_NULL_ERROR: Count.prototype.NOT_NULL_ERROR
-//     });
-// });
-//
-// it('Count() - used as a function', async () => {
-//
-//     expect.assertions(1);
-//
-//     try {
-//         let errors = await validator('test', new Collection({
-//             test: Count()
-//         }));
-//
-//         errors.getRaw();
-//     }
-//     catch (e) {
-//
-//         expect(e + '').toBe("Don't use Count() as a function, create instance new Count()");
-//     }
-// });
+it('Count', () => {
+
+    var k = new Count(4);
+
+    expect(k.errorNames()).toEqual({
+        TOO_FEW_ERROR: Count.prototype.TOO_FEW_ERROR,
+        TOO_MANY_ERROR: Count.prototype.TOO_MANY_ERROR,
+    });
+});
+
+it('Count() - used as a function', async () => {
+
+    expect.assertions(1);
+
+    try {
+        let errors = await validator('test', new Collection({
+            test: Count()
+        }));
+
+        errors.getRaw();
+    }
+    catch (e) {
+
+        expect(e + '').toBe("Don't use Count() as a function, create instance new Count()");
+    }
+});
 
 it('Count - custom message exact', async () => {
 
