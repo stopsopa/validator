@@ -4,8 +4,6 @@ const validator     = require('../../validator');
 
 const Count         = require('../../validator/constraints/Count');
 
-const Length        = require('../../validator/constraints/Length');
-
 const Collection    = require('../../validator/constraints/Collection');
 
 const Callback      = require('../../validator/constraints/Callback');

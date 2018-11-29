@@ -6,10 +6,6 @@ const All           = require('../../validator/constraints/All');
 
 const Collection    = require('../../validator/constraints/Collection');
 
-const Required      = require('../../validator/constraints/Required');
-
-const Optional      = require('../../validator/constraints/Optional');
-
 const Length        = require('../../validator/constraints/Length');
 
 const IsNull        = require('../../validator/constraints/IsNull');
