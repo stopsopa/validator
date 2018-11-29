@@ -2,43 +2,43 @@
 
 const validator     = require('../../validator');
 
-const IsNull = require('../../validator/constraints/IsNull');
+const Email        = require('../../validator/constraints/Email');
 
 const Count         = require('../../validator/constraints/Count');
 
-const Collection = require('../../validator/constraints/Collection');
+const Collection    = require('../../validator/constraints/Collection');
 
-it('IsNull', () => {
+it('Email', () => {
 
-    var k = new IsNull();
+    var k = new Email();
 
     expect(k.errorNames()).toEqual({
-        NOT_NULL_ERROR: IsNull.prototype.NOT_NULL_ERROR
+        INVALID_EMAIL_ERROR: Email.prototype.INVALID_EMAIL_ERROR
     });
 });
 
-it('IsNull() - used as a function', async () => {
+it('Email() - used as a function', async () => {
 
     expect.assertions(1);
 
     try {
         let errors = await validator('test', new Collection({
-            test: IsNull()
+            test: Email()
         }));
 
         errors.getRaw();
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use IsNull() as a function, create instance new IsNull()");
+        expect(e + '').toBe("Don't use Email() as a function, create instance new Email()");
     }
 });
 
-it('IsNull - custom message', async () => {
+it('Email - custom message', async () => {
 
     expect.assertions(1);
 
-    let errors = await validator('test', new IsNull('custom message'));
+    let errors = await validator('test', new Email('custom message'));
 
     errors = errors.getRaw();
 
@@ -47,15 +47,13 @@ it('IsNull - custom message', async () => {
             [
                 undefined,
                 "custom message",
-                "NOT_NULL_ERROR",
+                "INVALID_EMAIL_ERROR",
                 "test"
             ]
         ]
     );
 });
-
-
-it('IsNull - stop [part 1]', async () => {
+it('Email - stop [part 1]', async () => {
 
     expect.assertions(1);
 
@@ -69,7 +67,7 @@ it('IsNull - stop [part 1]', async () => {
             }
         }
     }, new Collection({
-        z: new IsNull(),
+        z: new Email(),
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
@@ -81,8 +79,8 @@ it('IsNull - stop [part 1]', async () => {
         [
             [
                 "z",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
+                "This value is not a valid email address.",
+                "INVALID_EMAIL_ERROR",
                 false
             ],
             [
@@ -98,7 +96,7 @@ it('IsNull - stop [part 1]', async () => {
         ]
     );
 });
-it('IsNull - stop [part 2]', async () => {
+it('Email - stop [part 2]', async () => {
 
     expect.assertions(1);
 
@@ -112,7 +110,7 @@ it('IsNull - stop [part 2]', async () => {
             }
         }
     }, new Collection({
-        z: new IsNull(undefined, {async: -1, stop: true}),
+        z: new Email(undefined, {async: -1, stop: true}),
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
@@ -124,8 +122,8 @@ it('IsNull - stop [part 2]', async () => {
         [
             [
                 "z",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
+                "This value is not a valid email address.",
+                "INVALID_EMAIL_ERROR",
                 false
             ]
         ]
