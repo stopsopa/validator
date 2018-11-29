@@ -890,3 +890,34 @@ it('Collection - no constraints undefined', async () => {
 
     expect(errors).toEqual([]);
 });
+
+
+it("Collection no data", async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator(undefined , new Collection({
+        a: new Collection({
+            b: new Collection({
+                fields: {
+                    c: new Length(3),
+                    d: new Length(2),
+                },
+                // allowMissingFields: true,
+            })
+        })
+    }));
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual(
+        [
+            [
+                "a",
+                "This field is missing.",
+                "MISSING_FIELD_ERROR",
+                undefined
+            ]
+        ]
+    );
+});

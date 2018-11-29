@@ -21,7 +21,7 @@ it('Callback - main arg', async () => {
     let errors = await validator(
         'test',
         new Callback(
-            (value, context, path, opt, extra) =>
+            (value, context, path, extra) =>
                 new Promise((resolve, reject) => {
                     setTimeout(() => {
 
@@ -84,7 +84,7 @@ it('Callback - not promise', async () => {
 
     expect.assertions(1);
 
-    const errors = await validator('test', new Callback((value, context, path, opt, extra) => {
+    const errors = await validator('test', new Callback((value, context, path, extra) => {
         if (value.length !== 5) {
 
             context

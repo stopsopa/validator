@@ -33,11 +33,11 @@ Callback.prototype.constructor = Callback;
 
 Callback.prototype.validate = function (value, context, path, extra) {
 
-    const opt = this.getOptions();
+    const callback = this.getOptions();
 
     return new Promise((resolve, reject) => {
 
-        let result = opt(value, context, path, opt, extra);
+        let result = callback(value, context, path, extra);
 
         if ( ! result || typeof result.then !== 'function') {
 

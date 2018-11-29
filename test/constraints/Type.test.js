@@ -26,9 +26,9 @@ it('Type - custom message', async () => {
         type: 'object'
     }));
 
-    errors = errors.getRaw();
+    const row = errors.getRaw();
 
-    expect(errors).toEqual(
+    expect(row).toEqual(
         [
             [
                 undefined,
@@ -66,33 +66,6 @@ it('Type - stop', async () => {
     );
 });
 
-it('Type - check all types', async () => {
-
-    const data = {
-        'undefined' : undefined,
-        'object'    : {},
-        'boolean'   : true,
-        'number'    : 67.6,
-        'string'    : 'str',
-        'function'  : function () {},
-        'integer'   : 45,
-        'array'     : []
-    }
-
-    const keys = Object.keys(data);
-
-    expect.assertions(keys.length)
-
-    return Promise.all(keys.map(async (type, i) => {
-
-        let errors = await validator(data[type], new Type(type, {async: i}));
-
-        errors = errors.getRaw();
-
-        expect(errors).toEqual([]);
-    }));
-});
-
 it('Type - not string', async () => {
 
     expect.assertions(1);
@@ -105,7 +78,7 @@ it('Type - not string', async () => {
     }
     catch (e) {
 
-        expect(e).toEqual("Type constraint: type parameter have to be string and one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+        expect(e).toEqual("Type constraint: Each of types have to be string one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
     }
 });
 
@@ -121,6 +94,100 @@ it('Type - string', async () => {
     }
     catch (e) {
 
-        expect(e).toEqual("Type constraint: type parameter is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+        expect(e).toEqual("Type constraint: One of types is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
     }
 });
+
+it('Type - array of types - ok', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator(56, new Type({
+        type: ['string', 'integer'],
+    }));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual([]);
+});
+
+it('Type - array of types - wrong type', async () => {
+
+    expect.assertions(1);
+
+    try {
+
+        let errors = await validator(true, new Type({
+            type: ['string', 'iii'],
+        }));
+    }
+    catch (e) {
+
+        expect(e).toEqual("Type constraint: One of types is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+    }
+});
+
+it('Type - array of types - wrong value type', async () => {
+
+    expect.assertions(1);
+
+    let errors = await validator(true, new Type({
+        type: ['string', 'integer'],
+    }));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual(
+        [
+            [
+                undefined,
+                "This value should be of type 'string, integer'.",
+                "INVALID_TYPE_ERROR",
+                true
+            ]
+        ]
+    );
+});
+
+it('Type - check all types', async () => {
+
+    const data = {
+        'undefined'             : undefined,
+        'object'                : {},
+        'boolean'               : true,
+        'number'                : 67.6,
+        'string'                : 'str',
+        'function'              : function () {},
+        'integer'               : 45,
+        'array'                 : [],
+        'number boolean'        : 56,
+        'number boolean '       : false,
+        'string function'       : function () {},
+        'string function '      : '',
+        'string function  '     : 'a',
+        'undefined integer'     : undefined,
+        'undefined integer '    : 7,
+    }
+
+    const keys = Object.keys(data);
+
+    expect.assertions(keys.length)
+
+    return Promise.all(keys.map(async (type, i) => {
+
+        let key = type;
+
+        if (type.indexOf(' ') !== -1) {
+
+            type = type.split(' ').filter(a => a);
+        }
+
+        let errors = await validator(data[key], new Type(type, {async: i}));
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual([]);
+    }));
+});
+
+

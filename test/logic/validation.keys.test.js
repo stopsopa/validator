@@ -20,22 +20,14 @@ it('key - flat', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
-            [
-                [
-                    null,
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "test"
-                ]
-            ]
-        )
-    );
+    expect(errors).toEqual([
+        [
+            undefined,
+            "This value should have exactly 6 characters.",
+            "TOO_SHORT_ERROR",
+            "test"
+        ]
+    ]);
 });
 
 it('key - valid collection', async () => {
@@ -48,15 +40,7 @@ it('key - valid collection', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
-            []
-        )
-    );
+    expect(errors).toEqual([]);
 });
 
 it('key - invalid collection, 1st level key', async () => {
@@ -69,21 +53,15 @@ it('key - invalid collection, 1st level key', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -101,21 +79,15 @@ it('key - invalid collection, 2st level key', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -133,21 +105,15 @@ it('key - invalid collection, 2st level key - behind Require 1', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -165,21 +131,15 @@ it('key - invalid collection, 2st level key - behind Require 2', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -199,21 +159,15 @@ it('key - invalid collection, 2st level key - behind Require 3', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -235,21 +189,15 @@ it('key - invalid collection, 2st level key - behind Require 4', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -275,21 +223,15 @@ it('key - invalid collection, 3st level key - behind Require 5', async () => {
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2.test3",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2.test3",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -316,32 +258,26 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field', a
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.extra",
-                    "This field was not expected.",
-                    "NO_SUCH_FIELD_ERROR",
-                    {
-                        "extra": null,
-                        "test2": {
-                            "test3": "abcde"
-                        }
+                "test.extra",
+                "This field was not expected.",
+                "NO_SUCH_FIELD_ERROR",
+                {
+                    "extra": null,
+                    "test2": {
+                        "test3": "abcde"
                     }
-                ],
-                [
-                    "test.test2.test3",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                }
+            ],
+            [
+                "test.test2.test3",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });
 
@@ -371,20 +307,14 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field, al
 
     errors = errors.getRaw();
 
-    expect(
-        JSON.stringify(
-            errors
-        )
-    ).toBe(
-        JSON.stringify(
+    expect(errors).toEqual(
+        [
             [
-                [
-                    "test.test2.test3",
-                    "This value should have exactly 6 characters.",
-                    "TOO_SHORT_ERROR",
-                    "abcde"
-                ]
+                "test.test2.test3",
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "abcde"
             ]
-        )
+        ]
     );
 });

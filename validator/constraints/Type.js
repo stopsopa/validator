@@ -19,6 +19,13 @@ const Type = function (opt, extra) {
 
     this.setExtra(extra);
 
+    if (isArray(opt)) {
+
+        opt = {
+            type: opt,
+        }
+    }
+
     if (typeof opt === 'string') {
 
         opt = {
@@ -28,14 +35,26 @@ const Type = function (opt, extra) {
 
     opt = Object.assign({}, def, opt);
 
-    if (typeof opt.type !== 'string') {
+    if ( ! isArray(opt.type) ) {
 
-        throw `Type constraint: type parameter have to be string and one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+        opt.type = [opt.type];
     }
 
-    if (Type.prototype.allowedTypes.indexOf(opt.type) === -1) {
+    for (let i = 0, l = opt.type.length ; i < l ; i += 1 ) {
 
-        throw `Type constraint: type parameter is string but is not one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+        if (typeof opt.type[i] === 'string') {
+
+            opt.type[i] = opt.type[i].toLowerCase();
+        }
+        else {
+
+            throw `Type constraint: Each of types have to be string one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+        }
+
+        if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {
+
+            throw `Type constraint: One of types is string but is not one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+        }
     }
 
     this.setOptions(opt);
@@ -57,31 +76,37 @@ Type.prototype.validate = function (value, context, path, extra) {
 
             let type = opt.type;
 
-            // console.log('type', type, extra.async)
-
-            type = type.toLowerCase();
-
             let valid = false;
 
             let arr = isArray(value);
 
             let obj = isObject(value);
 
-            if (type === 'array' && arr) {
+            for (let i = 0, l = type.length ; i < l ; i += 1 ) {
 
-                valid = true;
-            }
-            else if (type === 'object' && obj) {
+                if (type[i] === 'array' && arr && !obj) {
 
-                valid = true;
-            }
-            else if (type === 'integer' && Number.isInteger(value)) {
+                    valid = true;
+                    break;
+                }
 
-                valid = true;
-            }
-            else if ( ! obj && ! arr && typeof value === type) {
+                if (type[i] === 'object' && !arr && obj) {
 
-                valid = true;
+                    valid = true;
+                    break;
+                }
+
+                if (type[i] === 'integer' && Number.isInteger(value)) {
+
+                    valid = true;
+                    break;
+                }
+
+                if ( ! obj && ! arr && typeof value === type[i]) {
+
+                    valid = true;
+                    break;
+                }
             }
 
             if ( ! valid ) {
@@ -89,7 +114,7 @@ Type.prototype.validate = function (value, context, path, extra) {
                 context
                     .buildViolation(opt.message)
                     .atPath(path)
-                    .setParameter('{{ type }}', opt.type)
+                    .setParameter('{{ type }}', opt.type.join(', '))
                     .setCode(Type.prototype.INVALID_TYPE_ERROR)
                     .setInvalidValue(value)
                     .addViolation()

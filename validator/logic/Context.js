@@ -9,7 +9,7 @@ const Context = function (rootData, extra = {}) {
 
     this.rootData   = rootData;
 
-    this.extra      = extra || {};
+    this.extra      = extra;
 
     this.stack      = {};
 };
@@ -67,7 +67,7 @@ Context.prototype.getRoot = function () {
     return this.rootData;
 }
 Context.prototype.getExtra = function () {
-    return this.extra || {};
+    return this.extra;
 }
 
 module.exports = Context;

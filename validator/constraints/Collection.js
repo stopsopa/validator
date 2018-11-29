@@ -90,12 +90,17 @@ Collection.prototype.validate = function (value, context, path, extra) {
     return new Promise((resolve, reject) => {
         // setTimeout(() => {
 
-            let error = false;
-
             // console.log(`\n\n\n\n\n\ncon: `+JSON.stringify(opt.fields, null, 4)+`\n\n\n\n\n`);
             // process.exit(1);
 
             const optFieldsIsObj    = isObject(value);
+
+            // if ( ! optFieldsIsObj && ! isArray(value) ) {
+            //
+            //     return;
+            // }
+
+            let error = false;
 
             const keys              = optFieldsIsObj ? Object.keys(value || {}) : [];
 
@@ -118,7 +123,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
                     });
                 }
 
-                return (error && extra.stop) ? reject('stop Collection1') : resolve('resolve Collection1');
+                return resolve('resolve Collection1');
             }
 
             if (optFieldsIsObj) {
@@ -168,8 +173,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
                 }
             }
 
-
-            (error && extra.stop) ? reject('stop Collection2') : resolve('resolve Collection2');
+            resolve('resolve Collection2');
         // }, 10);
     });
 };
