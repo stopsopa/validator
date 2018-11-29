@@ -5,15 +5,12 @@ const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');
 
-const log = require('../../log/logn');
-
 const def = {
     minMessage: 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.',
     maxMessage: 'This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.',
     exactMessage: 'This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements.',
     // max,
     // min;
-    // charset = 'UTF-8';
 };
 
 function Count() {
@@ -83,10 +80,6 @@ Count.prototype.TOO_FEW_ERROR   = 'TOO_FEW_ERROR';
 Count.prototype.TOO_MANY_ERROR  = 'TOO_MANY_ERROR';
 
 Count.prototype.validate = function (value, context, path, extra) {
-
-    // log.dump(`\n\n\n\n\nwtf`)
-    // log.dump(constraints[i])
-    // log.dump(`wtf\n\n\n\n\n`)
 
     const opt = this.getOptions();
 

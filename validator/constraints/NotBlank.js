@@ -1,13 +1,9 @@
 
 'use strict';
 
-const arrayIntersect    = require('../utils/arrayIntersect');
-
-const isObject          = require('../utils/isObject');
-
-const isArray           = require('../utils/isArray');
-
 const Constraint        = require('../prototypes/Constraint');
+
+const Blank             = require('./Blank');
 
 const def = {
     message    : 'This value should not be blank.',
@@ -39,18 +35,9 @@ NotBlank.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    let valid = true;
+    let blank = Blank.prototype.logic(value);
 
-    switch (true) {
-        case (!value): // covers: false, null, undefined, '', 0, NaN
-        case (value === '0'): // covers: '0'
-        case (isArray(value) && value.length === 0):
-        case (isObject(value) && Object.keys(value).length === 0):
-            valid = false;
-            break;
-    }
-
-    if ( ! valid ) {
+    if ( blank ) {
 
         context
             .buildViolation(opt.message)

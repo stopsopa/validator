@@ -1,10 +1,6 @@
 
 'use strict';
 
-const arrayIntersect    = require('../utils/arrayIntersect');
-
-const isObject          = require('../utils/isObject');
-
 const Constraint        = require('../prototypes/Constraint');
 
 const def = {

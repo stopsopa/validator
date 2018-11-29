@@ -4,7 +4,7 @@ const validator     = require('../../validator');
 
 const NotBlank      = require('../../validator/constraints/NotBlank');
 
-const Length      = require('../../validator/constraints/Length');
+const Length        = require('../../validator/constraints/Length');
 
 const Collection    = require('../../validator/constraints/Collection');
 

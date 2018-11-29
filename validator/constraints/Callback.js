@@ -1,17 +1,7 @@
 
 'use strict';
 
-const arrayIntersect    = require('../utils/arrayIntersect');
-
-const isObject          = require('../utils/isObject');
-
-const isArray           = require('../utils/isArray');
-
 const Constraint        = require('../prototypes/Constraint');
-
-const def = {
-    message    : 'This value should not be blank.',
-};
 
 const Callback = function (opt, extra) {
 

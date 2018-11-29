@@ -15,8 +15,4 @@ const Required = function (opt, extra) {
 Required.prototype = Object.create(Existence.prototype);
 Required.prototype.constructor = Required;
 
-// Required.prototype.validate = function (value, context, path, extra) {
-//     return Promise.resolve('Required');
-// }
-
 module.exports = Required;

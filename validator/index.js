@@ -13,7 +13,7 @@ const Required          = require('./constraints/Required');
 
 const delay             = require('./utils/delay');
 
-const log               = require('../log/logn');
+// const log               = require('../log/logn');
 
 /**
  * import validator, { test } from '@stopsopa/validator';
@@ -41,16 +41,15 @@ const validator = (value, constraints, extra) => {
                 .then(() => Promise.all(list.map(c => c())))
                 // .then(...delay.then(2500))
                 // .then(a => {
-                //
                 //     console.log(`\n\n\n\n\n`);
-                //     log.dump('resolved:', a);
+                //     log.dump('resolved:' + (JSON.stringify(a)+''));
                 //     console.log(`\n\n\n\n\n`);
                 //
                 //     return a;
                 // }, a => {
                 //
                 //     console.log(`\n\n\n\n\n`);
-                //     log.dump('rejected:', a);
+                //     log.dump('rejected:' + (JSON.stringify(a)+''));
                 //     console.log(`\n\n\n\n\n`);
                 //     return a;
                 // })

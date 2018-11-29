@@ -1,6 +1,4 @@
 
-const arrayIntersect    = require('../utils/arrayIntersect');
-
 const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');
@@ -11,7 +9,6 @@ const def = {
     exactMessage: 'This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.',
     // max,
     // min;
-    // charset = 'UTF-8';
 };
 
 function Length() {

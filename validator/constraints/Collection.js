@@ -7,8 +7,6 @@ const Constraint        = require('../prototypes/Constraint');
 
 const Existence         = require('../prototypes/Existence');
 
-const IsNull            = require('../constraints/IsNull');
-
 const Required          = require('../constraints/Required');
 
 const Optional          = require('../constraints/Optional');
