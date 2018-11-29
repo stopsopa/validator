@@ -4,7 +4,7 @@
 const Constraint        = require('../prototypes/Constraint');
 
 const def = {
-    message    : 'his value should be true.',
+    message    : 'This value should be true.',
 };
 
 const IsTrue = function (opt, extra) {
@@ -42,9 +42,14 @@ IsTrue.prototype.validate = function (value, context, path, extra) {
             .setInvalidValue(value)
             .addViolation()
         ;
+
+        if (extra.stop) {
+
+            return Promise.reject('stop IsTrue');
+        }
     }
 
-    return extra.stop ? Promise.reject('stop IsTrue') : Promise.resolve('resolve IsTrue');
+    return Promise.resolve('resolve IsTrue');
 };
 
 module.exports = IsTrue;

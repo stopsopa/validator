@@ -42,9 +42,14 @@ IsNull.prototype.validate = function (value, context, path, extra) {
             .setInvalidValue(value)
             .addViolation()
         ;
+
+        if (extra.stop) {
+
+            return Promise.reject('stop IsNull');
+        }
     }
 
-    return extra.stop ? Promise.reject('stop IsNull') : Promise.resolve('resolve IsNull');
+    return Promise.resolve('resolve IsNull');
 };
 
 module.exports = IsNull;

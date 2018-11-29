@@ -42,9 +42,14 @@ IsFalse.prototype.validate = function (value, context, path, extra) {
             .setInvalidValue(value)
             .addViolation()
         ;
+
+        if (extra.stop) {
+
+            return Promise.reject('stop IsFalse');
+        }
     }
 
-    return extra.stop ? Promise.reject('stop IsFalse') : Promise.resolve('resolve IsFalse');
+    return Promise.resolve('resolve IsFalse');
 };
 
 module.exports = IsFalse;

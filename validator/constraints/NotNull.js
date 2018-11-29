@@ -42,9 +42,15 @@ NotNull.prototype.validate = function (value, context, path, extra) {
             .setInvalidValue(value)
             .addViolation()
         ;
+
+        if (extra.stop) {
+
+            // return reject('stop Type');
+            return Promise.reject('stop NotNull');
+        }
     }
 
-    return extra.stop ? Promise.reject('stop NotNull') : Promise.resolve('resolve NotNull');
+    return Promise.resolve('resolve NotNull');
 };
 
 module.exports = NotNull;

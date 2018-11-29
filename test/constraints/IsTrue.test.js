@@ -79,7 +79,7 @@ it('IsTrue - stop [part 1]', async () => {
         [
             [
                 "z",
-                "his value should be true.",
+                "This value should be true.",
                 "NOT_TRUE_ERROR",
                 false
             ],
@@ -122,7 +122,7 @@ it('IsTrue - stop [part 2]', async () => {
         [
             [
                 "z",
-                "his value should be true.",
+                "This value should be true.",
                 "NOT_TRUE_ERROR",
                 false
             ]
