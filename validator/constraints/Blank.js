@@ -39,8 +39,6 @@ Blank.prototype.validate = function (value, context, path, extra) {
 
     let blank = Blank.prototype.logic(value);
 
-    console.log('Blank', JSON.stringify(blank, null, 4));
-
     if ( ! blank ) {
 
         context
