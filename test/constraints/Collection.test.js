@@ -37,7 +37,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
             [
                 "n",
                 "This field is missing.",
-                "MISSING_FIELD_ERROR",
+                "UNKNOWN_FIELD_ERROR",
                 {
                     "extra": false,
                     "one": "two",
@@ -87,13 +87,13 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
             [
                 "one",
                 "This field is missing.",
-                "MISSING_FIELD_ERROR",
+                "UNKNOWN_FIELD_ERROR",
                 {}
             ],
             [
                 "two",
                 "This field is missing.",
-                "MISSING_FIELD_ERROR",
+                "UNKNOWN_FIELD_ERROR",
                 {}
             ]
         ]
@@ -199,23 +199,6 @@ it('key - Collection - empty object option', async () => {
     }
 });
 
-it('key - Collection - IsNull() used as a function', async () => {
-
-    expect.assertions(1);
-
-    try {
-        let errors = await validator('test', new Collection({
-            test: IsNull()
-        }));
-
-        errors.getRaw();
-    }
-    catch (e) {
-
-        expect(e + '').toBe("Don't use IsNull() as a function, create instance new IsNull()");
-    }
-});
-
 it('key - Collection - string but expect object with field', async () => {
 
     expect.assertions(1);
@@ -229,34 +212,7 @@ it('key - Collection - string but expect object with field', async () => {
     expect(errors).toEqual([]);
 });
 
-it('key - Collection - used together with other constraint array', async () => {
-
-    expect.assertions(2);
-
-    let errors = await validator('test', new Required([
-        new IsNull(),
-        new Collection({
-            test: new IsNull()
-        })
-    ]));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                undefined,
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                "test"
-            ]
-        ]
-    )
-
-    expect(errors[0][0]).toEqual()
-});
-
-it('key - Collection - used together with other constrain require', async () => {
+it('key - Collection - used together with other constrain array', async () => {
 
     expect.assertions(2);
 
@@ -281,6 +237,33 @@ it('key - Collection - used together with other constrain require', async () => 
     )
 
     expect(errors[0][0]).toBeUndefined();
+});
+
+it('key - Collection - used together with other constraint require', async () => {
+
+    expect.assertions(2);
+
+    let errors = await validator('test', new Required([
+        new IsNull(),
+        new Collection({
+            test: new IsNull()
+        })
+    ]));
+
+    errors = errors.getRaw();
+
+    expect(errors).toEqual(
+        [
+            [
+                undefined,
+                "This value should be null.",
+                "NOT_NULL_ERROR",
+                "test"
+            ]
+        ]
+    )
+
+    expect(errors[0][0]).toEqual()
 });
 
 it('key - Collection - used together with other constrain require x2', async () => {
@@ -336,7 +319,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
             [
                 "b.c",
                 "This field is missing.",
-                "MISSING_FIELD_ERROR",
+                "UNKNOWN_FIELD_ERROR",
                 {
                     "second": "level"
                 }
@@ -438,7 +421,16 @@ it('stack overflow', async () => {
 
     errors = errors.getRaw();
 
-    expect(errors).toMatchSnapshot();
+    expect(errors).toEqual(
+        [
+            [
+                "test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test.test",
+                "This field is missing.",
+                "UNKNOWN_FIELD_ERROR",
+                {}
+            ]
+        ]
+    )
 });
 
 it('Collection on array', async () => {
@@ -487,7 +479,7 @@ it('Collection on array', async () => {
             [
                 "b.0",
                 "This field is missing.",
-                "MISSING_FIELD_ERROR",
+                "UNKNOWN_FIELD_ERROR",
                 {
                     "1": {
                         "g": "h"
@@ -640,7 +632,7 @@ it("Collection - allowMissingFields: false", async () => {
     errors = errors.getRaw();
 
     expect(errors).toEqual(
-        [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
+        [["b", "This field is missing.", "UNKNOWN_FIELD_ERROR", {"a": null}]]
     );
 });
 
@@ -690,7 +682,7 @@ it("Collection deep - allowMissingFields: false", async () => {
             [
                 "a.b.d",
                 "This field is missing.",
-                "MISSING_FIELD_ERROR",
+                "UNKNOWN_FIELD_ERROR",
                 {
                     "c": "abc"
                 }
@@ -726,60 +718,7 @@ it("Collection deep - allowMissingFields: true", async () => {
     expect(errors).toEqual([]);
 });
 
-it("Collection deep, no data (main level) - allowMissingFields: false", async () => {
-
-    expect.assertions(1);
-
-    let errors = await validator(undefined , new Collection({
-        a: new Collection({
-            b: new Collection({
-                fields: {
-                    c: new Length(3),
-                    d: new Length(2),
-                },
-                // allowMissingFields: true,
-            })
-        })
-    }));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                "a",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                undefined
-            ]
-        ]
-    );
-});
-it("Collection deep, no data (main level) - allowMissingFields: true", async () => {
-
-    expect.assertions(1);
-
-    let errors = await validator(undefined , new Collection({
-        fields: {
-            a: new Collection({
-                b: new Collection({
-                    fields: {
-                        c: new Length(3),
-                        d: new Length(2),
-                    },
-                    allowMissingFields: true,
-                })
-            })
-        },
-        allowMissingFields: true,
-    }));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual([]);
-});
-
-it("Collection deep, no data (deep level) - allowMissingFields: false", async () => {
+it("Collection deep, no data", async () => {
 
     expect.assertions(1);
 
@@ -795,47 +734,6 @@ it("Collection deep, no data (deep level) - allowMissingFields: false", async ()
                     d: new Length(2),
                 },
                 // allowMissingFields: true,
-            })
-        })
-    }));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                "a.b.c",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                null
-            ],
-            [
-                "a.b.d",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                null
-            ]
-        ]
-    );
-});
-
-
-it("Collection deep, no data (deep level) - allowMissingFields: true", async () => {
-
-    expect.assertions(1);
-
-    let errors = await validator({
-        a: {
-            b: null,
-        },
-    }, new Collection({
-        a: new Collection({
-            b: new Collection({
-                fields: {
-                    c: new Length(3),
-                    d: new Length(2),
-                },
-                allowMissingFields: true,
             })
         })
     }));
@@ -910,14 +808,5 @@ it("Collection no data", async () => {
 
     errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
-            [
-                "a",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                undefined
-            ]
-        ]
-    );
+    expect(errors).toEqual([]);
 });

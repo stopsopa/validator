@@ -76,7 +76,7 @@ const Collection = function (opt, extra) {
 Collection.prototype = Object.create(Constraint.prototype);
 Collection.prototype.constructor = Collection;
 
-Collection.prototype.MISSING_FIELD_ERROR = 'MISSING_FIELD_ERROR';
+Collection.prototype.UNKNOWN_FIELD_ERROR = 'UNKNOWN_FIELD_ERROR';
 Collection.prototype.NO_SUCH_FIELD_ERROR = 'NO_SUCH_FIELD_ERROR';
 
 Collection.prototype.validate = function (value, context, path, extra) {
@@ -95,10 +95,10 @@ Collection.prototype.validate = function (value, context, path, extra) {
 
             const optFieldsIsObj    = isObject(value);
 
-            // if ( ! optFieldsIsObj && ! isArray(value) ) {
-            //
-            //     return;
-            // }
+            if ( ! optFieldsIsObj && ! isArray(value) ) {
+
+                return resolve('resolve Collection3');
+            }
 
             let error = false;
 
@@ -114,7 +114,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
                             .buildViolation(opt.missingFieldsMessage)
                             .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
                             .setParameter('{{ field }}', field)
-                            .setCode(Collection.prototype.MISSING_FIELD_ERROR)
+                            .setCode(Collection.prototype.UNKNOWN_FIELD_ERROR)
                             .setInvalidValue(value)
                             .addViolation()
                         ;
@@ -138,7 +138,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
                                 .buildViolation(opt.missingFieldsMessage)
                                 .atPath((typeof path === 'undefined') ? field : ( path + '.' + field))
                                 .setParameter('{{ field }}', field)
-                                .setCode(Collection.prototype.MISSING_FIELD_ERROR)
+                                .setCode(Collection.prototype.UNKNOWN_FIELD_ERROR)
                                 .setInvalidValue(value)
                                 .addViolation()
                             ;
