@@ -26,6 +26,7 @@ yarn-error*
 /karma.sh
 /package_karma.json
 /travis.sh
+/webpack-UMD.config.js
 
 
 
