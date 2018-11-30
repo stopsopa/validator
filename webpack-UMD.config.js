@@ -2,58 +2,34 @@
 
 const path                  = require('path');
 
-const webpack               = require('webpack');
+const dev =              require('./webpack.config');
 
-const utils                 = require('./webpack/utils');
+dev.entry = {
+    spvalidation: path.resolve(__dirname, 'validator', 'index')
+}
 
-utils.setup(path.resolve(__dirname, 'webpack', 'config.js'));
+dev.output = {
+    library: 'spvalidation',
+    libraryTarget: 'umd',
+    filename: 'spvalidation.js',
+    // auxiliaryComment: 'Test Comment'
+}
 
-module.exports = {
-    mode: 'development',
-    // mode: 'production',
-    entry: utils.entries(),
-    output: {
-        path: utils.config.js.outputForWeb,
-        filename: "[name].test.js",
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        cacheDirectory: true,
-                        cacheCompression: false,
-                        presets: [
-                            '@babel/preset-react',
-                            '@babel/preset-env',
-                        ],
-                        plugins: [
-                            '@babel/plugin-proposal-object-rest-spread',
-                            '@babel/plugin-proposal-export-default-from',
-                            '@babel/plugin-proposal-export-namespace-from',
-                            '@babel/plugin-proposal-class-properties',
-                            '@babel/plugin-proposal-async-generator-functions',
-                            '@babel/plugin-transform-async-to-generator',
-                            '@babel/plugin-transform-destructuring',
-                        ],
-                        sourceMap: false,
-                    }
-                }
-            },
-        ]
-    },
-    resolve: {
-        alias: {
-            karma_polyfill: path.resolve(__dirname, 'webpack', 'karma-polyfill'),
-        }
-    },
-    plugins: [
-        new webpack.ProvidePlugin(utils.config.provide)
-    ],
-    optimization:{
-        // minimize: false, // <---- disables uglify.
-        // minimizer: [new UglifyJsPlugin()] if you want to customize it.
-    }
-};
+const prod = Object.assign({}, dev, {
+    mode: 'production',
+    output: Object.assign({}, dev.output, {
+        filename: 'spvalidation.min.js',
+    })
+});
+
+module.exports = [dev, prod];
+
+// const sp = spvalidation;
+//
+// sp({
+//     test: null,
+// }, new sp.Collection({
+//     test: new sp.NotBlank()
+// }))
+// .then(errors => errors.getTree())
+// .then(errors => console.log(errors))

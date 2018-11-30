@@ -80,6 +80,8 @@ function green {
         exit 1;
     fi
 
+
+
 if [ "$(git rev-parse --abbrev-ref HEAD)" != $LOCALBRANCH ]; then
 
     red "switch first branch to <$LOCALBRANCH>"

@@ -31,3 +31,6 @@ cj: # jest parameters.json
 karma:
 	/bin/bash karma.sh
 
+umd:
+	node node_modules/.bin/webpack --config webpack-UMD.config.js
+
