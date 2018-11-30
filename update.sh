@@ -73,9 +73,9 @@ function green {
         exit 0
     fi
 
-    if [ -f package_karma.json ]; then
+    if [ -f package_prod.json ]; then
 
-        red "package_karma.json exist, before update run\n    /bin/bash update.sh --prod"
+        red "package_prod.json exist, before update run\n    /bin/bash update.sh --prod"
 
         exit 1;
     fi
