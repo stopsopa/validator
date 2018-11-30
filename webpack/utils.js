@@ -68,7 +68,7 @@ function findentries(root, mask, appdir) {
                                             entries[tmp] = list[i];
                                         }
                                     }
-                                    else if (list[i].indexOf('/lib/test/jest/') === -1) {
+                                    else if (list[i].indexOf('/test/jest/') === -1) {
 
                                         entries[tmp] = list[i];
                                     }
@@ -80,10 +80,10 @@ function findentries(root, mask, appdir) {
 
     }
 
-    console.log(JSON.stringify({
-        entries,
-        d: filter
-    }, null, 4));
+    // console.log(JSON.stringify({
+    //     entries,
+    //     d: filter
+    // }, null, 4));
     //
     // process.exit(1);
 
