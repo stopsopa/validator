@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.62)](https://travis-ci.org/stopsopa/validator)
+[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.63)](https://travis-ci.org/stopsopa/validator)
 [![npm version](https://badge.fury.io/js/%40stopsopa%2Fvalidator.svg)](https://badge.fury.io/js/%40stopsopa%2Fvalidator)
-[![Coverage Status](https://coveralls.io/repos/github/stopsopa/validator/badge.svg?branch=v0.0.62)](https://coveralls.io/github/stopsopa/validator?branch=v0.0.62)
+[![Coverage Status](https://coveralls.io/repos/github/stopsopa/validator/badge.svg?branch=v0.0.63)](https://coveralls.io/github/stopsopa/validator?branch=v0.0.63)
 
 # Loosely inspired by:
 - https://symfony.com/doc/current/components/validator.html
