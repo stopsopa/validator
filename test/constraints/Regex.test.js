@@ -23,12 +23,10 @@ it('Regex() - used as a function', done => {
         validator('test', new Collection({
             test: Regex()
         }));
-
-        errors.getRaw();
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use Regex() as a function, create instance new Regex()");
+        expect(e + '').toBe("It is necessary to use operotr 'new' with all constraints");
 
         done();
     }

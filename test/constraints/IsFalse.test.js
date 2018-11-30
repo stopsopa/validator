@@ -27,10 +27,23 @@ it('IsFalse() - used as a function', done => {
         }))
     }
     catch (e) {
-        expect(e + '').toBe("Don't use IsFalse() as a function, create instance new IsFalse()");
+
+        expect(e).toBe("It is necessary to use operotr 'new' with all constraints");
 
         done();
     }
+});
+
+it('IsFalse - is actually null', done => {
+
+    return validator(false, new IsFalse()).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
 it('IsFalse - custom message', done => {

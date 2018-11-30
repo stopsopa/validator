@@ -29,7 +29,7 @@ it('Email() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use Email() as a function, create instance new Email()");
+        expect(e + '').toBe("It is necessary to use operotr 'new' with all constraints");
 
         done();
     }

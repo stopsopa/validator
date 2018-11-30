@@ -5,21 +5,9 @@ const isObject = require('../utils/isObject');
 
 function Constraint() {
 
-    // https://stackoverflow.com/a/27462108
-    let name = 'UnknownConstraintsClass';
-
-    try {
-        const tmp = Error().stack.split(/\n/g).filter(a => /^\s*at /.test(a));
-        // console.log(tmp.map((a, i) => i + ':' + a).join("\n\n"));
-        name = tmp[1].replace(/.*\/([^\/]+)\.js.*/, '$1')
-
-        this.cls = name;
-    }
-    catch (e) {}
-
     if ( ! (this instanceof Constraint) ) {
 
-        throw `Don't use ${name}() as a function, create instance new ${name}()`;
+        throw "It is necessary to use operotr 'new' with all constraints"
     }
 };
 

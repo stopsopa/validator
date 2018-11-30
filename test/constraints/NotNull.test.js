@@ -22,13 +22,13 @@ it('NotNull', () => {
 it('NotNull() - used as a function', done => {
 
     try {
-        validator('test', new Collection({
+        validator(null, new Collection({
             test: NotNull()
-        }));
+        }))
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use NotNull() as a function, create instance new NotNull()");
+        expect(e).toEqual("It is necessary to use operotr 'new' with all constraints");
 
         done();
     }

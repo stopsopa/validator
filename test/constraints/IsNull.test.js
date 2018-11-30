@@ -29,10 +29,22 @@ it('IsNull() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use IsNull() as a function, create instance new IsNull()");
+        expect(e + '').toBe("It is necessary to use operotr 'new' with all constraints");
 
         done();
     }
+});
+
+it('IsNull - is actually null', done => {
+
+    return validator(null, new IsNull()).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
 it('IsNull - custom message', done => {

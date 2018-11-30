@@ -24,13 +24,13 @@ it('IsTrue() - used as a function', done => {
     try {
         validator('test', new Collection({
             test: IsTrue()
-        }));
+        }))
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use IsTrue() as a function, create instance new IsTrue()");
+        expect(e).toBe("It is necessary to use operotr 'new' with all constraints");
 
-        done()
+        done();
     }
 });
 
@@ -50,6 +50,18 @@ it('IsTrue - custom message', done => {
                 ]
             ]
         );
+
+        done();
+    });
+});
+
+it('IsTrue - is actually true', done => {
+
+    return validator(true, new IsTrue()).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual([]);
 
         done();
     });

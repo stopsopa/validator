@@ -22,14 +22,14 @@ it('Blank', () => {
 it('Blank() - used as a function', done => {
 
     try {
-
         validator('test', new Collection({
             test: Blank()
         }))
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use Blank() as a function, create instance new Blank()");
+        expect(e).toBe("It is necessary to use operotr 'new' with all constraints");
+
         done();
     }
 });

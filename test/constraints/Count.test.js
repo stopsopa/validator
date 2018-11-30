@@ -24,8 +24,6 @@ it('Count', () => {
 
 it('Count() - used as a function', done => {
 
-    expect.assertions(1);
-
     try {
         validator('test', new Collection({
             test: Count()
@@ -33,7 +31,7 @@ it('Count() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("Don't use Count() as a function, create instance new Count()");
+        expect(e).toBe("It is necessary to use operotr 'new' with all constraints");
 
         done();
     }
