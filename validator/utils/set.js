@@ -1,4 +1,6 @@
 
+'use strict';
+
 const isArray = require('./isArray');
 
 const isObject = require('./isObject');

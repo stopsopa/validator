@@ -32,7 +32,7 @@ Email.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    if ( ! Email.prototype.validEmail(value) ) {
+    if ( ! Email.prototype.logic(value) ) {
 
         context
             .buildViolation(opt.message)
@@ -52,7 +52,7 @@ Email.prototype.validate = function (value, context, path, extra) {
     return Promise.resolve('resolve Email');
 };
 
-Email.prototype.validEmail = function (email) {
+Email.prototype.logic = function (email) {
 
     if (typeof email === 'string') {
 

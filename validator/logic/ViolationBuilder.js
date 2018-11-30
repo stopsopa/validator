@@ -1,4 +1,6 @@
 
+'use strict';
+
 const ViolationBuilder = function (message, context) {
     this.parameters     = {};
     this.code           = undefined;

@@ -45,7 +45,7 @@ Regex.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    if ( ! Regex.prototype.match(value, opt.pattern, opt.match) ) {
+    if ( ! Regex.prototype.logic(value, opt.pattern, opt.match) ) {
 
         context
             .buildViolation(opt.message)
@@ -67,7 +67,7 @@ Regex.prototype.validate = function (value, context, path, extra) {
 Regex.prototype.isRegex = function (reg) {
     return Object.prototype.toString.call(reg) === "[object RegExp]"
 }
-Regex.prototype.match = function (value, regex, match) {
+Regex.prototype.logic = function (value, regex, match) {
 
     if (typeof value === 'string') {
 

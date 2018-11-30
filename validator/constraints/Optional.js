@@ -1,4 +1,6 @@
 
+'use strict';
+
 const Existence         = require('../prototypes/Existence');
 
 const Constraint         = require('../prototypes/Constraint');

@@ -1,4 +1,6 @@
 
+'use strict';
+
 const set       = require('../utils/set');
 
 const isArray   = require('../utils/isArray');

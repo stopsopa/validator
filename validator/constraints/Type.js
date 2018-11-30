@@ -68,7 +68,28 @@ Type.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    let type = opt.type;
+    if ( ! Type.prototype.logic(value, opt.type) ) {
+
+        context
+            .buildViolation(opt.message)
+            .atPath(path)
+            .setParameter('{{ type }}', opt.type.join(', '))
+            .setCode(Type.prototype.INVALID_TYPE_ERROR)
+            .setInvalidValue(value)
+            .addViolation()
+        ;
+
+        if (extra.stop) {
+
+            // return reject('stop Type');
+            return Promise.reject('stop Type');
+        }
+    }
+
+    return Promise.resolve('resolve Type');
+};
+
+Type.prototype.logic = function (value, type) {
 
     let valid = false;
 
@@ -103,26 +124,8 @@ Type.prototype.validate = function (value, context, path, extra) {
         }
     }
 
-    if ( ! valid ) {
-
-        context
-            .buildViolation(opt.message)
-            .atPath(path)
-            .setParameter('{{ type }}', opt.type.join(', '))
-            .setCode(Type.prototype.INVALID_TYPE_ERROR)
-            .setInvalidValue(value)
-            .addViolation()
-        ;
-
-        if (extra.stop) {
-
-            // return reject('stop Type');
-            return Promise.reject('stop Type');
-        }
-    }
-
-    return Promise.resolve('resolve Type');
-};
+    return valid;
+}
 
 Type.prototype.allowedTypes = 'undefined object boolean number string symbol function integer array'.split(' ');
 

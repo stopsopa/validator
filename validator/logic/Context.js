@@ -1,4 +1,6 @@
 
+'use strict';
+
 const ViolationBuilder          = require('./ViolationBuilder');
 
 const ConstraintViolationList   = require('../logic/ConstraintViolationList');

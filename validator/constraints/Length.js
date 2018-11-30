@@ -1,4 +1,6 @@
 
+'use strict';
+
 const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');

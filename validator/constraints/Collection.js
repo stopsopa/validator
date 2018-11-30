@@ -1,4 +1,6 @@
 
+'use strict';
+
 const arrayIntersect    = require('../utils/arrayIntersect');
 
 const isObject          = require('../utils/isObject');

@@ -1,4 +1,6 @@
 
+'use strict';
+
 const Constraint = require('./Constraint');
 
 const Existence = function () {

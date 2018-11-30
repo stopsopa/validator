@@ -1,4 +1,6 @@
 
+'use strict';
+
 const Constraint        = require('../prototypes/Constraint');
 
 const All = function (opt, extra) {

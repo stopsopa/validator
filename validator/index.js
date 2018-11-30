@@ -1,17 +1,11 @@
 
-const isArray           = require('./utils/isArray');
+'use strict';
 
 const Context           = require('./logic/Context');
 
 const connectAndSort    = require('./logic/connectAndSort');
 
-const Constraint        = require('./prototypes/Constraint');
-
-const Existence         = require('./prototypes/Existence');
-
-const Required          = require('./constraints/Required');
-
-const delay             = require('./utils/delay');
+// const delay             = require('./utils/delay');
 
 // const log               = require('../log/logn');
 
@@ -29,7 +23,6 @@ const validator = (value, constraints, extra) => {
     const context       = new Context(value, extra);
 
     const connected     = connectAndSort(value, constraints, context, extra ? extra.path : undefined, true);
-
 
     let promise = Promise.resolve();
 
@@ -62,5 +55,22 @@ const validator = (value, constraints, extra) => {
 
     return promise.then(end, end);
 }
+
+validator.Required      = require('./constraints/Required');
+validator.Optional      = require('./constraints/Optional');
+validator.Collection    = require('./constraints/Collection');
+validator.All           = require('./constraints/All');
+validator.Blank         = require('./constraints/Blank');
+validator.Callback      = require('./constraints/Callback');
+validator.Count         = require('./constraints/Count');
+validator.Email         = require('./constraints/Email');
+validator.IsFalse       = require('./constraints/IsFalse');
+validator.IsNull        = require('./constraints/IsNull');
+validator.IsTrue        = require('./constraints/IsTrue');
+validator.Length        = require('./constraints/Length');
+validator.NotBlank      = require('./constraints/NotBlank');
+validator.NotNull       = require('./constraints/NotNull');
+validator.Regex         = require('./constraints/Regex');
+validator.Type          = require('./constraints/Type');
 
 module.exports  = validator;

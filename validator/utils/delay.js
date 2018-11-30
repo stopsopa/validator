@@ -1,3 +1,6 @@
+
+'use strict';
+
 /**
     return Promise.resolve()
         .then(() => delay(3000, 'ok'))
