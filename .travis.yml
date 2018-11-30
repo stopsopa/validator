@@ -10,15 +10,15 @@ node_js: '10'
 matrix:
   include:
     - node_js: '8'
-      env: RUN=jest
+      env: MODE=jest
     - node_js: '9'
-      env: RUN=jest
+      env: MODE=jest
     - node_js: '10'
-      env: RUN=jest
+      env: MODE=jest
     - node_js: '11'
-      env: RUN=jest
+      env: MODE=jest
     - node_js: '10'
-      env: RUN=karma
+      env: MODE=karma
 
 # https://docs.travis-ci.com/user/customizing-the-build/#safelisting-or-blocklisting-branches
 branches:
