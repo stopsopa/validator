@@ -19,6 +19,13 @@ yarn-error*
 /local.txt
 /karma_build/
 /dev/
+/webpack/
+/webpack.config.js
+
+/karma.conf.js
+/karma.sh
+/package_karma.json
+/travis.sh
 
 
 
