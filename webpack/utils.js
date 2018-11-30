@@ -80,10 +80,10 @@ function findentries(root, mask, appdir) {
 
     }
 
-    // console.log(JSON.stringify({
-    //     entries,
-    //     d: filter
-    // }, null, 4));
+    console.log(JSON.stringify({
+        entries,
+        d: filter
+    }, null, 4));
     //
     // process.exit(1);
 
