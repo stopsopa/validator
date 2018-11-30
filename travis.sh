@@ -9,8 +9,6 @@ function green {
     printf "\e[32m$1\e[0m\n"
 }
 
-MODE=""
-
 if [ "$MODE" = "karma" ]; then
 
     export DISPLAY=:99.0
