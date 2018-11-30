@@ -11,9 +11,12 @@ function green {
 
 if [ "$MODE" = "karma" ]; then
 
-    export DISPLAY=:99.0
+    if [ "$BROWSER" != "Safari" ]; then
 
-    sh -e /etc/init.d/xvfb start
+        export DISPLAY=:99.0
+
+        sh -e /etc/init.d/xvfb start
+    fi
 
     make ck
 

@@ -378,7 +378,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
 
 it('stack overflow', done => {
 
-    const num = 500;
+    const num = 200;
 
     function buildData(left) {
 
@@ -418,7 +418,7 @@ it('stack overflow', done => {
         expect(errors).toEqual(
             [
                 [
-                    Array(501).join(".").split(".").map(() => 'test').join('.'),
+                    Array(201).join(".").split(".").map(() => 'test').join('.'),
                     "This field is missing.",
                     "MISSING_FIELD_ERROR",
                     {}
