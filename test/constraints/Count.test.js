@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Count         = require('../../validator/constraints/Count');
@@ -20,272 +22,288 @@ it('Count', () => {
     });
 });
 
-it('Count() - used as a function', async () => {
+it('Count() - used as a function', done => {
 
     expect.assertions(1);
 
     try {
-        let errors = await validator('test', new Collection({
+        validator('test', new Collection({
             test: Count()
         }));
-
-        errors.getRaw();
     }
     catch (e) {
 
         expect(e + '').toBe("Don't use Count() as a function, create instance new Count()");
+
+        done();
     }
 });
 
-it('Count - custom message exact', async () => {
+it('Count - custom message exact', done => {
 
-    expect.assertions(1);
+    return validator(['one', 'two'], new Count(4)).then(errors => {
 
-    let errors = await validator(['one', 'two'], new Count(4));
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
-
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                undefined,
-                "This collection should contain exactly 4 elements.",
-                "TOO_FEW_ERROR",
                 [
-                    "one",
-                    "two"
+                    undefined,
+                    "This collection should contain exactly 4 elements.",
+                    "TOO_FEW_ERROR",
+                    [
+                        "one",
+                        "two"
+                    ]
                 ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Count - custom message more', async () => {
+it('Count - custom message more', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(['one', 'two'], new Count({
+    return validator(['one', 'two'], new Count({
         min: 4,
         max: 5
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                undefined,
-                "This collection should contain 4 elements or more.",
-                "TOO_FEW_ERROR",
                 [
-                    "one",
-                    "two"
+                    undefined,
+                    "This collection should contain 4 elements or more.",
+                    "TOO_FEW_ERROR",
+                    [
+                        "one",
+                        "two"
+                    ]
                 ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Count - custom message less', async () => {
+it('Count - custom message less', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(['one', 'two'], new Count({
+    return validator(['one', 'two'], new Count({
         min: 0,
         max: 1
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                undefined,
-                "This collection should contain 1 element or less.",
-                "TOO_MANY_ERROR",
                 [
-                    "one",
-                    "two"
+                    undefined,
+                    "This collection should contain 1 element or less.",
+                    "TOO_MANY_ERROR",
+                    [
+                        "one",
+                        "two"
+                    ]
                 ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Count - no args', async () => {
-
-    expect.assertions(1);
+it('Count - no args', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count());
+        validator(['one', 'two'], new Count());
     }
     catch (e) {
+
         expect(e).toEqual("Count: options must be given for this constraint");
+
+        done()
     }
 });
 
-it('Count - wrong arg', async () => {
-
-    expect.assertions(1);
+it('Count - wrong arg', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count(false));
+        validator(['one', 'two'], new Count(false));
     }
     catch (e) {
+
         expect(e).toEqual("Count: Wrong parameter type have been given to this constraint, typeof: boolean");
+
+        done()
     }
 });
 
-it('Count - empty obj arg', async () => {
-
-    expect.assertions(1);
+it('Count - empty obj arg', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count({}));
+        validator(['one', 'two'], new Count({}));
     }
     catch (e) {
+
         expect(e).toEqual("Count: Either option \"min\" or \"max\" must be given for constraint");
+
+        done()
     }
 });
 
-it('Count - min not int', async () => {
-
-    expect.assertions(1);
+it('Count - min not int', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count({min: false}));
+        validator(['one', 'two'], new Count({min: false}));
     }
     catch (e) {
+
         expect(e).toEqual("Count: min should be integer");
+
+        done()
     }
 });
 
-it('Count - max not int', async () => {
-
-    expect.assertions(1);
+it('Count - max not int', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count({max: false}));
+        validator(['one', 'two'], new Count({max: false}));
     }
     catch (e) {
+
         expect(e).toEqual("Count: max should be integer");
+
+        done()
     }
 });
 
-it('Count - min < 0', async () => {
-
-    expect.assertions(1);
+it('Count - min < 0', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count({min: -1}));
+        validator(['one', 'two'], new Count({min: -1}));
     }
     catch (e) {
+
         expect(e).toEqual("Count: min should be greater than 0");
+
+        done()
     }
 });
 
-it('Count - max < 0', async () => {
-
-    expect.assertions(1);
+it('Count - max < 0', done => {
 
     try {
 
-        let errors = await validator(['one', 'two'], new Count({max: -1}));
+        validator(['one', 'two'], new Count({max: -1}));
     }
     catch (e) {
+
         expect(e).toEqual("Count: max should be greater than 0");
+
+        done()
     }
 });
 
-it('Count - not object|array', async () => {
+it('Count - not object|array', done => {
 
-    expect.assertions(1);
+    return validator(false, new Count({max: 1})).then(errors => {
 
-    let errors = await validator(false, new Count({max: 1}));
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
+        expect(raw).toEqual([]);
 
-    expect(raw).toEqual([]);
+        done()
+    });
 });
 
-it('Count - object', async () => {
+it('Count - object', done => {
 
-    expect.assertions(1);
+    return validator({}, new Count({max: 1})).then(errors => {
 
-    let errors = await validator({}, new Count({max: 1}));
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
+        expect(raw).toEqual([]);
 
-    expect(raw).toEqual([]);
+        done()
+    });
 });
 
-it('Count - object working', async () => {
+it('Count - object working', done => {
 
-    expect.assertions(1);
+    return validator({a:'b', c: 'd'}, new Count(2)).then(errors => {
 
-    let errors = await validator({a:'b', c: 'd'}, new Count(2));
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
+        expect(raw).toEqual([]);
 
-    expect(raw).toEqual([]);
+        done()
+    });
 });
 
-it('Count - object working part 2', async () => {
+it('Count - object working part 2', done => {
 
-    expect.assertions(1);
+    return validator({a:'b', c: 'd'}, new Count({min: 1, max: 2})).then(errors => {
 
-    let errors = await validator({a:'b', c: 'd'}, new Count({min: 1, max: 2}));
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
+        expect(raw).toEqual([]);
 
-    expect(raw).toEqual([]);
+        done()
+    });
 });
 
-it('Count - object working part 3', async () => {
+it('Count - object working part 3', done => {
 
-    expect.assertions(1);
+    return validator({a:'b', c: 'd'}, new Count({min: 2, max: 2})).then(errors => {
 
-    let errors = await validator({a:'b', c: 'd'}, new Count({min: 2, max: 2}));
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual([]);
+        expect(raw).toEqual([]);
+
+        done()
+    });
 });
 
-it('Count - object working part 4', async () => {
+it('Count - object working part 4', done => {
 
-    expect.assertions(1);
+    return validator({a:'b', c: 'd'}, new Count({min: 3, max: 4})).then(errors => {
 
-    let errors = await validator({a:'b', c: 'd'}, new Count({min: 3, max: 4}));
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
-
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                undefined,
-                "This collection should contain 3 elements or more.",
-                "TOO_FEW_ERROR",
-                {
-                    "a": "b",
-                    "c": "d"
-                }
+                [
+                    undefined,
+                    "This collection should contain 3 elements or more.",
+                    "TOO_FEW_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done()
+    });
+
 });
 
-it('Count - stop [part 1]', async () => {
+it('Count - stop [part 1]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: {
             a: 'b',
             c: 'd'
@@ -298,36 +316,37 @@ it('Count - stop [part 1]', async () => {
         b: new Collection({
             a: new IsNull(undefined),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This collection should contain 3 elements or more.",
-                "TOO_FEW_ERROR",
-                {
-                    "a": "b",
-                    "c": "d"
-                }
-            ],
-            [
-                "b.a",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                ""
+                [
+                    "z",
+                    "This collection should contain 3 elements or more.",
+                    "TOO_FEW_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d"
+                    }
+                ],
+                [
+                    "b.a",
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    ""
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Count - stop [part 2]', async () => {
+it('Count - stop [part 2]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: {
             a: 'b',
             c: 'd'
@@ -340,30 +359,31 @@ it('Count - stop [part 2]', async () => {
         b: new Collection({
             a: new IsNull(undefined),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This collection should contain 3 elements or more.",
-                "TOO_FEW_ERROR",
-                {
-                    "a": "b",
-                    "c": "d"
-                }
-            ],
-        ]
-    );
+                [
+                    "z",
+                    "This collection should contain 3 elements or more.",
+                    "TOO_FEW_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d"
+                    }
+                ],
+            ]
+        );
+
+        done();
+    });
 });
 
-it('Count - stop [part 3]', async () => {
+it('Count - stop [part 3]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: {
             a: 'b',
             c: 'd'
@@ -376,30 +396,31 @@ it('Count - stop [part 3]', async () => {
         b: new Collection({
             a: new IsNull(undefined),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This collection should contain 1 element or less.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d"
-                }
-            ],
-        ]
-    );
+                [
+                    "z",
+                    "This collection should contain 1 element or less.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d"
+                    }
+                ],
+            ]
+        );
+
+        done();
+    });
 });
 
-it('Count - stop [part 4]', async () => {
+it('Count - stop [part 4]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: {
         },
         b: {
@@ -410,27 +431,28 @@ it('Count - stop [part 4]', async () => {
         b: new Collection({
             a: new IsNull(undefined),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This collection should contain exactly 1 element.",
-                "TOO_FEW_ERROR",
-                {}
-            ],
-        ]
-    );
+                [
+                    "z",
+                    "This collection should contain exactly 1 element.",
+                    "TOO_FEW_ERROR",
+                    {}
+                ],
+            ]
+        );
+
+        done();
+    });
 });
 
-it('Count - stop [part 5]', async () => {
+it('Count - stop [part 5]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: {
             a: 'b',
             c: 'd',
@@ -444,31 +466,32 @@ it('Count - stop [part 5]', async () => {
         b: new Collection({
             a: new IsNull(undefined),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Count - extra is string', async () => {
+it('Count - extra is string', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: 'abc',
     }, new Collection({
         z: new Callback(
@@ -495,11 +518,14 @@ it('Count - extra is string', async () => {
                 }),
             'extrastring'
         )
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [["z", "\"extrastring\"", "CALLBACK_5", "abc"]]
-    );
+        expect(raw).toEqual(
+            [["z", "\"extrastring\"", "CALLBACK_5", "abc"]]
+        );
+
+        done();
+    });
 });

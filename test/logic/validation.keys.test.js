@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Collection    = require('../../validator/constraints/Collection');
@@ -14,60 +16,69 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-it('key - flat', async () => {
+it('key - flat', done => {
 
-    let errors = await validator('test', new Length(6));
+    return validator('test', new Length(6)).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([
-        [
-            undefined,
-            "This value should have exactly 6 characters.",
-            "TOO_SHORT_ERROR",
-            "test"
-        ]
-    ]);
+        expect(errors).toEqual([
+            [
+                undefined,
+                "This value should have exactly 6 characters.",
+                "TOO_SHORT_ERROR",
+                "test"
+            ]
+        ]);
+
+        done();
+    });
 });
 
-it('key - valid collection', async () => {
+it('key - valid collection', done => {
 
-    let errors = await validator({
+    return validator({
         test: 'abcdef'
     }, new Collection({
         test: new Length(6)
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
-it('key - invalid collection, 1st level key', async () => {
+it('key - invalid collection, 1st level key', done => {
 
-    let errors = await validator({
+    return validator({
         test: 'abcde'
     }, new Collection({
         test: new Length(6)
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 2st level key', async () => {
+it('key - invalid collection, 2st level key', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             test2: 'abcde'
         }
@@ -75,25 +86,28 @@ it('key - invalid collection, 2st level key', async () => {
         test: new Collection({
             test2: new Length(6)
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 2st level key - behind Require 1', async () => {
+it('key - invalid collection, 2st level key - behind Require 1', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             test2: 'abcde'
         }
@@ -101,25 +115,28 @@ it('key - invalid collection, 2st level key - behind Require 1', async () => {
         test: new Required(new Collection({
             test2: new Length(6)
         }))
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 2st level key - behind Require 2', async () => {
+it('key - invalid collection, 2st level key - behind Require 2', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             test2: 'abcde'
         }
@@ -127,25 +144,28 @@ it('key - invalid collection, 2st level key - behind Require 2', async () => {
         test: new Required(new Collection({
             test2: new Required(new Length(6))
         }))
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 2st level key - behind Require 3', async () => {
+it('key - invalid collection, 2st level key - behind Require 3', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             test2: 'abcde'
         }
@@ -155,25 +175,28 @@ it('key - invalid collection, 2st level key - behind Require 3', async () => {
                 test2: new Required(new Length(6))
             })
         ])
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 2st level key - behind Require 4', async () => {
+it('key - invalid collection, 2st level key - behind Require 4', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             test2: 'abcde'
         }
@@ -185,25 +208,28 @@ it('key - invalid collection, 2st level key - behind Require 4', async () => {
                 ])
             })
         ])
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 3st level key - behind Require 5', async () => {
+it('key - invalid collection, 3st level key - behind Require 5', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             test2: {
                 test3: 'abcde'
@@ -219,25 +245,28 @@ it('key - invalid collection, 3st level key - behind Require 5', async () => {
                 })
             })
         ])
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2.test3",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2.test3",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 3st level key - behind Require 4 - extra field', async () => {
+it('key - invalid collection, 3st level key - behind Require 4 - extra field', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             extra: null,
             test2: {
@@ -254,36 +283,39 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field', a
                 })
             })
         ])
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.extra",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "extra": null,
-                    "test2": {
-                        "test3": "abcde"
+                [
+                    "test.extra",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "extra": null,
+                        "test2": {
+                            "test3": "abcde"
+                        }
                     }
-                }
-            ],
-            [
-                "test.test2.test3",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                ],
+                [
+                    "test.test2.test3",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('key - invalid collection, 3st level key - behind Require 4 - extra field, allowExtraFields', async () => {
+it('key - invalid collection, 3st level key - behind Require 4 - extra field, allowExtraFields', done => {
 
-    let errors = await validator({
+    return validator({
         test: {
             extra: null,
             test2: {
@@ -303,18 +335,21 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field, al
                 allowExtraFields: true,
             })
         ])
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "test.test2.test3",
-                "This value should have exactly 6 characters.",
-                "TOO_SHORT_ERROR",
-                "abcde"
+                [
+                    "test.test2.test3",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

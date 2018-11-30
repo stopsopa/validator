@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Collection    = require('../../validator/constraints/Collection');
@@ -14,11 +16,9 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-it("validation stop", async () => {
+it("validation stop", done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             b: 'b',
         },
@@ -40,45 +40,44 @@ it("validation stop", async () => {
             //      then don't check any validator with higher async
         }),
         z: new Length(3), // async no defined - so default is 0
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.b",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "b"
-            ]
-        ]
-    );
-
-    const tree = errors.getTree();
-
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
-                "b": [
-                    "This value should have exactly 3 characters."
+                [
+                    "a.b",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "b"
                 ]
+            ]
+        );
+
+        const tree = errors.getTree();
+
+        expect(
+            tree
+        ).toEqual(
+            {
+                "a": {
+                    "b": [
+                        "This value should have exactly 3 characters."
+                    ]
+                }
             }
-        }
-    );
+        );
+
+        done();
+    });
 });
 
+it("validation stop 3 levels - normal", done => {
 
-
-it("validation stop 3 levels - normal", async () => {
-
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             a: {
                 a: {
@@ -102,59 +101,63 @@ it("validation stop 3 levels - normal", async () => {
             z: new Length(3),
         }),
         z: new Length(3),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.a.a.a",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "z"
+                [
+                    "a.a.a.a",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "z"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
+        expect(
+            tree
+        ).toEqual(
+            {
                 "a": {
                     "a": {
-                        "a": [
-                            "This value should have exactly 3 characters."
-                        ],
+                        "a": {
+                            "a": [
+                                "This value should have exactly 3 characters."
+                            ],
+                            "z": [
+                                "This value should have exactly 3 characters."
+                            ]
+                        },
                         "z": [
                             "This value should have exactly 3 characters."
                         ]
@@ -166,20 +169,17 @@ it("validation stop 3 levels - normal", async () => {
                 "z": [
                     "This value should have exactly 3 characters."
                 ]
-            },
-            "z": [
-                "This value should have exactly 3 characters."
-            ]
-        }
-    );
+            }
+        );
+
+        done();
+    });
 });
 
 
-it("validation stop 3 levels - async", async () => {
+it("validation stop 3 levels - async", done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             a: {
                 a: {
@@ -203,59 +203,63 @@ it("validation stop 3 levels - async", async () => {
             z: new Length(3, {async: 5}),
         }),
         z: new Length(3, {async: 4}),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.a.a.a",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "z"
-            ],
-            [
-                "a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
+                [
+                    "a.a.a.a",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "z"
+                ],
+                [
+                    "a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
+        expect(
+            tree
+        ).toEqual(
+            {
                 "a": {
                     "a": {
-                        "a": [
-                            "This value should have exactly 3 characters."
-                        ],
+                        "a": {
+                            "a": [
+                                "This value should have exactly 3 characters."
+                            ],
+                            "z": [
+                                "This value should have exactly 3 characters."
+                            ]
+                        },
                         "z": [
                             "This value should have exactly 3 characters."
                         ]
@@ -267,20 +271,17 @@ it("validation stop 3 levels - async", async () => {
                 "z": [
                     "This value should have exactly 3 characters."
                 ]
-            },
-            "z": [
-                "This value should have exactly 3 characters."
-            ]
-        }
-    );
+            }
+        );
+
+        done();
+    });
 });
 
 
-it("validation stop 3 levels - stop", async () => {
+it("validation stop 3 levels - stop", done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             a: {
                 a: {
@@ -304,66 +305,67 @@ it("validation stop 3 levels - stop", async () => {
             z: new Length(3, {async: 5}),
         }),
         z: new Length(3, {async: 4}),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.a.a.a",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
+                [
+                    "a.a.a.a",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
+        expect(
+            tree
+        ).toEqual(
+            {
                 "a": {
                     "a": {
-                        "a": [
-                            "This value should have exactly 3 characters."
-                        ],
+                        "a": {
+                            "a": [
+                                "This value should have exactly 3 characters."
+                            ],
+                            "z": [
+                                "This value should have exactly 3 characters."
+                            ]
+                        },
                         "z": [
                             "This value should have exactly 3 characters."
                         ]
-                    },
-                    "z": [
-                        "This value should have exactly 3 characters."
-                    ]
+                    }
                 }
             }
-        }
-    );
+        );
+
+        done();
+    });
 });
 
 
-it("validation stop 3 levels - reverse", async () => {
+it("validation stop 3 levels - reverse", done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             a: {
                 a: {
@@ -387,59 +389,63 @@ it("validation stop 3 levels - reverse", async () => {
             z: new Length(3, {async: 1}),
         }),
         z: new Length(3, {async: 2}),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "z"
-            ],
-            [
-                "a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "a.a.a.a",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
+                [
+                    "a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "z"
+                ],
+                [
+                    "a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.a.a",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
+        expect(
+            tree
+        ).toEqual(
+            {
                 "a": {
                     "a": {
-                        "a": [
-                            "This value should have exactly 3 characters."
-                        ],
+                        "a": {
+                            "a": [
+                                "This value should have exactly 3 characters."
+                            ],
+                            "z": [
+                                "This value should have exactly 3 characters."
+                            ]
+                        },
                         "z": [
                             "This value should have exactly 3 characters."
                         ]
@@ -451,22 +457,16 @@ it("validation stop 3 levels - reverse", async () => {
                 "z": [
                     "This value should have exactly 3 characters."
                 ]
-            },
-            "z": [
-                "This value should have exactly 3 characters."
-            ]
-        }
-    );
+            }
+        );
+
+        done();
+    });
 });
 
+it("validation stop 3 levels - reverse stop", done => {
 
-
-
-it("validation stop 3 levels - reverse stop", async () => {
-
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             a: {
                 a: {
@@ -490,43 +490,47 @@ it("validation stop 3 levels - reverse stop", async () => {
             z: new Length(3, {async: 1}),
         }),
         z: new Length(3, {async: 2}),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
-            ],
-            [
-                "z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "z"
-            ],
-            [
-                "a.a.z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "a"
+                [
+                    "a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ],
+                [
+                    "z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "z"
+                ],
+                [
+                    "a.a.z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "a"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
+        expect(
+            tree
+        ).toEqual(
+            {
                 "a": {
+                    "a": {
+                        "z": [
+                            "This value should have exactly 3 characters."
+                        ]
+                    },
                     "z": [
                         "This value should have exactly 3 characters."
                     ]
@@ -534,11 +538,10 @@ it("validation stop 3 levels - reverse stop", async () => {
                 "z": [
                     "This value should have exactly 3 characters."
                 ]
-            },
-            "z": [
-                "This value should have exactly 3 characters."
-            ]
-        }
-    );
+            }
+        );
+
+        done();
+    });
 });
 

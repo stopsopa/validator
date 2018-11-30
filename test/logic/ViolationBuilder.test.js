@@ -1,12 +1,12 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const Context           = require('../../validator/logic/Context');
 
 const ViolationBuilder  = require('../../validator/logic/ViolationBuilder');
 
-it('new ViolationBuilder() - no code', async () => {
-
-    expect.assertions(1);
+it('new ViolationBuilder() - no code', done => {
 
     try {
 
@@ -21,12 +21,12 @@ it('new ViolationBuilder() - no code', async () => {
     catch (e) {
 
         expect(e + '').toBe("ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)");
+
+        done();
     }
 });
 
-it('new ViolationBuilder() - not integer plural', async () => {
-
-    expect.assertions(1);
+it('new ViolationBuilder() - not integer plural', done => {
 
     try {
 
@@ -41,5 +41,7 @@ it('new ViolationBuilder() - not integer plural', async () => {
     catch (e) {
 
         expect(e + '').toBe("ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty");
+
+        done();
     }
 });

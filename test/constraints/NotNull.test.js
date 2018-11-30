@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const NotNull        = require('../../validator/constraints/NotNull');
@@ -17,47 +19,44 @@ it('NotNull', () => {
     });
 });
 
-it('NotNull() - used as a function', async () => {
-
-    expect.assertions(1);
+it('NotNull() - used as a function', done => {
 
     try {
-        let errors = await validator('test', new Collection({
+        validator('test', new Collection({
             test: NotNull()
         }));
-
-        errors.getRaw();
     }
     catch (e) {
 
         expect(e + '').toBe("Don't use NotNull() as a function, create instance new NotNull()");
+
+        done();
     }
 });
 
-it('NotNull - custom message', async () => {
+it('NotNull - custom message', done => {
 
-    expect.assertions(1);
+    return validator('test', new NotNull('custom message')).then(errors => {
 
-    let errors = await validator('test', new NotNull('custom message'));
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                undefined,
-                "custom message",
-                "IS_NULL_ERROR",
-                "test"
+                [
+                    undefined,
+                    "custom message",
+                    "IS_NULL_ERROR",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
-it('NotNull - stop [part 1]', async () => {
+it('NotNull - stop [part 1]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -71,36 +70,37 @@ it('NotNull - stop [part 1]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "his value should be true.",
-                "IS_NULL_ERROR",
-                false
-            ],
-            [
-                "b.a",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "his value should be true.",
+                    "IS_NULL_ERROR",
+                    false
+                ],
+                [
+                    "b.a",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
-it('NotNull - stop [part 2]', async () => {
+it('NotNull - stop [part 2]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -114,18 +114,21 @@ it('NotNull - stop [part 2]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "his value should be true.",
-                "IS_NULL_ERROR",
-                false
+                [
+                    "z",
+                    "his value should be true.",
+                    "IS_NULL_ERROR",
+                    false
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

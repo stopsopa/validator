@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Collection    = require('../../validator/constraints/Collection');
@@ -16,11 +18,9 @@ const NotBlank      = require('../../validator/constraints/NotBlank');
 
 const Context       = require('../../validator/logic/Context');
 
-it('new ConstraintViolationList() ', async () => {
+it('new ConstraintViolationList() ', done => {
 
-    expect.assertions(4);
-
-    const errors = await validator({
+    return validator({
         a: {
             a: {
                 a: {
@@ -44,35 +44,9 @@ it('new ConstraintViolationList() ', async () => {
             z: new Length(3),
         }),
         z: new NotBlank(),
-    }));
+    })).then(errors => {
 
-    const result = [
-        [
-            "a.a.a.a",
-            "This value should be null.",
-            "NOT_NULL_ERROR",
-            "a"
-        ],
-        [
-            "a.a.z",
-            "This value should be null.",
-            "NOT_NULL_ERROR",
-            "a"
-        ]
-    ];
-
-    expect(errors.findByCodes(IsNull.prototype.NOT_NULL_ERROR)).toEqual(result);
-
-    expect(errors.findByCodes([
-        IsNull.prototype.NOT_NULL_ERROR,
-        IsNull.prototype.NOT_NULL_ERROR
-    ])).toEqual(result);
-
-    expect(errors.findByCodes([
-        IsNull.prototype.NOT_NULL_ERROR,
-        NotBlank.prototype.IS_BLANK_ERROR,
-    ])).toEqual(
-        [
+        const result = [
             [
                 "a.a.a.a",
                 "This value should be null.",
@@ -84,16 +58,45 @@ it('new ConstraintViolationList() ', async () => {
                 "This value should be null.",
                 "NOT_NULL_ERROR",
                 "a"
-            ],
-            [
-                "z",
-                "This value should not be blank.",
-                "IS_BLANK_ERROR",
-                ""
             ]
-        ]
-    );
+        ];
 
-    expect(errors.count()).toBe(5);
+        expect(errors.findByCodes(IsNull.prototype.NOT_NULL_ERROR)).toEqual(result);
+
+        expect(errors.findByCodes([
+            IsNull.prototype.NOT_NULL_ERROR,
+            IsNull.prototype.NOT_NULL_ERROR
+        ])).toEqual(result);
+
+        expect(errors.findByCodes([
+            IsNull.prototype.NOT_NULL_ERROR,
+            NotBlank.prototype.IS_BLANK_ERROR,
+        ])).toEqual(
+            [
+                [
+                    "a.a.a.a",
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "a"
+                ],
+                [
+                    "a.a.z",
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "a"
+                ],
+                [
+                    "z",
+                    "This value should not be blank.",
+                    "IS_BLANK_ERROR",
+                    ""
+                ]
+            ]
+        );
+
+        expect(errors.count()).toBe(5);
+
+        done();
+    });
 });
 

@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const arrayIntersect = require('../../validator/utils/arrayIntersect');
 
 const ja = (a, b) => JSON.stringify(arrayIntersect(a, b));

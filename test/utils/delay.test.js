@@ -1,67 +1,63 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const delay = require('../../validator/utils/delay');
 
 const time = () => (new Date()).getTime();
 
-it('delay()', async () => {
-
-    expect.assertions(2);
+it('delay()', done => {
 
     const start = time();
 
-    const data = await delay(40, 'resolved');
+    return delay(40, 'resolved').then(data => {
 
-    expect(time() - start).toBeGreaterThan(30);
+        expect(time() - start).toBeGreaterThan(30);
 
-    expect(data).toBe('resolved');
+        expect(data).toBe('resolved');
+
+        done();
+    });
 });
 
-it('delay.reject()', async () => {
-
-    expect.assertions(2);
+it('delay.reject()', done => {
 
     const start = time();
 
-    try {
-
-        await delay.reject(40, 'rejected');
-    }
-    catch (e) {
+    return delay.reject(40, 'rejected').catch(e => {
 
         expect(time() - start).toBeGreaterThan(30);
 
         expect(e).toBe('rejected');
-    }
+
+        done();
+    });
 });
 
-it('delay.then() - resolved', async () => {
-
-    expect.assertions(2);
+it('delay.then() - resolved', done => {
 
     const start = time();
 
-    const data = await Promise.resolve('resolved').then(...delay.then(40));
+    return Promise.resolve('resolved').then(...delay.then(40)).then(data => {
 
-    expect(time() - start).toBeGreaterThan(30);
+        expect(time() - start).toBeGreaterThan(30);
 
-    expect(data).toBe('resolved');
+        expect(data).toBe('resolved');
+
+        done();
+    });
 });
 
-it('delay.then() - rejected', async () => {
-
-    expect.assertions(2);
+it('delay.then() - rejected', done => {
 
     const start = time();
 
-    try {
-
-        const data = await Promise.reject('rejected').then(...delay.then(40));
-    }
-    catch (e) {
+    return Promise.reject('rejected').then(...delay.then(40)).catch(e => {
 
         expect(time() - start).toBeGreaterThan(30);
 
         expect(e).toBe('rejected');
-    }
+
+        done();
+    });
 });

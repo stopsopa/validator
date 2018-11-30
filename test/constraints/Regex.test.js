@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Regex        = require('../../validator/constraints/Regex');
@@ -15,12 +17,10 @@ it('Regex', () => {
     });
 });
 
-it('Regex() - used as a function', async () => {
-
-    expect.assertions(1);
+it('Regex() - used as a function', done => {
 
     try {
-        let errors = await validator('test', new Collection({
+        validator('test', new Collection({
             test: Regex()
         }));
 
@@ -29,156 +29,161 @@ it('Regex() - used as a function', async () => {
     catch (e) {
 
         expect(e + '').toBe("Don't use Regex() as a function, create instance new Regex()");
+
+        done();
     }
 });
 
-it('Regex - wrong arg', async () => {
-
-    expect.assertions(1);
+it('Regex - wrong arg', done => {
 
     try {
 
-        await validator('test', new Regex('custom message'));
+        validator('test', new Regex('custom message'));
     }
     catch (e) {
 
         expect(e).toEqual("Regex: first argument must be regex or object");
+
+        done();
     }
 });
 
-it('Regex - no regex given', async () => {
-
-    expect.assertions(1);
+it('Regex - no regex given', done => {
 
     try {
 
-        await validator('test', new Regex({
+        validator('test', new Regex({
             message: 'custom message'
         }));
     }
     catch (e) {
 
         expect(e).toEqual("Regex: 'pattern' is not specified");
+
+        done()
     }
 });
 
-it('Regex - custom message', async () => {
+it('Regex - custom message', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'startmidleend'
     }, new Collection({
         a: new Regex({
             message: 'custom message',
             pattern: /middle/
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "a",
-                "custom message",
-                "REGEX_FAILED_ERROR",
-                "startmidleend"
+                [
+                    "a",
+                    "custom message",
+                    "REGEX_FAILED_ERROR",
+                    "startmidleend"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Regex - match: true, valid', async () => {
+it('Regex - match: true, valid', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'startmiddleend'
     }, new Collection({
         a: new Regex(/middle/)
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
-it('Regex - match: true, invalid', async () => {
+it('Regex - match: true, invalid', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'startmidleend'
     }, new Collection({
         a: new Regex(/middle/)
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "a",
-                "This value is not valid.",
-                "REGEX_FAILED_ERROR",
-                "startmidleend"
+                [
+                    "a",
+                    "This value is not valid.",
+                    "REGEX_FAILED_ERROR",
+                    "startmidleend"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
 
-it('Regex - match: false, valid', async () => {
+it('Regex - match: false, valid', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'startmiddleend'
     }, new Collection({
         a: new Regex({
             pattern: /middle/,
             match: false,
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "a",
-                "This value is not valid.",
-                "REGEX_FAILED_ERROR",
-                "startmiddleend"
+                [
+                    "a",
+                    "This value is not valid.",
+                    "REGEX_FAILED_ERROR",
+                    "startmiddleend"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Regex - match: true, invalid', async () => {
+it('Regex - match: true, invalid', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'startmidleend'
     }, new Collection({
         a: new Regex({
             pattern: /middle/,
             match: false,
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
-it('Regex - stop [part 1]', async () => {
+it('Regex - stop [part 1]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: 'onetothree',
         b: {
             a: {
@@ -192,38 +197,39 @@ it('Regex - stop [part 1]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value is not valid.",
-                "REGEX_FAILED_ERROR",
-                "onetothree"
-            ],
-            [
-                "b.a",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "This value is not valid.",
+                    "REGEX_FAILED_ERROR",
+                    "onetothree"
+                ],
+                [
+                    "b.a",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
 
-it('Regex - stop [part 2]', async () => {
+it('Regex - stop [part 2]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: 'onetothree',
         b: {
             a: {
@@ -237,27 +243,28 @@ it('Regex - stop [part 2]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value is not valid.",
-                "REGEX_FAILED_ERROR",
-                "onetothree"
+                [
+                    "z",
+                    "This value is not valid.",
+                    "REGEX_FAILED_ERROR",
+                    "onetothree"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Regex - not string value', async () => {
+it('Regex - not string value', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -271,28 +278,31 @@ it('Regex - not string value', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value is not valid.",
-                "REGEX_FAILED_ERROR",
-                false
-            ],
-            [
-                "b.a",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "This value is not valid.",
+                    "REGEX_FAILED_ERROR",
+                    false
+                ],
+                [
+                    "b.a",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

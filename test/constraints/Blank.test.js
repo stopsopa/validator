@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Blank        = require('../../validator/constraints/Blank');
@@ -17,47 +19,45 @@ it('Blank', () => {
     });
 });
 
-it('Blank() - used as a function', async () => {
-
-    expect.assertions(1);
+it('Blank() - used as a function', done => {
 
     try {
-        let errors = await validator('test', new Collection({
-            test: Blank()
-        }));
 
-        errors.getRaw();
+        validator('test', new Collection({
+            test: Blank()
+        }))
     }
     catch (e) {
 
         expect(e + '').toBe("Don't use Blank() as a function, create instance new Blank()");
+        done();
     }
 });
 
-it('Blank - custom message', async () => {
+it('Blank - custom message', done => {
 
-    expect.assertions(1);
+    return validator('test', new Blank('custom message')).then(errors => {
 
-    let errors = await validator('test', new Blank('custom message'));
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                undefined,
-                "custom message",
-                "NOT_BLANK_ERROR",
-                "test"
+                [
+                    undefined,
+                    "custom message",
+                    "NOT_BLANK_ERROR",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done()
+    });
+
 });
-it('Blank - stop [part 1]', async () => {
+it('Blank - stop [part 1]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: 'string',
         b: {
             a: {
@@ -71,36 +71,37 @@ it('Blank - stop [part 1]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value should be blank.",
-                "NOT_BLANK_ERROR",
-                "string"
-            ],
-            [
-                "b.a",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "This value should be blank.",
+                    "NOT_BLANK_ERROR",
+                    "string"
+                ],
+                [
+                    "b.a",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
-it('Blank - stop [part 2]', async () => {
+it('Blank - stop [part 2]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: '0d',
         b: {
             a: {
@@ -114,64 +115,70 @@ it('Blank - stop [part 2]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value should be blank.",
-                "NOT_BLANK_ERROR",
-                "0d"
+                [
+                    "z",
+                    "This value should be blank.",
+                    "NOT_BLANK_ERROR",
+                    "0d"
+                ]
             ]
-        ]
-    );
+        );
+
+        done()
+    });
 });
-it('Blank - not empty array', async () => {
+it('Blank - not empty array', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: ['test']
     }, new Collection({
         z: new Blank(),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value should be blank.",
-                "NOT_BLANK_ERROR",
-                ['test']
+                [
+                    "z",
+                    "This value should be blank.",
+                    "NOT_BLANK_ERROR",
+                    ['test']
+                ]
             ]
-        ]
-    );
+        );
+
+        done()
+    });
+
 });
-it('Blank - not empty object', async () => {
+it('Blank - not empty object', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: {test:'test'}
     }, new Collection({
         z: new Blank(),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value should be blank.",
-                "NOT_BLANK_ERROR",
-                {test: 'test'}
+                [
+                    "z",
+                    "This value should be blank.",
+                    "NOT_BLANK_ERROR",
+                    {test: 'test'}
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Email        = require('../../validator/constraints/Email');
@@ -17,47 +19,45 @@ it('Email', () => {
     });
 });
 
-it('Email() - used as a function', async () => {
-
-    expect.assertions(1);
+it('Email() - used as a function', done => {
 
     try {
-        let errors = await validator('test', new Collection({
-            test: Email()
-        }));
 
-        errors.getRaw();
+        validator('test', new Collection({
+            test: Email()
+        }))
     }
     catch (e) {
 
         expect(e + '').toBe("Don't use Email() as a function, create instance new Email()");
+
+        done();
     }
 });
 
-it('Email - custom message', async () => {
+it('Email - custom message', done => {
 
-    expect.assertions(1);
+    return validator('test', new Email('custom message')).then(errors => {
 
-    let errors = await validator('test', new Email('custom message'));
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                undefined,
-                "custom message",
-                "INVALID_EMAIL_ERROR",
-                "test"
+                [
+                    undefined,
+                    "custom message",
+                    "INVALID_EMAIL_ERROR",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
-it('Email - stop [part 1]', async () => {
+it('Email - stop [part 1]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -71,36 +71,37 @@ it('Email - stop [part 1]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value is not a valid email address.",
-                "INVALID_EMAIL_ERROR",
-                false
-            ],
-            [
-                "b.a",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "This value is not a valid email address.",
+                    "INVALID_EMAIL_ERROR",
+                    false
+                ],
+                [
+                    "b.a",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
-it('Email - stop [part 2]', async () => {
+it('Email - stop [part 2]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -114,18 +115,21 @@ it('Email - stop [part 2]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value is not a valid email address.",
-                "INVALID_EMAIL_ERROR",
-                false
+                [
+                    "z",
+                    "This value is not a valid email address.",
+                    "INVALID_EMAIL_ERROR",
+                    false
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

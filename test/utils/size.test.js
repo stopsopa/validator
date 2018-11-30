@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const size = require('../../validator/utils/size');
 
 it('size', () => {

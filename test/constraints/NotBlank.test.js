@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const NotBlank      = require('../../validator/constraints/NotBlank');
@@ -17,48 +19,50 @@ it('NotBlank', () => {
     });
 });
 
-it('NotBlank - custom message', async () => {
+it('NotBlank - custom message', done => {
 
-    expect.assertions(1);
+    return validator('', new NotBlank('custom message')).then(errors => {
 
-    let errors = await validator('', new NotBlank('custom message'));
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                undefined,
-                "custom message",
-                "IS_BLANK_ERROR",
-                ""
+                [
+                    undefined,
+                    "custom message",
+                    "IS_BLANK_ERROR",
+                    ""
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('NotBlank - stop', async () => {
+it('NotBlank - stop', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'a',
         b: '',
     }, new Collection({
         a: new Length(2, {async: 1}),
         b: new NotBlank(undefined, {stop: true})
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "b",
-                "This value should not be blank.",
-                "IS_BLANK_ERROR",
-                ""
+                [
+                    "b",
+                    "This value should not be blank.",
+                    "IS_BLANK_ERROR",
+                    ""
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

@@ -1,109 +1,111 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const set = require('../../validator/utils/set');
 
-it('set() - key null', () => {
-
-    expect.assertions(1);
+it('set() - key null', done => {
 
     let target = {};
 
     target = set(target, null, 'test');
 
     expect(target).toBe('test');
+
+    done();
 });
 
-it('set() - key undefined', () => {
-
-    expect.assertions(1);
+it('set() - key undefined', done => {
 
     let target = {};
 
     target = set(target, undefined, 'test');
 
     expect(target).toBe('test');
+
+    done();
 });
 
-it('set() - key false', () => {
+it('set() - key false', done => {
 
-    expect.assertions(1);
 
     let target = {};
 
     target = set(target, false, 'test');
 
     expect(target).toBe('test');
+
+    done();
 });
 
-it('set() - key true', () => {
+it('set() - key true', done => {
 
-    expect.assertions(1);
 
     let target = {};
 
     target = set(target, false, 'test');
 
     expect(target).toBe('test');
+
+    done();
 });
 
-it('set() - key int 0', () => {
-
-    expect.assertions(1);
+it('set() - key int 0', done => {
 
     let target = {};
 
     target = set(target, 0, 'test');
 
     expect(target).toEqual({0:'test'});
+
+    done();
 });
 
-it('set() - key int 1', () => {
-
-    expect.assertions(1);
+it('set() - key int 1', done => {
 
     let target = {};
 
     target = set(target, 1, 'test');
 
     expect(target).toEqual({1:'test'});
+
+    done();
 });
 
-it('set() - key object empty', () => {
-
-    expect.assertions(1);
+it('set() - key object empty', done => {
 
     let target = {};
 
     target = set(target, {}, 'test');
 
     expect(target).toBe('test');
+
+    done();
 });
 
-it('set() - key object a b', () => {
-
-    expect.assertions(1);
+it('set() - key object a b', done => {
 
     let target = {};
 
     target = set(target, {a:'b', c:'d'}, 'test');
 
     expect(target).toEqual({"b":{"d":'test'}});
+
+    done();
 });
 
-it('set() - key object a b c', () => {
-
-    expect.assertions(1);
+it('set() - key object a b c', done => {
 
     let target = {};
 
     target = set(target, {a:'b', c:'d', e: 'ff'}, 'test');
 
     expect(target).toEqual({"b":{"d":{ff:'test'}}});
+
+    done();
 });
 
-it('set() - key object a b c - not empty source', () => {
-
-    expect.assertions(1);
+it('set() - key object a b c - not empty source', done => {
 
     let target = {
         g: { h: 'i' }
@@ -116,11 +118,11 @@ it('set() - key object a b c - not empty source', () => {
     ).toEqual(
         {"b": {"d": {"ff": "test"}}, "g": {"h": "i"}}
     );
+
+    done();
 });
 
-it('set() - key array a b c - not empty source', () => {
-
-    expect.assertions(1);
+it('set() - key array a b c - not empty source', done => {
 
     let target = {
         g: { h: 'i' }
@@ -133,11 +135,11 @@ it('set() - key array a b c - not empty source', () => {
     ).toEqual(
         {"b": {"d": {"ff": "test"}}, "g": {"h": "i"}}
     );
+
+    done();
 });
 
-it('set() - key array false - not empty source', () => {
-
-    expect.assertions(1);
+it('set() - key array false - not empty source', done => {
 
     let target = [];
 
@@ -148,11 +150,11 @@ it('set() - key array false - not empty source', () => {
     ).toEqual(
         "test"
     );
+
+    done();
 });
 
-it('set() - not empty array - key 0', () => {
-
-    expect.assertions(1);
+it('set() - not empty array - key 0', done => {
 
     let target = [
         'one'
@@ -165,11 +167,11 @@ it('set() - not empty array - key 0', () => {
     ).toEqual(
         ["test"]
     );
+
+    done();
 });
 
-it('set() - not empty array - key 1', () => {
-
-    expect.assertions(1);
+it('set() - not empty array - key 1', done => {
 
     let target = [
         'one'
@@ -182,11 +184,11 @@ it('set() - not empty array - key 1', () => {
     ).toEqual(
         ['one', "test"]
     );
+
+    done();
 });
 
-it('set() - not empty array - key 4', () => {
-
-    expect.assertions(1);
+it('set() - not empty array - key 4', done => {
 
     let target = [
         'one'
@@ -199,11 +201,11 @@ it('set() - not empty array - key 4', () => {
     ).toEqual(
         ['one', undefined, undefined, undefined, "test"]
     );
+
+    done();
 });
 
-it('set() - not empty array - key l4 [expected error]', () => {
-
-    expect.assertions(1);
+it('set() - not empty array - key l4 [expected error]', done => {
 
     let target = [
         'one'
@@ -220,12 +222,12 @@ it('set() - not empty array - key l4 [expected error]', () => {
         ).toEqual(
             "if source is array and key is not integer nor empty string then its not possible to add to array, given key: \"l4\""
         );
+
+        done();
     }
 });
 
-it('set() - false - key 4', () => {
-
-    expect.assertions(1);
+it('set() - false - key 4', done => {
 
     let target = false;
 
@@ -236,11 +238,11 @@ it('set() - false - key 4', () => {
     ).toEqual(
         {"4": 'test'}
     );
+
+    done();
 });
 
-it('set() - [] - key ""', () => {
-
-    expect.assertions(1);
+it('set() - [] - key ""', done => {
 
     let target = [];
 
@@ -251,11 +253,11 @@ it('set() - [] - key ""', () => {
     ).toEqual(
         ['test']
     );
+
+    done();
 });
 
-it('set() - {} - key a.', () => {
-
-    expect.assertions(1);
+it('set() - {} - key a.', done => {
 
     let target = {};
 
@@ -266,11 +268,11 @@ it('set() - {} - key a.', () => {
     ).toEqual(
         {"a": ['test']}
     );
+
+    done();
 });
 
-it('set() - {} - key a. x2', () => {
-
-    expect.assertions(1);
+it('set() - {} - key a. x2', done => {
 
     let target = {};
 
@@ -283,11 +285,11 @@ it('set() - {} - key a. x2', () => {
     ).toEqual(
         {"a": ['test', 'end']}
     );
+
+    done();
 });
 
-it('set() - {} - key a.b.', () => {
-
-    expect.assertions(1);
+it('set() - {} - key a.b.', done => {
 
     let target = {};
 
@@ -300,11 +302,11 @@ it('set() - {} - key a.b.', () => {
     ).toEqual(
         {"a": {"b" : ['test', 'end']}}
     );
+
+    done();
 });
 
-it('set() - {} - key a.b.', () => {
-
-    expect.assertions(1);
+it('set() - {} - key a.b.', done => {
 
     let target = {};
 
@@ -317,11 +319,11 @@ it('set() - {} - key a.b.', () => {
     ).toEqual(
         {"a": {"b" : ['test', 'end']}}
     );
+
+    done();
 });
 
-it('set() - {} - key a.b.', () => {
-
-    expect.assertions(1);
+it('set() - {} - key a.b.', done => {
 
     let target = {};
 
@@ -334,11 +336,11 @@ it('set() - {} - key a.b.', () => {
     ).toEqual(
         {"a": {"b": {"c": ["test"], "d": ["end"]}}}
     );
+
+    done();
 });
 
-it('set() - complex', () => {
-
-    expect.assertions(1);
+it('set() - complex', done => {
 
     let target = {};
 
@@ -384,11 +386,11 @@ it('set() - complex', () => {
             }
         }
     );
+
+    done();
 });
 
-it('set() - complex reverse', () => {
-
-    expect.assertions(1);
+it('set() - complex reverse', done => {
 
     let target = {};
 
@@ -434,4 +436,6 @@ it('set() - complex reverse', () => {
             ]
         }
     );
+
+    done();
 });

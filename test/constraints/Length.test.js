@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const IsNull = require('../../validator/constraints/IsNull');
@@ -7,8 +9,6 @@ const IsNull = require('../../validator/constraints/IsNull');
 const Length = require('../../validator/constraints/Length');
 
 it('Length - error types', () => {
-
-    expect.assertions(1);
 
     var k = new Length(3);
 
@@ -18,9 +18,7 @@ it('Length - error types', () => {
     });
 });
 
-it('Length - no arg', () => {
-
-    expect.assertions(1);
+it('Length - no arg', done => {
 
     try {
 
@@ -29,12 +27,12 @@ it('Length - no arg', () => {
     catch (e) {
 
         expect(e + '').toBe("Length: options must be given for this constraint");
+
+        done();
     }
 });
 
-it('Length - wrong arg type', () => {
-
-    expect.assertions(1);
+it('Length - wrong arg type', done => {
 
     try {
 
@@ -43,12 +41,12 @@ it('Length - wrong arg type', () => {
     catch (e) {
 
         expect(e + '').toBe("Length: Wrong parameter type have been given to this constraint, typeof: boolean");
+
+        done();
     }
 });
 
-it('Length - no min & no max', () => {
-
-    expect.assertions(1);
+it('Length - no min & no max', done => {
 
     try {
 
@@ -57,5 +55,7 @@ it('Length - no min & no max', () => {
     catch (e) {
 
         expect(e + '').toBe("Length: Either option \"min\" or \"max\" must be given for constraint");
+
+        done()
     }
 });

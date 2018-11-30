@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const isArray = require('../../validator/utils/isArray');
 
 it('isArray()', () => {

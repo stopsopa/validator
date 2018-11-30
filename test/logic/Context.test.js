@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Context       = require('../../validator/logic/Context');
@@ -8,9 +10,7 @@ const Callback      = require('../../validator/constraints/Callback');
 
 const All           = require('../../validator/constraints/All');
 
-it('new Context().buildViolation() ', async () => {
-
-    expect.assertions(1);
+it('new Context().buildViolation() ', done => {
 
     try {
 
@@ -19,12 +19,12 @@ it('new Context().buildViolation() ', async () => {
     catch (e) {
 
         expect(e + '').toBe("new Context(message).buildViolation(message): message not specified");
+
+        done();
     }
 });
 
-it('new Context().buildViolation(false) ', async () => {
-
-    expect.assertions(1);
+it('new Context().buildViolation(false) ', done => {
 
     try {
 
@@ -33,14 +33,14 @@ it('new Context().buildViolation(false) ', async () => {
     catch (e) {
 
         expect(e + '').toBe("new Context(message).buildViolation(message): message arg must be string");
+
+        done();
     }
 });
 
-it('new Constraint().getExtra() ', async () => {
+it('new Constraint().getExtra() ', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(
+    return validator(
         ['test'],
         new All(
             new Callback(
@@ -74,27 +74,28 @@ it('new Constraint().getExtra() ', async () => {
         {
             extra: 'context'
         }
-    );
+    ).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                0,
-                "{\"extra\":\"callback\"}",
-                "CALLBACK_5",
-                "test"
+                [
+                    0,
+                    "{\"extra\":\"callback\"}",
+                    "CALLBACK_5",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('new Context().getExtra() ', async () => {
+it('new Context().getExtra() ', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(
+    return validator(
         ['test'],
         new All(
             new Callback(
@@ -128,29 +129,30 @@ it('new Context().getExtra() ', async () => {
         {
             extra: 'context'
         }
-    );
+    ).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                0,
-                "{\"extra\":\"context\"}",
-                "CALLBACK_5",
-                "test"
+                [
+                    0,
+                    "{\"extra\":\"context\"}",
+                    "CALLBACK_5",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
 
 
-it('new Context().getRoot() ', async () => {
+it('new Context().getRoot() ', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(
+    return validator(
         ['test'],
         new All(
             new Callback(
@@ -183,19 +185,22 @@ it('new Context().getRoot() ', async () => {
         {
             extra: 'context'
         }
-    );
+    ).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                0,
-                "[\"test\"]",
-                "CALLBACK_5",
-                "test"
+                [
+                    0,
+                    "[\"test\"]",
+                    "CALLBACK_5",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 

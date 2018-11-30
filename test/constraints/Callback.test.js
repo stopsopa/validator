@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const NotBlank      = require('../../validator/constraints/NotBlank');
@@ -12,13 +14,11 @@ const Collection    = require('../../validator/constraints/Collection');
 
 const time = () => (new Date()).getTime();
 
-it('Callback - main arg', async () => {
-
-    expect.assertions(2);
+it('Callback - main arg', done => {
 
     const start = time();
 
-    let errors = await validator(
+    return validator(
         'test',
         new Callback(
             (value, context, path, extra) =>
@@ -46,45 +46,44 @@ it('Callback - main arg', async () => {
                     }, 50)
                 })
         )
-    );
+    ).then(errors => {
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                undefined,
-                "Custom message: not equal.",
-                "CALLBACK_5",
-                "test"
+                [
+                    undefined,
+                    "Custom message: not equal.",
+                    "CALLBACK_5",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
 
-    expect(time() - start).toBeGreaterThan(30);
+        expect(time() - start).toBeGreaterThan(30);
+
+        done();
+    });
 });
 
 
-it('Callback - not function', async () => {
-
-    expect.assertions(1);
-
+it('Callback - not function', done => {
     try {
 
-        let errors = await validator('test', new Callback());
+        validator('test', new Callback());
     }
     catch (e) {
 
         expect(e).toEqual("Callback constraint first arg should be function");
+
+        done();
     }
 });
 
 
-it('Callback - not promise', async () => {
+it('Callback - not promise', done => {
 
-    expect.assertions(1);
-
-    const errors = await validator('test', new Callback((value, context, path, extra) => {
+    return validator('test', new Callback((value, context, path, extra) => {
         if (value.length !== 5) {
 
             context
@@ -96,18 +95,21 @@ it('Callback - not promise', async () => {
                 .addViolation()
             ;
         }
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                undefined,
-                "Custom message: not equal.",
-                "CALLBACK_5",
-                "test"
+                [
+                    undefined,
+                    "Custom message: not equal.",
+                    "CALLBACK_5",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

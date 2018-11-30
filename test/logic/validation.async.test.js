@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Collection    = require('../../validator/constraints/Collection');
@@ -14,11 +16,9 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-it("validation async", async () => {
+it("validation async", done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             b: 'b',
         },
@@ -28,52 +28,53 @@ it("validation async", async () => {
             b: new Length(3, {async: -1}),
         }),
         z: new Length(3),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "a.b",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "b"
-            ],
-            [
-                "z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "z"
+                [
+                    "a.b",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "b"
+                ],
+                [
+                    "z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "z"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
-                "b": [
+        expect(
+            tree
+        ).toEqual(
+            {
+                "a": {
+                    "b": [
+                        "This value should have exactly 3 characters."
+                    ]
+                },
+                "z": [
                     "This value should have exactly 3 characters."
                 ]
-            },
-            "z": [
-                "This value should have exactly 3 characters."
-            ]
-        }
-    );
+            }
+        );
+
+        done();
+    });
 });
 
-it("validation async - reversed", async () => {
+it("validation async - reversed", done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         a: {
             b: 'b',
         },
@@ -83,43 +84,46 @@ it("validation async - reversed", async () => {
             b: new Length(3, {async: 1}),
         }),
         z: new Length(3),
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(
-        raw
-    ).toEqual(
-        [
+        expect(
+            raw
+        ).toEqual(
             [
-                "z",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "z"
-            ],
-            [
-                "a.b",
-                "This value should have exactly 3 characters.",
-                "TOO_SHORT_ERROR",
-                "b"
+                [
+                    "z",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "z"
+                ],
+                [
+                    "a.b",
+                    "This value should have exactly 3 characters.",
+                    "TOO_SHORT_ERROR",
+                    "b"
+                ]
             ]
-        ]
-    );
+        );
 
-    const tree = errors.getTree();
+        const tree = errors.getTree();
 
-    expect(
-        tree
-    ).toEqual(
-        {
-            "a": {
-                "b": [
+        expect(
+            tree
+        ).toEqual(
+            {
+                "a": {
+                    "b": [
+                        "This value should have exactly 3 characters."
+                    ]
+                },
+                "z": [
                     "This value should have exactly 3 characters."
                 ]
-            },
-            "z": [
-                "This value should have exactly 3 characters."
-            ]
-        }
-    );
+            }
+        );
+
+        done();
+    });
 });

@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Collection    = require('../../validator/constraints/Collection');
@@ -14,11 +16,9 @@ const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
 
-it('Collection allowExtraFields = false & allowMissingFields = false: both', async () => {
+it('Collection allowExtraFields = false & allowMissingFields = false: both', done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         extra   : false, // checking existance not value
         one     : 'two',
         three    : 'four',
@@ -28,48 +28,47 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', asy
         n       : new IsNull(),
     }), {
         // debug: true,
-    });
+    }).then(errors => {
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
-
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "n",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {
-                    "extra": false,
-                    "one": "two",
-                    "three": "four"
-                }
-            ],
-            [
-                "extra",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "extra": false,
-                    "one": "two",
-                    "three": "four"
-                }
+                [
+                    "n",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {
+                        "extra": false,
+                        "one": "two",
+                        "three": "four"
+                    }
+                ],
+                [
+                    "extra",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "extra": false,
+                        "one": "two",
+                        "three": "four"
+                    }
+                ]
             ]
-        ]
-    );
+        );
 
-    const flat = errors.getFlat();
+        const flat = errors.getFlat();
 
-    expect(flat).toEqual(
-        {"extra": ["This field was not expected."], "n": ["This field is missing."]}
-    );
+        expect(flat).toEqual(
+            {"extra": ["This field was not expected."], "n": ["This field is missing."]}
+        );
 
+        done();
+    });
 });
 
-it('Collection allowExtraFields = false & allowMissingFields = false: missing', async () => {
+it('Collection allowExtraFields = false & allowMissingFields = false: missing', done => {
 
-    expect.assertions(2);
-
-    const errors = await validator({
+    return validator({
         // extra   : false, // checking existance not value
         // one     : 'two',
         // three    : 'four',
@@ -78,40 +77,38 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
         two     : new Required(),
     }), {
         // debug: true,
-    });
+    }).then(errors => {
+        const raw = errors.getRaw();
 
-    const raw = errors.getRaw();
-
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "one",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {}
-            ],
-            [
-                "two",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {}
+                [
+                    "one",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {}
+                ],
+                [
+                    "two",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {}
+                ]
             ]
-        ]
-    );
+        );
 
-    const flat = errors.getFlat();
+        const flat = errors.getFlat();
 
-    expect(flat).toEqual(
-        {"one": ["This field is missing."], "two": ["This field is missing."]}
-    );
-
+        expect(flat).toEqual(
+            {"one": ["This field is missing."], "two": ["This field is missing."]}
+        );
+        done();
+    });
 });
 
-it('Collection allowExtraFields = false & allowMissingFields = false: extra', async () => {
+it('Collection allowExtraFields = false & allowMissingFields = false: extra', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         test    : null,
         two     : true,
         one     : false, // checking existance not value
@@ -121,178 +118,176 @@ it('Collection allowExtraFields = false & allowMissingFields = false: extra', as
         // two     : new Required(),
     }), {
         // debug: true,
+    }).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    "two",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "test": null,
+                        "two": true,
+                        "one": false
+                    }
+                ],
+                [
+                    "one",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "test": null,
+                        "two": true,
+                        "one": false
+                    }
+                ],
+            ]
+        );
+
+        done();
+    });
+});
+
+it('key - Collection - no options', done => {
+
+    try {
+
+        validator('test', new Collection())
+    }
+    catch (e) {
+
+        expect(e + '').toBe("Collection accept only plain object as a first argument");
+
+        done();
+    }
+});
+
+it('key - Collection - array option', done => {
+
+    try {
+
+        validator('test', new Collection([]))
+    }
+    catch (e) {
+
+        expect(e + '').toBe("Collection accept only plain object as a first argument");
+
+        done();
+    }
+});
+
+it('key - Collection - empty object option', done => {
+
+    try {
+
+        validator('test', new Collection({}))
+    }
+    catch (e) {
+
+        expect(e + '').toBe("Describe at least one field in \"fields\" parameter");
+
+        done();
+    }
+});
+
+it('key - Collection - string but expect object with field', done => {
+
+    return validator('test', new Collection({
+        test: new IsNull()
+    })).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual([]);
+
+        done();
+    });
+});
+
+it('key - Collection - used together with other constrain array', done => {
+
+    return validator('test', [
+        new IsNull(),
+        new Collection({
+            test: new IsNull()
+        })
+    ]).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    undefined,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        )
+
+        expect(errors[0][0]).toBeUndefined();
+
+        done();
+    });
+});
+
+it('key - Collection - used together with other constraint require', done => {
+
+    return validator('test', new Required([
+        new IsNull(),
+        new Collection({
+            test: new IsNull()
+        })
+    ])).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    undefined,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        )
+
+        expect(errors[0][0]).toEqual()
+
+        done();
+    });
+});
+
+it('key - Collection - used together with other constrain require x2', done => {
+
+    return validator('test', new Required(new Optional([
+        new IsNull(),
+        new Collection({
+            test: new IsNull()
+        })
+    ]))).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]
+        );
+
+        expect(errors[0][0]).toBeUndefined();
+
+        done();
     });
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                "two",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "test": null,
-                    "two": true,
-                    "one": false
-                }
-            ],
-            [
-                "one",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "test": null,
-                    "two": true,
-                    "one": false
-                }
-            ],
-        ]
-    );
 });
 
-it('key - Collection - no options', async () => {
+it('Collection-nested allowExtraFields = false & allowMissingFields = false: both', done => {
 
-    expect.assertions(1);
-
-    try {
-
-        let errors = await validator('test', new Collection());
-
-        errors.getRaw();
-    }
-    catch (e) {
-
-        expect(e + '').toBe("Collection accept only plain object as a first argument");
-    }
-});
-
-it('key - Collection - array option', async () => {
-
-    expect.assertions(1);
-
-    try {
-
-        let errors = await validator('test', new Collection([]));
-
-        errors.getRaw();
-    }
-    catch (e) {
-
-        expect(e + '').toBe("Collection accept only plain object as a first argument");
-    }
-});
-
-it('key - Collection - empty object option', async () => {
-
-    expect.assertions(1);
-
-    try {
-
-        let errors = await validator('test', new Collection({}));
-
-        errors.getRaw();
-    }
-    catch (e) {
-
-        expect(e + '').toBe('Describe at least one field in "fields" parameter');
-    }
-});
-
-it('key - Collection - string but expect object with field', async () => {
-
-    expect.assertions(1);
-
-    let errors = await validator('test', new Collection({
-        test: new IsNull()
-    }));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual([]);
-});
-
-it('key - Collection - used together with other constrain array', async () => {
-
-    expect.assertions(2);
-
-    let errors = await validator('test', [
-        new IsNull(),
-        new Collection({
-            test: new IsNull()
-        })
-    ]);
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                undefined,
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                "test"
-            ]
-        ]
-    )
-
-    expect(errors[0][0]).toBeUndefined();
-});
-
-it('key - Collection - used together with other constraint require', async () => {
-
-    expect.assertions(2);
-
-    let errors = await validator('test', new Required([
-        new IsNull(),
-        new Collection({
-            test: new IsNull()
-        })
-    ]));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
-            [
-                undefined,
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                "test"
-            ]
-        ]
-    )
-
-    expect(errors[0][0]).toEqual()
-});
-
-it('key - Collection - used together with other constrain require x2', async () => {
-
-    expect.assertions(2);
-
-    let errors;
-
-    errors = await validator('test', new Required(new Optional([
-        new IsNull(),
-        new Collection({
-            test: new IsNull()
-        })
-    ])));
-
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]
-    );
-
-    expect(errors[0][0]).toBeUndefined();
-});
-
-it('Collection-nested allowExtraFields = false & allowMissingFields = false: both', async () => {
-
-    expect.assertions(3);
-
-    const errors = await validator({
+    return validator({
         a       : false, // checking existance not value
         b       : {
             second: 'level',
@@ -310,78 +305,78 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
             e : new IsNull(),
             f : new IsNull(),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "b.c",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {
-                    "second": "level"
-                }
-            ],
-            [
-                "b.second",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "second": "level"
-                }
-            ],
-            [
-                "d.f",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                true
+                [
+                    "b.c",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {
+                        "second": "level"
+                    }
+                ],
+                [
+                    "b.second",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "second": "level"
+                    }
+                ],
+                [
+                    "d.f",
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    true
+                ]
             ]
-        ]
-    );
+        );
 
-    const flat = errors.getFlat();
+        const flat = errors.getFlat();
 
-    expect(flat).toEqual(
-        {
-            "b.c": [
-                "This field is missing."
-            ],
-            "b.second": [
-                "This field was not expected."
-            ],
-            "d.f": [
-                "This value should be null."
-            ]
-        }
-    );
-
-    const tree = errors.getTree();
-
-    expect(tree).toEqual(
-        {
-            "b": {
-                "c": [
+        expect(flat).toEqual(
+            {
+                "b.c": [
                     "This field is missing."
                 ],
-                "second": [
+                "b.second": [
                     "This field was not expected."
-                ]
-            },
-            "d": {
-                "f": [
+                ],
+                "d.f": [
                     "This value should be null."
                 ]
             }
-        }
-    );
+        );
 
+        const tree = errors.getTree();
+
+        expect(tree).toEqual(
+            {
+                "b": {
+                    "c": [
+                        "This field is missing."
+                    ],
+                    "second": [
+                        "This field was not expected."
+                    ]
+                },
+                "d": {
+                    "f": [
+                        "This value should be null."
+                    ]
+                }
+            }
+        );
+
+        done();
+    });
 });
 
-it('stack overflow', async () => {
-
-    expect.assertions(1);
+it('stack overflow', done => {
 
     const num = 1000;
 
@@ -417,27 +412,27 @@ it('stack overflow', async () => {
     //
     // process.stdout.write(`\n\n\n`);
 
-    let errors = await validator(data, constraints);
+    return validator(data, constraints).then(errors => {
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                Array(1001).join(".").split(".").map(() => 'test').join('.'),
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {}
+                [
+                    Array(1001).join(".").split(".").map(() => 'test').join('.'),
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {}
+                ]
             ]
-        ]
-    )
+        )
+
+        done();
+    });
 });
 
-it('Collection on array', async () => {
+it('Collection on array', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'test',
         z: 'te',
         // b: [
@@ -470,37 +465,37 @@ it('Collection on array', async () => {
                 // e: new Length(2),
             })
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "b.0",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {
-                    "1": {
-                        "g": "h"
+                [
+                    "b.0",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {
+                        "1": {
+                            "g": "h"
+                        }
                     }
-                }
-            ],
-            [
-                "b.1.g",
-                "This value should have exactly 23 characters.",
-                "TOO_SHORT_ERROR",
-                "h"
+                ],
+                [
+                    "b.1.g",
+                    "This value should have exactly 23 characters.",
+                    "TOO_SHORT_ERROR",
+                    "h"
+                ]
             ]
-        ]
-    );
+        );
 
+        done();
+    });
 });
-it('Collection on array 2', async () => {
+it('Collection on array 2', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'test',
         z: 'te',
         b: [
@@ -540,43 +535,43 @@ it('Collection on array 2', async () => {
                 // e: new Length(2),
             })
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "b.0.c",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "c": "d",
-                    "e": "f"
-                }
-            ],
-            [
-                "b.1.g",
-                "This value should have exactly 2 characters.",
-                "TOO_SHORT_ERROR",
-                "h"
-            ],
-            [
-                "b.2.g",
-                "This value should have exactly 1 character.",
-                "TOO_LONG_ERROR",
-                "h1"
+                [
+                    "b.0.c",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "c": "d",
+                        "e": "f"
+                    }
+                ],
+                [
+                    "b.1.g",
+                    "This value should have exactly 2 characters.",
+                    "TOO_SHORT_ERROR",
+                    "h"
+                ],
+                [
+                    "b.2.g",
+                    "This value should have exactly 1 character.",
+                    "TOO_LONG_ERROR",
+                    "h1"
+                ]
             ]
-        ]
-    );
+        );
 
+        done();
+    });
 });
 
-it('Collection on array 3', async () => {
+it('Collection on array 3', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator([
+    return validator([
         {
             c: 'd',
             e: 'f'
@@ -592,55 +587,56 @@ it('Collection on array 3', async () => {
             g: new Length(2),
             // e: new Length(2),
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "0.c",
-                "This field was not expected.",
-                "NO_SUCH_FIELD_ERROR",
-                {
-                    "c": "d",
-                    "e": "f"
-                }
-            ],
-            [
-                "1.g",
-                "This value should have exactly 2 characters.",
-                "TOO_SHORT_ERROR",
-                "h"
+                [
+                    "0.c",
+                    "This field was not expected.",
+                    "NO_SUCH_FIELD_ERROR",
+                    {
+                        "c": "d",
+                        "e": "f"
+                    }
+                ],
+                [
+                    "1.g",
+                    "This value should have exactly 2 characters.",
+                    "TOO_SHORT_ERROR",
+                    "h"
+                ]
             ]
-        ]
-    );
+        );
 
+        done();
+    });
 });
 
-it("Collection - allowMissingFields: false", async () => {
+it("Collection - allowMissingFields: false", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: null,
     }, new Collection({
         a: new IsNull(),
         b: new Length(3),
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
-    );
+        expect(errors).toEqual(
+            [["b", "This field is missing.", "MISSING_FIELD_ERROR", {"a": null}]]
+        );
+
+        done();
+    });
 });
 
-it("Collection - allowMissingFields: true", async () => {
+it("Collection - allowMissingFields: true", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: null,
     }, new Collection({
         fields: {
@@ -648,19 +644,20 @@ it("Collection - allowMissingFields: true", async () => {
             b: new Length(3),
         },
         allowMissingFields: true
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
 
-it("Collection deep - allowMissingFields: false", async () => {
+it("Collection deep - allowMissingFields: false", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: {
             b: {
                 c: 'abc',
@@ -673,29 +670,30 @@ it("Collection deep - allowMissingFields: false", async () => {
                 d: new Length(2),
             })
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "a.b.d",
-                "This field is missing.",
-                "MISSING_FIELD_ERROR",
-                {
-                    "c": "abc"
-                }
+                [
+                    "a.b.d",
+                    "This field is missing.",
+                    "MISSING_FIELD_ERROR",
+                    {
+                        "c": "abc"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it("Collection deep - allowMissingFields: true", async () => {
+it("Collection deep - allowMissingFields: true", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: {
             b: {
                 c: 'abc',
@@ -711,18 +709,19 @@ it("Collection deep - allowMissingFields: true", async () => {
                 allowMissingFields: true,
             })
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
-it("Collection deep, no data", async () => {
+it("Collection deep, no data", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: {
             b: null,
         },
@@ -736,65 +735,70 @@ it("Collection deep, no data", async () => {
                 // allowMissingFields: true,
             })
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
-it('Collection - array as a root', async () => {
+it('Collection - array as a root', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator('abc', [
+    return validator('abc', [
         new Required(new Length(4)),
-    ]);
+    ]).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([[undefined, "This value should have exactly 4 characters.", "TOO_SHORT_ERROR", "abc"]]);
+        expect(errors).toEqual([[undefined, "This value should have exactly 4 characters.", "TOO_SHORT_ERROR", "abc"]]);
+
+        done();
+    });
 });
 
-it('Collection - no constraints true', async () => {
+it('Collection - no constraints true', done => {
 
-    expect.assertions(1);
+    return validator('abc', true).then(errors => {
 
-    let errors = await validator('abc', true);
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
+        expect(errors).toEqual([]);
 
-    expect(errors).toEqual([]);
+        done();
+    });
 });
 
-it('Collection - no constraints false', async () => {
+it('Collection - no constraints false', done => {
 
-    expect.assertions(1);
+    return validator('abc', false).then(errors => {
 
-    let errors = await validator('abc', false);
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
+        expect(errors).toEqual([]);
 
-    expect(errors).toEqual([]);
+        done();
+    });
 });
 
-it('Collection - no constraints undefined', async () => {
+it('Collection - no constraints undefined', done => {
 
-    expect.assertions(1);
+    return validator('abc').then(errors => {
 
-    let errors = await validator('abc');
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
+        expect(errors).toEqual([]);
 
-    expect(errors).toEqual([]);
+        done();
+    });
 });
 
 
-it("Collection no data", async () => {
+it("Collection no data", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(undefined , new Collection({
+    return validator(undefined , new Collection({
         a: new Collection({
             b: new Collection({
                 fields: {
@@ -804,18 +808,19 @@ it("Collection no data", async () => {
                 // allowMissingFields: true,
             })
         })
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual([]);
+        expect(errors).toEqual([]);
+
+        done();
+    });
 });
 
-it("Collection missing fields [part 1]", async () => {
+it("Collection missing fields [part 1]", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: {
 
         }
@@ -829,18 +834,19 @@ it("Collection missing fields [part 1]", async () => {
                 // allowMissingFields: true,
             })
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual([["a.b", "This field is missing.", "MISSING_FIELD_ERROR", {}]]);
+        expect(raw).toEqual([["a.b", "This field is missing.", "MISSING_FIELD_ERROR", {}]]);
+
+        done();
+    });
 });
 
-it("Collection missing fields [part 2]", async () => {
+it("Collection missing fields [part 2]", done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: {
 
         }
@@ -857,11 +863,14 @@ it("Collection missing fields [part 2]", async () => {
             },
             allowMissingFields: true
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual([]);
+        expect(raw).toEqual([]);
+
+        done();
+    });
 });
 
 

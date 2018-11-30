@@ -1,8 +1,10 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const each = require('../../validator/utils/each');
 
-it('each() - array stop', () => {
+it('each() - array stop', done => {
 
     const a = 'qwertyuiop'.split('');
 
@@ -16,9 +18,11 @@ it('each() - array stop', () => {
     });
 
     expect(t.join('')).toBe('qwert');
+
+    done();
 });
 
-it('each() - object stop', () => {
+it('each() - object stop', done => {
 
     const a = 'qwertyuiop'.split('');
 
@@ -37,4 +41,6 @@ it('each() - object stop', () => {
     })
 
     expect(t.join('')).toBe('qwerty');
+
+    done();
 });

@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const IsNull = require('../../validator/constraints/IsNull');
@@ -17,49 +19,47 @@ it('IsNull', () => {
     });
 });
 
-it('IsNull() - used as a function', async () => {
-
-    expect.assertions(1);
+it('IsNull() - used as a function', done => {
 
     try {
-        let errors = await validator('test', new Collection({
-            test: IsNull()
-        }));
 
-        errors.getRaw();
+        validator('test', new Collection({
+            test: IsNull()
+        }))
     }
     catch (e) {
 
         expect(e + '').toBe("Don't use IsNull() as a function, create instance new IsNull()");
+
+        done();
     }
 });
 
-it('IsNull - custom message', async () => {
+it('IsNull - custom message', done => {
 
-    expect.assertions(1);
+    return validator('test', new IsNull('custom message')).then(errors => {
 
-    let errors = await validator('test', new IsNull('custom message'));
+        errors = errors.getRaw();
 
-    errors = errors.getRaw();
-
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                undefined,
-                "custom message",
-                "NOT_NULL_ERROR",
-                "test"
+                [
+                    undefined,
+                    "custom message",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
 
-it('IsNull - stop [part 1]', async () => {
+it('IsNull - stop [part 1]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -73,36 +73,37 @@ it('IsNull - stop [part 1]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                false
-            ],
-            [
-                "b.a",
-                "This collection should contain exactly 2 elements.",
-                "TOO_MANY_ERROR",
-                {
-                    "a": "b",
-                    "c": "d",
-                    "d": "f"
-                }
+                [
+                    "z",
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    false
+                ],
+                [
+                    "b.a",
+                    "This collection should contain exactly 2 elements.",
+                    "TOO_MANY_ERROR",
+                    {
+                        "a": "b",
+                        "c": "d",
+                        "d": "f"
+                    }
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
-it('IsNull - stop [part 2]', async () => {
+it('IsNull - stop [part 2]', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         z: false,
         b: {
             a: {
@@ -116,18 +117,21 @@ it('IsNull - stop [part 2]', async () => {
         b: new Collection({
             a: new Count({min: 2, max: 2}),
         })
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                "z",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                false
+                [
+                    "z",
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    false
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });

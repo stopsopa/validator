@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const isObject = require('../../validator/utils/isObject');
 
 it('isObject()', () => {

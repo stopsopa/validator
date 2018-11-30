@@ -1,5 +1,7 @@
 'use strict';
 
+try {require("karma_jest_shim")}catch(e){}
+
 const validator     = require('../../validator');
 
 const Type          = require('../../validator/constraints/Type');
@@ -17,139 +19,143 @@ it('Type', () => {
     });
 });
 
-it('Type - custom message', async () => {
+it('Type - custom message', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator([], new Type({
+    return validator([], new Type({
         message: 'Custom message: {{ type }}.',
         type: 'object'
-    }));
+    })).then(errors => {
 
-    const row = errors.getRaw();
+        const row = errors.getRaw();
 
-    expect(row).toEqual(
-        [
+        expect(row).toEqual(
             [
-                undefined,
-                "Custom message: object.",
-                "INVALID_TYPE_ERROR",
-                []
+                [
+                    undefined,
+                    "Custom message: object.",
+                    "INVALID_TYPE_ERROR",
+                    []
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Type - stop', async () => {
+it('Type - stop', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator({
+    return validator({
         a: 'a',
         b: {},
     }, new Collection({
         a: new Length(2, {async: 1}),
         b: new Type('array', {stop: true})
-    }));
+    })).then(errors => {
 
-    errors = errors.getRaw();
+        errors = errors.getRaw();
 
-    expect(errors).toEqual(
-        [
+        expect(errors).toEqual(
             [
-                "b",
-                "This value should be of type 'array'.",
-                "INVALID_TYPE_ERROR",
-                {}
+                [
+                    "b",
+                    "This value should be of type 'array'.",
+                    "INVALID_TYPE_ERROR",
+                    {}
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Type - not string', async () => {
-
-    expect.assertions(1);
+it('Type - not string', done => {
 
     try {
 
-        let errors = await validator('one', new Type({
+        validator('one', new Type({
             type: false,
         }));
     }
     catch (e) {
 
         expect(e).toEqual("Type constraint: Each of types have to be string one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+
+        done();
     }
 });
 
-it('Type - string', async () => {
-
-    expect.assertions(1);
+it('Type - string', done => {
 
     try {
 
-        let errors = await validator('one', new Type({
+        validator('one', new Type({
             type: 'other',
         }));
     }
     catch (e) {
 
         expect(e).toEqual("Type constraint: One of types is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+
+        done();
     }
 });
 
-it('Type - array of types - ok', async () => {
+it('Type - array of types - ok', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(56, new Type({
+    return validator(56, new Type({
         type: ['string', 'integer'],
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual([]);
+        expect(raw).toEqual([]);
+
+        done();
+    });
 });
 
-it('Type - array of types - wrong type', async () => {
-
-    expect.assertions(1);
+it('Type - array of types - wrong type', done => {
 
     try {
 
-        let errors = await validator(true, new Type({
+        validator(true, new Type({
             type: ['string', 'iii'],
         }));
     }
     catch (e) {
 
         expect(e).toEqual("Type constraint: One of types is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+
+        done()
     }
 });
 
-it('Type - array of types - wrong value type', async () => {
+it('Type - array of types - wrong value type', done => {
 
-    expect.assertions(1);
-
-    let errors = await validator(true, new Type({
+    return validator(true, new Type({
         type: ['string', 'integer'],
-    }));
+    })).then(errors => {
 
-    const raw = errors.getRaw();
+        const raw = errors.getRaw();
 
-    expect(raw).toEqual(
-        [
+        expect(raw).toEqual(
             [
-                undefined,
-                "This value should be of type 'string, integer'.",
-                "INVALID_TYPE_ERROR",
-                true
+                [
+                    undefined,
+                    "This value should be of type 'string, integer'.",
+                    "INVALID_TYPE_ERROR",
+                    true
+                ]
             ]
-        ]
-    );
+        );
+
+        done();
+    });
 });
 
-it('Type - check all types', async () => {
+it('Type - check all types', done => {
 
     const data = {
         'undefined'             : undefined,
@@ -171,9 +177,7 @@ it('Type - check all types', async () => {
 
     const keys = Object.keys(data);
 
-    expect.assertions(keys.length)
-
-    return Promise.all(keys.map(async (type, i) => {
+    return Promise.all(keys.map((type, i) => {
 
         let key = type;
 
@@ -182,12 +186,13 @@ it('Type - check all types', async () => {
             type = type.split(' ').filter(a => a);
         }
 
-        let errors = await validator(data[key], new Type(type, {async: i}));
+        return validator(data[key], new Type(type, {async: i})).then(errors => {
 
-        errors = errors.getRaw();
+            errors = errors.getRaw();
 
-        expect(errors).toEqual([]);
-    }));
+            expect(errors).toEqual([]);
+        });
+    })).then(() => done());
 });
 
 
