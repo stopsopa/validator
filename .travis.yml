@@ -1,7 +1,7 @@
 language: node_js
-dist: trusty
+#dist: trusty
 
-node_js: '10'
+#node_js: '10'
 #  - '8'
 #  - '9'
 #  - '10'
@@ -11,20 +11,31 @@ matrix:
   include:
     - node_js: '8'
       env: MODE=jest
+      dist: trusty
     - node_js: '9'
       env: MODE=jest
+      dist: trusty
     - node_js: '10'
       env: MODE=jest
+      dist: trusty
     - node_js: '11'
       env: MODE=jest
+      dist: trusty
     - node_js: '10'
       env:
         - MODE=karma
         - BROWSER=Chrome
+      dist: trusty
     - node_js: '10'
       env:
         - MODE=karma
         - BROWSER=Firefox
+      dist: trusty
+    - os: osx
+      node_js: "10"
+      env:
+        - MODE=karma
+        - BROWSER=Safari
 
 # https://docs.travis-ci.com/user/customizing-the-build/#safelisting-or-blocklisting-branches
 branches:
