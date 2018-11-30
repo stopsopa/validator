@@ -18,7 +18,13 @@ matrix:
     - node_js: '11'
       env: MODE=jest
     - node_js: '10'
-      env: MODE=karma
+      env:
+        - MODE=karma
+        - BROWSER=Chrome
+    - node_js: '10'
+      env:
+        - MODE=karma
+        - BROWSER=Firefox
 
 # https://docs.travis-ci.com/user/customizing-the-build/#safelisting-or-blocklisting-branches
 branches:
