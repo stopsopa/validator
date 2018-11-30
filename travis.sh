@@ -9,9 +9,6 @@ function green {
     printf "\e[32m$1\e[0m\n"
 }
 
-sudo apt-get install tree
-tree test
-
 MODE=""
 
 if [ "$MODE" = "karma" ]; then

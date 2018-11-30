@@ -31,10 +31,10 @@ env:
   global:
     - TRAVIS=true
 
-#before_script:
+before_script:
 #  - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
-#  - sudo apt-get install tree
-#  - tree test
+  - sudo apt-get install tree
+  - tree test
 
 script:
   - /bin/bash travis.sh
