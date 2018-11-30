@@ -1,6 +1,6 @@
 {
   "name": "@stopsopa/validator",
-  "version": "0.0.64",
+  "version": "0.0.65",
   "description": "",
   "main": "validator",
   "scripts": {
