@@ -1,6 +1,6 @@
 'use strict';
 
-try {require("karma_jest_shim")}catch(e){}
+try {require("karma_polyfill")}catch(e){}
 
 const Context           = require('../../validator/logic/Context');
 

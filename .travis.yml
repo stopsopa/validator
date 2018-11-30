@@ -1,10 +1,24 @@
 language: node_js
 dist: trusty
-node_js:
-  - '8'
-  - '9'
-  - '10'
-  - '11'
+
+node_js: '10'
+#  - '8'
+#  - '9'
+#  - '10'
+#  - '11'
+
+matrix:
+  include:
+    - node_js: '8'
+      env: RUN=jest
+    - node_js: '9'
+      env: RUN=jest
+    - node_js: '10'
+      env: RUN=jest
+    - node_js: '11'
+      env: RUN=jest
+    - node_js: '10'
+      env: RUN=karma
 
 # https://docs.travis-ci.com/user/customizing-the-build/#safelisting-or-blocklisting-branches
 branches:
@@ -17,17 +31,16 @@ env:
   global:
     - TRAVIS=true
 
-before_script:
-  - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
-  - sudo apt-get install tree
-  - tree test
+#before_script:
+#  - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
+#  - sudo apt-get install tree
+#  - tree test
 
 script:
-  - /bin/bash test.sh
+  - /bin/bash travis.sh
 
-after_success:
-  # - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v
-  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js
+#after_success:
+#  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js
 
 
 

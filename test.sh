@@ -64,7 +64,7 @@ $@ \
 --bail \
 --verbose \
 --runInBand \
---modulePathIgnorePatterns test/examples test/minefield test/project test/puppeteer
+--modulePathIgnorePatterns test/examples test/minefield test/project test/puppeteer karma_build
 END
 )";
 

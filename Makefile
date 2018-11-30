@@ -21,3 +21,13 @@ c: # run local server to browse coverage
 
 nt: # test .npmignore
 	npm pack
+
+ck: # karma parameters.json
+	/bin/bash update.sh --karma
+
+cj: # jest parameters.json
+	/bin/bash update.sh --prod
+
+karma:
+	/bin/bash karma.sh
+

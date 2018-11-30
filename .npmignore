@@ -14,3 +14,12 @@
 /server.js
 /yarn.lock
 /log/
+node_modules
+yarn-error*
+/local.txt
+/karma_build/
+/dev/
+
+
+
+
