@@ -16,6 +16,6 @@ if [ "$1" != "" ]; then
     export KARMAFILTER="$1"
 fi
 
-node node_modules/.bin/webpack --config webpack.config.js
+node node_modules/.bin/webpack --config webpack-KARMA.config.js
 
 node node_modules/.bin/karma start --log-level debug --single-run

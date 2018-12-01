@@ -20,7 +20,7 @@ yarn-error*
 /karma_build/
 /dev/
 /webpack/
-/webpack.config.js
+/webpack-KARMA.config.js
 
 /karma.conf.js
 /karma.sh
