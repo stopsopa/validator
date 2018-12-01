@@ -17,20 +17,21 @@ twa: # run tests in watchAll mode
 	@/bin/bash test.sh --watchAll
 
 c: # run local server to browse coverage
-	node server.js --log 15 --dir coverage
+	@node server.js --log 15 --dir coverage
 
 nt: # test .npmignore
-	npm pack
+	@npm pack
 
 ck: # karma parameters.json
-	/bin/bash update.sh --karma
+	@/bin/bash update.sh --karma
 
 cj: # jest parameters.json
-	/bin/bash update.sh --prod
+	@/bin/bash update.sh --prod
 
-karma:
-	/bin/bash karma.sh
+karma: # run karma test
+	@/bin/bash karma.sh
+	# /bin/bash karma.sh test/../file.test.js
 
-umd:
-	node node_modules/.bin/webpack --config webpack-UMD.config.js
+umd: # build browser UMD versions
+	@node node_modules/.bin/webpack --config webpack-UMD.config.js
 
