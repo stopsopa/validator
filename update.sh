@@ -119,8 +119,16 @@ if [ "$DIFF" != "" ] || [ "$1" = "force" ]; then
 
     npm version patch
 
+    make umd
+    cat comment.txt dist/spvalidation.js > dist/test.js
+    mv dist/test.js dist/spvalidation.js
+    cat comment.txt dist/spvalidation.min.js > dist/test.js
+    mv dist/test.js dist/spvalidation.min.js
+
                             node update-badge.js
                             git add README.md
+
+                            git add dist
                             git commit --amend --no-edit
 
     git push $ORIGIN $REMOTEBRANCH

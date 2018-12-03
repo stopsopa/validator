@@ -2,7 +2,11 @@
 
 const path                  = require('path');
 
-const dev =              require('./webpack.config');
+let dev                     = require('./webpack-KARMA.config');
+
+dev = Object.assign({
+    mode: 'production',
+})
 
 dev.entry = {
     spvalidation: path.resolve(__dirname, 'validator', 'index')
@@ -12,15 +16,29 @@ dev.output = {
     library: 'spvalidation',
     libraryTarget: 'umd',
     filename: 'spvalidation.js',
+    // pathinfo: true,
+//     auxiliaryComment: {
+//         root: `
+// /**
+//  * @author Szymon Działowski
+//  * @homepage https://github.com/stopsopa/validator
+//  */
+//     `
+//     }
     // auxiliaryComment: 'Test Comment'
 }
 
 const prod = Object.assign({}, dev, {
-    mode: 'production',
     output: Object.assign({}, dev.output, {
         filename: 'spvalidation.min.js',
     })
 });
+
+dev = Object.assign({}, dev, {
+    optimization:{
+        minimize: false,
+    }
+})
 
 module.exports = [dev, prod];
 
