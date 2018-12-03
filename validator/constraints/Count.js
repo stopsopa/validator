@@ -112,7 +112,7 @@ Count.prototype.validate = function (value, context, path, extra) {
                 .addViolation()
             ;
 
-            return extra.stop ? Promise.reject('stop Count') : Promise.resolve('resolve Count');
+            return (extra && extra.stop) ? Promise.reject('stop Count') : Promise.resolve('resolve Count');
         }
 
         if (typeof opt.min !== 'undefined' && count < opt.min) {
@@ -128,7 +128,7 @@ Count.prototype.validate = function (value, context, path, extra) {
                 .addViolation()
             ;
 
-            return extra.stop ? Promise.reject('stop Count') : Promise.resolve('resolve Count');
+            return (extra && extra.stop) ? Promise.reject('stop Count') : Promise.resolve('resolve Count');
         }
     }
 

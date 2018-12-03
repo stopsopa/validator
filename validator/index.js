@@ -35,14 +35,12 @@ const validator = (value, constraints, extra) => {
                 // .then(...delay.then(2500))
                 // .then(a => {
                 //     console.log(`\n\n\n\n\n`);
-                //     log.dump('resolved:' + (JSON.stringify(a)+''));
+                //     console.log('resolved:', JSON.stringify(a+''));
                 //     console.log(`\n\n\n\n\n`);
-                //
                 //     return a;
                 // }, a => {
-                //
                 //     console.log(`\n\n\n\n\n`);
-                //     log.dump('rejected:' + (JSON.stringify(a)+''));
+                //     console.log('rejected:', JSON.stringify(a+''));
                 //     console.log(`\n\n\n\n\n`);
                 //     return a;
                 // })

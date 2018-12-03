@@ -46,7 +46,7 @@ const connectAndSort = function (value, constraints, context, path, final = fals
         }
         else if (constraints[i] instanceof All) {
 
-            const combine = (typeof path === 'undefined') ? name => name : name => path + '.' + name;
+            const combine = path ? (name => path + '.' + name) : (name => name);
 
             const allConstraints = constraints[i].getOptions();
 
@@ -57,24 +57,31 @@ const connectAndSort = function (value, constraints, context, path, final = fals
         }
         else {
 
-            extra = constraints[i].getExtra();
-
             if (constraints[i].validate) {
 
-                context.addTrigger(
-                    extra ? extra.async : 0,
-                    () => constraints[i].validate(
-                        value,
-                        context,
-                        path,
-                        extra,
-                    )
-                );
+                (function (extra) {
+
+                    context.addTrigger(
+                        extra ? extra.async : 0,
+                        () => constraints[i].validate(
+                            value,
+                            context,
+                            path,
+                            extra,
+                        )
+                    );
+
+                }(constraints[i].getExtra()));
+
             }
 
             if (constraints[i].validateChildren) {
 
-                constraints[i].validateChildren(value, context, path, extra);
+                (function (extra) {
+
+                    constraints[i].validateChildren(value, context, path, extra);
+
+                }(constraints[i].getExtra()));
             }
         }
     }

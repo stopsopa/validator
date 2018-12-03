@@ -135,7 +135,7 @@ Collection.prototype.validateChildren = function (value, context, path, extra) {
                 value[name],
                 tmp.getOptions(),
                 context,
-                (typeof path === 'undefined') ? name : (path + '.' + name),
+                path ? (path + '.' + name) : name,
             );
         }
     });

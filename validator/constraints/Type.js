@@ -79,7 +79,7 @@ Type.prototype.validate = function (value, context, path, extra) {
             .addViolation()
         ;
 
-        if (extra.stop) {
+        if (extra && extra.stop) {
 
             // return reject('stop Type');
             return Promise.reject('stop Type');

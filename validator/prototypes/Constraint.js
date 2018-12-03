@@ -57,17 +57,7 @@ Constraint.prototype.setExtra = function (extra) {
 }
 Constraint.prototype.getExtra = function () {
 
-    if (isObject(this.extra)) {
-
-        return this.extra;
-    }
-
-    if (typeof this.extra === 'string') {
-
-        return this.extra;
-    }
-
-    return {};
+    return this.extra;
 }
 
 // Constraint.prototype.validate = function (value, context) {}

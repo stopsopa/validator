@@ -43,7 +43,7 @@ IsTrue.prototype.validate = function (value, context, path, extra) {
             .addViolation()
         ;
 
-        if (extra.stop) {
+        if (extra && extra.stop) {
 
             return Promise.reject('stop IsTrue');
         }

@@ -353,3 +353,105 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field, al
         done();
     });
 });
+
+it('key - add prefix', done => {
+
+    return validator({
+        a: 'te',
+        test: {
+            extra: null,
+            test2: {
+                test3: 'abcde'
+            }
+        }
+    }, new Collection({
+        a: new Length(80),
+        test: new Required([
+            new Collection({
+                fields: {
+                    test2: new Collection({
+                        test3: new Required([
+                            new Length(6)
+                        ])
+                    })
+                },
+                allowExtraFields: true,
+            })
+        ])
+    }), {
+        path: 'pre.fix'
+    }).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    "pre.fix.a",
+                    "This value should have exactly 80 characters.",
+                    "TOO_SHORT_ERROR",
+                    "te"
+                ],
+                [
+                    "pre.fix.test.test2.test3",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
+            ]
+        );
+
+        done();
+    });
+});
+
+it('key - add prefix (empty string)', done => {
+
+    return validator({
+        a: 'te',
+        test: {
+            extra: null,
+            test2: {
+                test3: 'abcde'
+            }
+        }
+    }, new Collection({
+        a: new Length(80),
+        test: new Required([
+            new Collection({
+                fields: {
+                    test2: new Collection({
+                        test3: new Required([
+                            new Length(6)
+                        ])
+                    })
+                },
+                allowExtraFields: true,
+            })
+        ])
+    }), {
+        path: ''
+    }).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    "a",
+                    "This value should have exactly 80 characters.",
+                    "TOO_SHORT_ERROR",
+                    "te"
+                ],
+                [
+                    "test.test2.test3",
+                    "This value should have exactly 6 characters.",
+                    "TOO_SHORT_ERROR",
+                    "abcde"
+                ]
+            ]
+        );
+
+        done();
+    });
+});

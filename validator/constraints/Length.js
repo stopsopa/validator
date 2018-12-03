@@ -77,10 +77,11 @@ Length.prototype.validate = function (value, context, path, extra) {
                 .setParameter('{{ limit }}', opt.max)
                 .setInvalidValue(value)
                 .setCode(Length.prototype.TOO_LONG_ERROR)
+                .setExtra(extra)
                 .addViolation()
             ;
 
-            return extra.stop ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
+            return (extra && extra.stop) ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
         }
 
         if (typeof opt.min !== 'undefined' && length < opt.min) {
@@ -93,10 +94,11 @@ Length.prototype.validate = function (value, context, path, extra) {
                 .setParameter('{{ limit }}', opt.min)
                 .setInvalidValue(value)
                 .setCode(Length.prototype.TOO_SHORT_ERROR)
+                .setExtra(extra)
                 .addViolation()
             ;
 
-            return extra.stop ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
+            return (extra && extra.stop) ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
         }
     }
 

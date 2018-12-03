@@ -506,7 +506,7 @@ it('Count - extra is string', done => {
                             .addViolation()
                         ;
 
-                        if (extra.stop) {
+                        if (extra && extra.stop) {
 
                             return reject('reject Callback_5');
                         }

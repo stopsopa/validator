@@ -32,8 +32,16 @@ Context.prototype.buildViolation = function () {
 
     return new ViolationBuilder(args[0], this);
 }
-Context.prototype.addViolation = function (path, message, code, invalidValue) {
-    this.violations.push([path, message, code, invalidValue]);
+Context.prototype.addViolation = function (path, message, code, invalidValue, extra) {
+
+    const violation = [path, message, code, invalidValue];
+
+    if (typeof extra !== 'undefined') {
+
+        violation.push(extra);
+    }
+
+    this.violations.push(violation);
 };
 Context.prototype.addTrigger = function (async = 0, trigger) {
 

@@ -18,14 +18,22 @@ function ConstraintViolationList (violations) {
 }
 
 ConstraintViolationList.prototype.getRaw = function () {
-    return this.violations;
+
+    return this.violations.map(v => {
+
+        if (v.length > 4) {
+
+            v.pop();
+        }
+        return v;
+    });
 }
 
-ConstraintViolationList.prototype.getFlat = function () {
+ConstraintViolationList.prototype.getFlat = function (all = false) {
 
     let key;
 
-    return this.violations.reduce((acc, v) => {
+    const list = this.violations.reduce((acc, v) => {
 
         key = v[0] || '';
 
@@ -34,30 +42,41 @@ ConstraintViolationList.prototype.getFlat = function () {
             acc[key] = [];
         }
 
-        acc[key].push(v[1]);
+        acc[key].push(v);
+
+        return acc;
+    }, {});
+
+    return Object.keys(list).reduce((acc, key) => {
+
+        acc[key] = list[key];
+
+        acc[key].sort(function (a, b) {
+
+            return (b[4] || 0) - (a[4] || 0);
+        });
+
+        acc[key] = acc[key].map(v => v[1]);
+
+        if ( ! all ) {
+
+            acc[key] = acc[key].shift();
+        }
 
         return acc;
     }, {});
 }
 
-ConstraintViolationList.prototype.getTree = function () {
+ConstraintViolationList.prototype.getTree = function (all = false) {
 
-    let key = {};
+    const raw = this.getFlat(all);
 
-    return this.violations.reduce((acc, v) => {
+    return Object.keys(raw).reduce((acc, key) => {
 
-        key = v[0] || '';
-
-        acc = set(acc, key += '.', v[1]);
-
-        // if ( ! acc[key] ) {
-        //
-        //     acc[key] = [];
-        // }
-        //
-        // acc[key].push(v[1]);
+        acc = set(acc, key, raw[key]);
 
         return acc;
+
     }, {});
 }
 
