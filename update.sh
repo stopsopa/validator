@@ -5,6 +5,8 @@ set -e
 
 set -x
 
+make t
+
 ORIGIN="origin"
 LOCALBRANCH="master"
 REMOTEBRANCH="master"
