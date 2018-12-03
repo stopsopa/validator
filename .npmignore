@@ -28,6 +28,7 @@ yarn-error*
 /travis.sh
 /webpack-UMD.config.js
 /comment.txt
+/todo.txt
 
 
 

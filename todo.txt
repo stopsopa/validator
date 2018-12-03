@@ -1,0 +1,6 @@
+- Choice validator
+- Type : int & bool
+- Check again what to do if Collection is given !object, how it should behave if it's given
+    - false - not object in general
+    - emtpy object {}
+    - array []
