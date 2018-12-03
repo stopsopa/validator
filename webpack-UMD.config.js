@@ -31,5 +31,5 @@ module.exports = [dev, prod];
 // }, new sp.Collection({
 //     test: new sp.NotBlank()
 // }))
-// .then(errors => errors.getTree())
+// .then(errors => errors.getTree(true))
 // .then(errors => console.log(errors))

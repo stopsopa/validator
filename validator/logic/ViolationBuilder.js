@@ -7,6 +7,7 @@ const ViolationBuilder = function (message, context) {
     this.path           = undefined;
     this.plural         = false;
     this.invalidValue   = undefined;
+    this.extra          = undefined;
     this.message        = message;
     this.context        = context;
 }
@@ -42,6 +43,12 @@ ViolationBuilder.prototype.setPlural = function (plural) {
 ViolationBuilder.prototype.setInvalidValue = function (invalidValue) {
 
     this.invalidValue = invalidValue;
+
+    return this;
+}
+ViolationBuilder.prototype.setExtra = function (extra) {
+
+    this.extra = extra;
 
     return this;
 }
@@ -81,7 +88,8 @@ ViolationBuilder.prototype.addViolation = function() {
         this.path,
         message,
         this.code,
-        this.invalidValue
+        this.invalidValue,
+        this.extra,
     );
 
     return this;

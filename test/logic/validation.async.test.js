@@ -51,7 +51,7 @@ it("validation async", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
@@ -107,7 +107,7 @@ it("validation async - reversed", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree

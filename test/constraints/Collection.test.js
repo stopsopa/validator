@@ -56,7 +56,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: both', don
             ]
         );
 
-        const flat = errors.getFlat();
+        const flat = errors.getFlat(true);
 
         expect(flat).toEqual(
             {"extra": ["This field was not expected."], "n": ["This field is missing."]}
@@ -97,7 +97,7 @@ it('Collection allowExtraFields = false & allowMissingFields = false: missing', 
             ]
         );
 
-        const flat = errors.getFlat();
+        const flat = errors.getFlat(true);
 
         expect(flat).toEqual(
             {"one": ["This field is missing."], "two": ["This field is missing."]}
@@ -336,7 +336,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
             ]
         );
 
-        const flat = errors.getFlat();
+        const flat = errors.getFlat(true);
 
         expect(flat).toEqual(
             {
@@ -352,7 +352,7 @@ it('Collection-nested allowExtraFields = false & allowMissingFields = false: bot
             }
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(tree).toEqual(
             {

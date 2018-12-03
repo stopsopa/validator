@@ -57,7 +57,7 @@ it("validation stop", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
@@ -142,7 +142,7 @@ it("validation stop 3 levels - normal", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
@@ -244,7 +244,7 @@ it("validation stop 3 levels - async", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
@@ -334,7 +334,7 @@ it("validation stop 3 levels - stop", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
@@ -430,7 +430,7 @@ it("validation stop 3 levels - reverse", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
@@ -519,7 +519,7 @@ it("validation stop 3 levels - reverse stop", done => {
             ]
         );
 
-        const tree = errors.getTree();
+        const tree = errors.getTree(true);
 
         expect(
             tree
