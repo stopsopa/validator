@@ -51,9 +51,27 @@ ConstraintViolationList.prototype.getFlat = function (all = false) {
 
         acc[key] = list[key];
 
-        acc[key].sort(function (a, b) {
+        acc[key].sort(function (aa, bb, a = 0, b = 0) {
 
-            return (b[4] || 0) - (a[4] || 0);
+            if (typeof aa[4] === 'number')  {
+
+                a = aa[4];
+            }
+            else if (aa[4] && typeof aa[4].order !== 'undefined') {
+
+                a = aa[4].order;
+            }
+
+            if (typeof bb[4] === 'number')  {
+
+                b = bb[4];
+            }
+            else if (bb[4] && typeof bb[4].order !== 'undefined') {
+
+                b = bb[4].order;
+            }
+
+            return b - a;
         });
 
         acc[key] = acc[key].map(v => v[1]);
