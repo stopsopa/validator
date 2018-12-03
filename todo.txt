@@ -4,3 +4,4 @@
     - false - not object in general
     - emtpy object {}
     - array []
+    - throw error if setExtra not called
