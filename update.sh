@@ -5,8 +5,6 @@ set -e
 
 set -x
 
-make t
-
 ORIGIN="origin"
 LOCALBRANCH="master"
 REMOTEBRANCH="master"
@@ -82,7 +80,7 @@ function green {
         exit 1;
     fi
 
-
+make t
 
 if [ "$(git rev-parse --abbrev-ref HEAD)" != $LOCALBRANCH ]; then
 
