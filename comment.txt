@@ -1,4 +1,4 @@
-/**
+/*!
  * @author Szymon Działowski
  * @homepage https://github.com/stopsopa/validator
  * @license MIT
