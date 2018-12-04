@@ -80,7 +80,7 @@ it('Type - not string', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Type constraint: Each of types have to be string one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+        expect(e).toEqual("Type constraint: Each of types have to be string one of: " + (Type.prototype.allowedTypes.map(t => '"' +t+ '"').join(', ')));
 
         done();
     }
@@ -96,7 +96,7 @@ it('Type - string', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Type constraint: One of types is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+        expect(e).toEqual("Type constraint: One of types is string but is not one of: " + (Type.prototype.allowedTypes.map(t => '"' +t+ '"').join(', ')));
 
         done();
     }
@@ -106,6 +106,34 @@ it('Type - array of types - ok', done => {
 
     return validator(56, new Type({
         type: ['string', 'integer'],
+    })).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual([]);
+
+        done();
+    });
+});
+
+it('Type - int', done => {
+
+    return validator(56, new Type({
+        type: ['string', 'int'],
+    })).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual([]);
+
+        done();
+    });
+});
+
+it('Type - bool', done => {
+
+    return validator(true, new Type({
+        type: ['string', 'bool'],
     })).then(errors => {
 
         const raw = errors.getRaw();
@@ -126,7 +154,7 @@ it('Type - array of types - wrong type', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Type constraint: One of types is string but is not one of: \"undefined\", \"object\", \"boolean\", \"number\", \"string\", \"symbol\", \"function\", \"integer\", \"array\"");
+        expect(e).toEqual("Type constraint: One of types is string but is not one of: " + (Type.prototype.allowedTypes.map(t => '"' +t+ '"').join(', ')));
 
         done()
     }

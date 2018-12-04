@@ -97,27 +97,41 @@ Type.prototype.logic = function (value, type) {
 
     let obj = isObject(value);
 
+    let t;
+
     for (let i = 0, l = type.length ; i < l ; i += 1 ) {
 
-        if (type[i] === 'array' && arr && !obj) {
+        t = type[i];
+
+        if (t === 'int') {
+
+            t = 'integer';
+        }
+
+        if (t === 'bool') {
+
+            t = 'boolean';
+        }
+
+        if (t === 'array' && arr && !obj) {
 
             valid = true;
             break;
         }
 
-        if (type[i] === 'object' && !arr && obj) {
+        if (t === 'object' && !arr && obj) {
 
             valid = true;
             break;
         }
 
-        if (type[i] === 'integer' && Number.isInteger(value)) {
+        if (t === 'integer' && Number.isInteger(value)) {
 
             valid = true;
             break;
         }
 
-        if ( ! obj && ! arr && typeof value === type[i]) {
+        if ( ! obj && ! arr && typeof value === t) {
 
             valid = true;
             break;
@@ -127,6 +141,6 @@ Type.prototype.logic = function (value, type) {
     return valid;
 }
 
-Type.prototype.allowedTypes = 'undefined object boolean number string symbol function integer array'.split(' ');
+Type.prototype.allowedTypes = 'undefined object boolean bool number string symbol function integer int array'.split(' ');
 
 module.exports = Type;
