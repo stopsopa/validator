@@ -20,10 +20,7 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
     if (constraints instanceof Constraint) {
 
-        if ( ! isArray(constraints) ) {
-
-            constraints = [constraints];
-        }
+        constraints = [constraints];
     }
 
     if ( ! isArray(constraints) ) {
@@ -57,23 +54,19 @@ const connectAndSort = function (value, constraints, context, path, final = fals
         }
         else {
 
-            if (constraints[i].validate) {
+            (function (extra) {
 
-                (function (extra) {
+                context.addTrigger(
+                    extra ? extra.async : 0,
+                    () => constraints[i].validate(
+                        value,
+                        context,
+                        path,
+                        extra,
+                    )
+                );
 
-                    context.addTrigger(
-                        extra ? extra.async : 0,
-                        () => constraints[i].validate(
-                            value,
-                            context,
-                            path,
-                            extra,
-                        )
-                    );
-
-                }(constraints[i].getExtra()));
-
-            }
+            }(constraints[i].getExtra()));
 
             if (constraints[i].validateChildren) {
 

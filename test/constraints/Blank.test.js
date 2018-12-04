@@ -28,7 +28,7 @@ it('Blank() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e).toBe("It is necessary to use operotr 'new' with all constraints");
+        expect(e).toBe("It is necessary to use operator 'new' with all constraints");
 
         done();
     }
@@ -182,3 +182,23 @@ it('Blank - not empty object', done => {
         done();
     });
 });
+
+
+it('Blank - blank', done => {
+
+    return validator({
+        z: null
+    }, new Collection({
+        z: new Blank(),
+    })).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual(
+            []
+        );
+
+        done();
+    });
+});
+

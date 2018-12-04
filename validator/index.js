@@ -5,9 +5,9 @@ const Context           = require('./logic/Context');
 
 const connectAndSort    = require('./logic/connectAndSort');
 
-// const delay             = require('./utils/delay');
+const delay             = require('./utils/delay');
 
-// const log               = require('../log/logn');
+const log               = require('../log/logn');
 
 /**
  * import validator, { test } from '@stopsopa/validator';
@@ -18,7 +18,7 @@ const connectAndSort    = require('./logic/connectAndSort');
  * @returns {string}
  */
 
-const validator = (value, constraints, extra) => {
+const validator = (value, constraints, extra, debug) => {
 
     const context       = new Context(value, extra);
 
@@ -32,19 +32,27 @@ const validator = (value, constraints, extra) => {
 
             promise = promise
                 .then(() => Promise.all(list.map(c => c())))
-                // .then(...delay.then(2500))
-                // .then(a => {
-                //     console.log(`\n\n\n\n\n`);
-                //     console.log('resolved:', JSON.stringify(a+''));
-                //     console.log(`\n\n\n\n\n`);
-                //     return a;
-                // }, a => {
-                //     console.log(`\n\n\n\n\n`);
-                //     console.log('rejected:', JSON.stringify(a+''));
-                //     console.log(`\n\n\n\n\n`);
-                //     return a;
-                // })
             ;
+
+            if (debug > 1) {
+
+                promise = promise
+                    .then(...delay.then(2500))
+                ;
+            }
+
+            if (debug > 0) {
+
+                promise = promise
+                    .then(a => {
+                        console.log('debug resolved:', JSON.stringify(a));
+                        return a;
+                    }, a => {
+                        console.log('debug rejected:', JSON.stringify(a));
+                        return a;
+                    })
+                ;
+            }
 
         }(connected.shift()));
     }
@@ -60,6 +68,7 @@ validator.Collection    = require('./constraints/Collection');
 validator.All           = require('./constraints/All');
 validator.Blank         = require('./constraints/Blank');
 validator.Callback      = require('./constraints/Callback');
+validator.Choice        = require('./constraints/Choice');
 validator.Count         = require('./constraints/Count');
 validator.Email         = require('./constraints/Email');
 validator.IsFalse       = require('./constraints/IsFalse');

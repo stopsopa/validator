@@ -31,7 +31,7 @@ it('Count() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e).toBe("It is necessary to use operotr 'new' with all constraints");
+        expect(e).toBe("It is necessary to use operator 'new' with all constraints");
 
         done();
     }

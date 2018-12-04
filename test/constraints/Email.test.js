@@ -29,7 +29,7 @@ it('Email() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("It is necessary to use operotr 'new' with all constraints");
+        expect(e + '').toBe("It is necessary to use operator 'new' with all constraints");
 
         done();
     }
@@ -128,6 +128,34 @@ it('Email - stop [part 2]', done => {
                     false
                 ]
             ]
+        );
+
+        done();
+    });
+});
+
+it('Email - valid', done => {
+
+    return validator({
+        z: 'valid@mail.com',
+        b: {
+            a: {
+                a: 'b',
+                c: 'd',
+                d: 'f'
+            }
+        }
+    }, new Collection({
+        z: new Email(),
+        b: new Collection({
+            a: new Count({min: 2, max: 2}),
+        })
+    })).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual(
+            [["b.a", "This collection should contain exactly 2 elements.", "TOO_MANY_ERROR", {"a": "b", "c": "d", "d": "f"}]]
         );
 
         done();

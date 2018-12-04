@@ -7,7 +7,7 @@ function Constraint() {
 
     if ( ! (this instanceof Constraint) ) {
 
-        throw "It is necessary to use operotr 'new' with all constraints"
+        throw "It is necessary to use operator 'new' with all constraints"
     }
 };
 

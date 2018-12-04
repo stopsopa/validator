@@ -32,7 +32,7 @@ NotNull.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    if (value !== true) {
+    if (value === null) {
 
         context
             .buildViolation(opt.message)

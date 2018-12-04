@@ -14,7 +14,7 @@ function onlyUnique(value, index, self) {
 
 function ConstraintViolationList (violations) {
 
-    this.violations = violations || [];
+    this.violations = violations;
 }
 
 ConstraintViolationList.prototype.getRaw = function () {
@@ -111,7 +111,7 @@ ConstraintViolationList.prototype.findByCodes = function (codes) {
 
     for (let i = 0, l = codes.length ; i < l ; i += 1 ) {
 
-        tmp = tmp.concat(this.violations.filter(v => v[2] === codes[i]) || []);
+        tmp = tmp.concat(this.violations.filter(v => v[2] === codes[i]));
     }
 
     return tmp;

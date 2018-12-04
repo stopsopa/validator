@@ -28,7 +28,7 @@ it('NotNull() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("It is necessary to use operotr 'new' with all constraints");
+        expect(e).toEqual("It is necessary to use operator 'new' with all constraints");
 
         done();
     }
@@ -36,7 +36,7 @@ it('NotNull() - used as a function', done => {
 
 it('NotNull - custom message', done => {
 
-    return validator('test', new NotNull('custom message')).then(errors => {
+    return validator(null, new NotNull('custom message')).then(errors => {
 
         errors = errors.getRaw();
 
@@ -46,7 +46,7 @@ it('NotNull - custom message', done => {
                     undefined,
                     "custom message",
                     "IS_NULL_ERROR",
-                    "test"
+                    null
                 ]
             ]
         );
@@ -57,7 +57,7 @@ it('NotNull - custom message', done => {
 it('NotNull - stop [part 1]', done => {
 
     return validator({
-        z: false,
+        z: null,
         b: {
             a: {
                 a: 'b',
@@ -80,7 +80,7 @@ it('NotNull - stop [part 1]', done => {
                     "z",
                     "his value should be true.",
                     "IS_NULL_ERROR",
-                    false
+                    null
                 ],
                 [
                     "b.a",
@@ -101,7 +101,7 @@ it('NotNull - stop [part 1]', done => {
 it('NotNull - stop [part 2]', done => {
 
     return validator({
-        z: false,
+        z: null,
         b: {
             a: {
                 a: 'b',
@@ -124,9 +124,27 @@ it('NotNull - stop [part 2]', done => {
                     "z",
                     "his value should be true.",
                     "IS_NULL_ERROR",
-                    false
+                    null
                 ]
             ]
+        );
+
+        done();
+    });
+});
+
+it('NotNull - null', done => {
+
+    return validator({
+        z: false,
+    }, new Collection({
+        z: new NotNull(),
+    })).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual(
+            []
         );
 
         done();

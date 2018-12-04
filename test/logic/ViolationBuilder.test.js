@@ -45,3 +45,19 @@ it('new ViolationBuilder() - not integer plural', done => {
         done();
     }
 });
+
+
+it('new ViolationBuilder() - plural > segments', done => {
+
+    const context   = new Context();
+
+    const violation = new ViolationBuilder('msg|test', context);
+
+    violation
+        .setPlural(10)
+        .setCode('code')
+        .addViolation()
+    ;
+
+    done();
+});

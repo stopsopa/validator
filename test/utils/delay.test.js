@@ -20,6 +20,21 @@ it('delay()', done => {
     });
 });
 
+
+it('delay()', done => {
+
+    const start = time();
+
+    return delay(undefined, 'resolved').then(data => {
+
+        expect(time() - start).toBeLessThan(5);
+
+        expect(data).toBe('resolved');
+
+        done();
+    });
+});
+
 it('delay.reject()', done => {
 
     const start = time();
@@ -27,6 +42,21 @@ it('delay.reject()', done => {
     return delay.reject(40, 'rejected').catch(e => {
 
         expect(time() - start).toBeGreaterThan(30);
+
+        expect(e).toBe('rejected');
+
+        done();
+    });
+});
+
+
+it('delay.reject()', done => {
+
+    const start = time();
+
+    return delay.reject(undefined, 'rejected').catch(e => {
+
+        expect(time() - start).toBeLessThan(5);
 
         expect(e).toBe('rejected');
 

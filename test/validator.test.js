@@ -135,3 +135,52 @@ it('groups', done => {
     });
 });
 
+it('debug', done => {
+
+    return validator('test', [
+        new IsNull(),
+    ], undefined, 2).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    undefined,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        );
+
+        done();
+    });
+});
+
+
+it('false', done => {
+
+    return validator('test', [
+        new IsNull(undefined, {
+            stop: 1
+        }),
+    ], undefined, 2).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    undefined,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        );
+
+        done();
+    });
+});
+

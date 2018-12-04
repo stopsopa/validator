@@ -19,6 +19,28 @@ it('NotBlank', () => {
     });
 });
 
+
+it('NotBlank - not blank', done => {
+
+    return validator({
+        a: 'a',
+        b: 'test',
+    }, new Collection({
+        a: new Length(2),
+        b: new NotBlank()
+    })).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [["a", "This value should have exactly 2 characters.", "TOO_SHORT_ERROR", "a"]]
+        );
+
+        done();
+    });
+});
+
+
 it('NotBlank - custom message', done => {
 
     return validator('', new NotBlank('custom message')).then(errors => {

@@ -63,9 +63,9 @@ Length.prototype.validate = function (value, context, path, extra) {
 
     const opt = this.getOptions();
 
-    if (value !== null && value !== '') {
+    if (typeof value === 'string') {
 
-        const length = (value || '').length;
+        const length = value.length;
 
         if (typeof opt.max !== 'undefined' && length > opt.max) {
 
