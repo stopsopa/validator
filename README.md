@@ -8,7 +8,7 @@
 
 # live example:
     
-    https://codesandbox.io/s/ymwky9603j
+    [https://codesandbox.io/s/ymwky9603j](https://codesandbox.io/s/ymwky9603j)
     
 
 I haven't found good enough implementation of JSR-303 Bean Validation for javascript, so here we go:
