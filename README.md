@@ -99,6 +99,6 @@ import validator, {
 
 ```
 
-For further examples please follow [test cases](./validator/tree/master/test/constraints)
+For further examples please follow [test cases](https://github.com/stopsopa/validator/tree/master/test/constraints)
 
 
