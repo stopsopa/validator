@@ -6,6 +6,10 @@
 - https://symfony.com/doc/current/components/validator.html
 - https://beanvalidation.org/1.0/spec/
 
+# live example:
+    
+    https://codesandbox.io/s/ymwky9603j
+    
 
 I haven't found good enough implementation of JSR-303 Bean Validation for javascript, so here we go:
 
