@@ -4703,7 +4703,7 @@ regeneratorRuntime.mark(function _callee() {
               max: 255
             })]),
             email: new _validator__WEBPACK_IMPORTED_MODULE_1__["Required"](new _validator__WEBPACK_IMPORTED_MODULE_1__["Email"]()),
-            notifications: new _validator__WEBPACK_IMPORTED_MODULE_1__["Optional"](new _validator__WEBPACK_IMPORTED_MODULE_1__["IsTrue"]()),
+            terms: new _validator__WEBPACK_IMPORTED_MODULE_1__["Optional"](new _validator__WEBPACK_IMPORTED_MODULE_1__["IsTrue"]()),
             comments: new _validator__WEBPACK_IMPORTED_MODULE_1__["All"](new _validator__WEBPACK_IMPORTED_MODULE_1__["Collection"]({
               comment: new _validator__WEBPACK_IMPORTED_MODULE_1__["Required"](new _validator__WEBPACK_IMPORTED_MODULE_1__["Length"]({
                 min: 10
@@ -4721,7 +4721,19 @@ regeneratorRuntime.mark(function _callee() {
           //     "comments.1.comment": "This value is too short. It should have 10 characters or more."
           // }
 
-        case 4:
+          console.log(JSON.stringify(errors.getTree(), null, 4)); // {
+          //     "terms": "This field was not expected.",
+          //     "name": "This value should not be blank.",
+          //     "surname": "This value is too short. It should have 10 characters or more.",
+          //     "email": "This value is not a valid email address.",
+          //     "comments": {
+          //         "1": {
+          //             "comment": "This value is too short. It should have 10 characters or more."
+          //         }
+          //     }
+          // }
+
+        case 5:
         case "end":
           return _context.stop();
       }

@@ -7,7 +7,7 @@ const connectAndSort    = require('./logic/connectAndSort');
 
 const delay             = require('./utils/delay');
 
-const log               = require('../log/logn');
+// const log               = require('../log/logn');
 
 /**
  * import validator, { test } from '@stopsopa/validator';

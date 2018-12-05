@@ -82,6 +82,8 @@ function green {
 
 make t
 
+make examples
+
 if [ "$(git rev-parse --abbrev-ref HEAD)" != $LOCALBRANCH ]; then
 
     red "switch first branch to <$LOCALBRANCH>"
@@ -129,6 +131,7 @@ if [ "$DIFF" != "" ] || [ "$1" = "force" ]; then
                             git add README.md
 
                             git add dist
+                            git add examples.es5.js
                             git commit --amend --no-edit
 
     git push $ORIGIN $REMOTEBRANCH
