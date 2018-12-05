@@ -12,6 +12,8 @@ const Optional      = require('../../validator/constraints/Optional');
 
 const Length        = require('../../validator/constraints/Length');
 
+const Type        = require('../../validator/constraints/Type');
+
 const IsNull        = require('../../validator/constraints/IsNull');
 
 const Context       = require('../../validator/logic/Context');
@@ -193,7 +195,7 @@ it('key - Collection - empty object option', done => {
     }
 });
 
-it('key - Collection - string but expect object with field', done => {
+it('key - Collection - string but expect object with field [part 1]', done => {
 
     return validator('test', new Collection({
         test: new IsNull()
@@ -207,7 +209,27 @@ it('key - Collection - string but expect object with field', done => {
     });
 });
 
-it('key - Collection - used together with other constrain array', done => {
+
+it('key - Collection - string but expect object with field [part 2] - explicit way of enforcing object', done => {
+
+    return validator('test', new Required([
+        new Type('object'),
+        new Collection({
+            test: new IsNull()
+        })
+    ])).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [[undefined, "This value should be of type 'object'.", "INVALID_TYPE_ERROR", "test"]]
+        );
+
+        done();
+    });
+});
+
+it('key - Collection - used together with other constraint array', done => {
 
     return validator('test', [
         new IsNull(),
