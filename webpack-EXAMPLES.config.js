@@ -2,19 +2,15 @@
 
 const path                  = require('path');
 
-const webpack               = require('webpack');
-
-const utils                 = require('./webpack/utils');
-
-utils.setup(path.resolve(__dirname, 'webpack', 'config.js'));
-
 module.exports = {
-    mode: 'development',
-    // mode: 'production',
-    entry: utils.entries(),
+    // mode: 'development',
+    mode: 'production',
+    entry: {
+        examples: path.resolve(__dirname, 'examples.es6.js'),
+    },
     output: {
-        path: utils.config.js.outputForWeb,
-        filename: "[name].test.js",
+        path: __dirname,
+        filename: 'examples.es5.js',
     },
     module: {
         rules: [
@@ -44,17 +40,8 @@ module.exports = {
             },
         ]
     },
-    resolve: {
-        alias: {
-            karma_polyfill: path.resolve(__dirname, 'webpack', 'karma-polyfill'),
-        }
-    },
-    plugins: [
-        new webpack.ProvidePlugin(utils.config.provide)
-    ],
     optimization:{
-        // minimize: false, // <---- disables uglify.
-        // minimizer: [new UglifyJsPlugin()] if you want to customize it.
+        minimize: false,
     },
     performance: {
         hints: false

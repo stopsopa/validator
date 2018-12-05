@@ -1,29 +1,3 @@
-[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.83)](https://travis-ci.org/stopsopa/validator)
-[![npm version](https://badge.fury.io/js/%40stopsopa%2Fvalidator.svg)](https://badge.fury.io/js/%40stopsopa%2Fvalidator)
-[![Coverage Status](https://coveralls.io/repos/github/stopsopa/validator/badge.svg?branch=v0.0.83)](https://coveralls.io/github/stopsopa/validator?branch=v0.0.83)
-
-# Loosely inspired by:
-- https://symfony.com/doc/current/components/validator.html
-- https://beanvalidation.org/1.0/spec/
-
-
-I haven't found good enough implementation of JSR-303 Bean Validation for javascript, so here we go:
-
-Main goals during implementation of this library was:
-
-- asynchronous behaviour (due to asynchronous nature of javascript)
-- extendability (custom asynchronous validator)
-- validation of any data structure and easyness in use (guaranteed by following JSR-303)
-- well tested (different node versions and browsers - done with "jest" and "karma") for polymorphic use on server and in the browser
-
------
------
-
-Simple example:
--
-
-```
-
 
 import "@babel/polyfill";
 
@@ -80,10 +54,5 @@ import validator, {
     // }
 
 })();
-
-
-
-
-```javascript
 
 

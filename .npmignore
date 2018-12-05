@@ -29,6 +29,9 @@ yarn-error*
 /webpack-UMD.config.js
 /comment.txt
 /todo.txt
+/examples.es5.js
+/examples.es6.js
+/webpack-EXAMPLES.config.js
 
 
 
