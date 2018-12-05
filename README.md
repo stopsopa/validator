@@ -22,10 +22,8 @@ Main goals during implementation of this library was:
 Simple example:
 -
 
-```
+```javascript
 
-
-import "@babel/polyfill";
 
 import validator, {
     Collection,
@@ -37,7 +35,7 @@ import validator, {
     Email,
     Type,
     IsTrue,
-} from './validator';
+} from '@stopsopa/validator';
 
 (async () => {
 
@@ -64,7 +62,7 @@ import validator, {
             new Length({min: 10, max: 255})
         ]),
         email           : new Required(new Email()),
-        notifications   : new Optional(new IsTrue()),
+        terms           : new Optional(new IsTrue()),
         comments        : new All(new Collection({
             comment: new Required(new Length({min: 10}))
         }))
@@ -72,18 +70,29 @@ import validator, {
 
     console.log(JSON.stringify(errors.getFlat(), null, 4));
     // {
-    //     "terms": "This field was not expected.",
     //     "name": "This value should not be blank.",
     //     "surname": "This value is too short. It should have 10 characters or more.",
     //     "email": "This value is not a valid email address.",
+    //     "terms": "This value should be true.",
     //     "comments.1.comment": "This value is too short. It should have 10 characters or more."
+    // }
+
+    console.log(JSON.stringify(errors.getTree(), null, 4));
+    // {
+    //     "name": "This value should not be blank.",
+    //     "surname": "This value is too short. It should have 10 characters or more.",
+    //     "email": "This value is not a valid email address.",
+    //     "terms": "This value should be true.",
+    //     "comments": {
+    //         "1": {
+    //             "comment": "This value is too short. It should have 10 characters or more."
+    //         }
+    //     }
     // }
 
 })();
 
 
-
-
-```javascript
+```
 
 
