@@ -11,10 +11,14 @@ I haven't found good enough implementation of JSR-303 Bean Validation for javasc
 
 Main goals during implementation of this library was:
 
+- simple and robust architecture
 - asynchronous behaviour (due to asynchronous nature of javascript)
 - extendability (custom asynchronous validator)
 - validation of any data structure and easyness in use (guaranteed by following JSR-303)
 - well tested (different node versions and browsers - done with "jest" and "karma") for polymorphic use on server and in the browser
+- no dependencies 
+
+Feel free to contribute. 
 
 -----
 -----
@@ -95,4 +99,5 @@ import validator, {
 
 ```
 
+For further examples please follow [test cases](/stopsopa/validator/tree/master/test/constraints)
 
