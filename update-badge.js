@@ -27,7 +27,8 @@ let content = fs.readFileSync(README_md).toString();
 content = content.split("\n");
 
 let regnpm = /^\[!\[Build Status\]/;
-let regcov = /^\[!\[Coverage Status\]/;
+//let regcov = /^\[!\[Coverage Status\]/;
+let regcov = /^\[!\[codecov\]/;
 
 const n = 'v' + package.version;
 
