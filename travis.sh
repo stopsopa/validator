@@ -30,7 +30,8 @@ fi
 
 if [ "$MODE" = "jest" ]; then
 
-    yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
+    #yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
+    yarn add codecov "jest"@"^23.6.0"
 
     EXECUTE="/bin/bash test.sh"
 fi
@@ -50,6 +51,7 @@ STATUS=$?
 
 if [ "$MODE" = "jest" ]; then
 
+    # cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v | grep -v "@"
     cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v | grep -v "@"
 fi
 
