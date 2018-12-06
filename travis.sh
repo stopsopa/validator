@@ -52,7 +52,7 @@ STATUS=$?
 if [ "$MODE" = "jest" ]; then
 
     # cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v | grep -v "@"
-    cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v | grep -v "@"
+    node node_modules/.bin/codecov
 fi
 
 exit $?
