@@ -4,7 +4,7 @@ const path                  = require('path');
 
 let dev                     = require('./webpack-KARMA.config');
 
-dev = Object.assign(dev,{
+dev = Object.assign({}, dev,{
     mode: 'production',
 })
 
