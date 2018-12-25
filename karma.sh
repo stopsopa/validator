@@ -1,6 +1,4 @@
 
-set -e
-set -x
 
 if [ -f package_karma.json ]; then
 
@@ -15,6 +13,9 @@ if [ "$1" != "" ]; then
 
     export KARMAFILTER="$1"
 fi
+
+set -e
+set -x
 
 node node_modules/.bin/webpack --config webpack-KARMA.config.js
 

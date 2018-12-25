@@ -2,6 +2,7 @@
 set -e
 set -x
 
+exec 3<> /dev/null
 function red {
     printf "\e[91m$1\e[0m\n"
 }
@@ -38,12 +39,12 @@ fi
 
 if [ "$MODE" = "" ]; then
 
-    red "first setup MODE env variable"
+    { red "first setup MODE env variable"; } 2>&3
 
     exit 10
 fi
 
-green "\n\n    executing tests:\n        $EXECUTE\n\n"
+{ green "\n\n    executing tests:\n        $EXECUTE\n\n"; } 2>&3
 
 $EXECUTE
 
