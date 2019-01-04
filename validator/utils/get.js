@@ -35,20 +35,24 @@ const get = function (source, key) {
 
     while (k = key.shift()) {
 
-        if (typeof tmp[k] === 'undefined') {
-
-            return arguments[2];
-        }
-        else {
-
+        try {
             if (key.length) {
 
                 tmp = tmp[k];
             }
             else {
 
+                if (typeof tmp[k] === 'undefined') {
+
+                    return arguments[2];
+                }
+
                 return tmp[k];
             }
+        }
+        catch (e) {
+
+            return arguments[2];
         }
     }
 }

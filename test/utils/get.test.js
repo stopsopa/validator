@@ -38,6 +38,33 @@ it('json []', () => {
     );
 });
 
+it('json undefined 1', () => {
+
+    expect(
+        JSON.stringify(get(undefined, "one.two", 'test'))
+    ).toBe(
+        JSON.stringify('test')
+    );
+});
+
+it('json undefined 2', () => {
+
+    expect(
+        JSON.stringify(get(undefined, "two", 'test'))
+    ).toBe(
+        JSON.stringify('test')
+    );
+});
+
+it('json {}', () => {
+
+    expect(
+        JSON.stringify(get({}, "two", 'test'))
+    ).toBe(
+        JSON.stringify('test')
+    );
+});
+
 it('json [] key', () => {
 
     expect(
