@@ -179,16 +179,70 @@ const ext = {
 
         return data;
     },
-    getValidators: function (mode = null, id) {
-        return new Collection({
+    getValidators: function (mode = null, id, entity) {
+
+        const validators = {
             id: new Optional(),
             cluster: new Required([
                 new NotBlank(),
                 new Length({max: 50}),
-            ]),
-            node: new Required([
-                new NotBlank(),
-                new Length({max: 50}),
+                new Callback(
+                    (value, context, path, extra) =>
+                        new Promise(async (resolve, reject) => {
+
+                            const {
+                                cluster,
+                                node,
+                                id,
+                            } = context.rootData;
+
+                            const condition = (node === null) ? 'is' : '=';
+
+                            let c;
+
+                            log(mode);
+
+                            if (mode === 'create') {
+
+                                c = await this.queryColumn(true, `select count(*) c from :table: where cluster = :cluster and node ${condition} :node`, {
+                                    cluster,
+                                    node,
+                                });
+                            }
+                            else {
+
+                                c = await this.queryColumn(true, `select count(*) c from :table: where cluster = :cluster and node ${condition} :node and id != :id`, {
+                                    cluster,
+                                    node,
+                                    id,
+                                });
+                            }
+
+
+                            log.dump(c);
+
+                            const code = "CALLBACK-NOTUNIQUE";
+
+                            if (c > 0) {
+
+                                context
+                                    .buildViolation('Not unique')
+                                    .atPath(path)
+                                    .setParameter('{{ callback }}', 'not equal')
+                                    .setCode(code)
+                                    .setInvalidValue(`cluster: '${cluster}' and node: '${node}'`)
+                                    .addViolation()
+                                ;
+
+                                if (extra && extra.stop) {
+
+                                    return reject('reject ' + code);
+                                }
+                            }
+
+                            resolve('resolve ' + code);
+                        })
+                )
             ]),
             domain: new Required([
                 new NotBlank(),
@@ -199,7 +253,24 @@ const ext = {
                 new Length({max: 8}),
                 new Regex(/^\d+$/),
             ]),
-        });
+        };
+
+        if (typeof entity.node !== 'undefined') {
+
+            if (entity.node === null) {
+
+                validators.node = new Optional();
+            }
+            else {
+
+                validators.node = new Required([
+                    new NotBlank(),
+                    new Length({max: 50}),
+                ]);
+            }
+        }
+
+        return new Collection(validators);
     },
 };    
 
