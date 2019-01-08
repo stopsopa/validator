@@ -45,6 +45,8 @@ import validator, {
     Email,
     Type,
     IsTrue,
+    Callback,
+    Regex,
 } from '@stopsopa/validator';
 
 (async () => {
