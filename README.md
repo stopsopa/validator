@@ -133,6 +133,7 @@ const {
     Email,
     Type,
     IsTrue,
+    Callback,
     Regex,
 } = require('@stopsopa/validator');
 
