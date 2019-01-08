@@ -105,6 +105,180 @@ import validator, {
 
 ```
 
+# example
+
+## entity manager
+
+```javascript
+
+const abstract          = require('@stopsopa/knex-abstract');
+
+const extend            = abstract.extend;
+
+const prototype         = abstract.prototype;
+
+const log               = require('inspc');
+
+const a                 = prototype.a;
+
+const {
+    Collection,
+    All,
+    Required,
+    Optional,
+    NotBlank,
+    Length,
+    Email,
+    Type,
+    IsTrue,
+    Regex,
+} = require('@stopsopa/validator');
+
+const ext = {
+    initial: async function () {
+        return {
+            updated     : this.now(),
+            created     : this.now(),
+            port        : 80,
+        }
+    },
+    toDb: row => {
+
+        return row;
+    },
+    update: function (...args) {
+
+        let [debug, trx, entity, id] = a(args);
+
+        delete entity.created;
+
+        entity.updated = this.now();
+
+        return prototype.prototype.update.call(this, debug, trx, entity, id);
+    },
+    insert: async function (...args) {
+
+        let [debug, trx, entity] = a(args);
+
+        entity.created = this.now();
+
+        delete entity.updated;
+        
+        const id = await prototype.prototype.insert.call(this, debug, trx, entity);
+
+        return id;
+    },
+    prepareToValidate: function (data = {}, mode) {
+
+        delete data.created;
+
+        delete data.updated;
+
+        return data;
+    },
+    getValidators: function (mode = null, id) {
+        return new Collection({
+            id: new Optional(),
+            cluster: new Required([
+                new NotBlank(),
+                new Length({max: 50}),
+            ]),
+            node: new Required([
+                new NotBlank(),
+                new Length({max: 50}),
+            ]),
+            domain: new Required([
+                new NotBlank(),
+                new Length({max: 50}),
+            ]),
+            port: new Required([
+                new NotBlank(),
+                new Length({max: 8}),
+                new Regex(/^\d+$/),
+            ]),
+        });
+    },
+};    
+
+module.exports = knex => extend(
+    knex,
+    prototype,
+    Object.assign({}, require('./abstract'), ext),
+    'clusters',
+    'id',
+);
+```
+
+## controller
+```javascript
+
+const knex          = require('@stopsopa/knex-abstract');
+
+const log           = require('inspc');
+
+const validator     = require('@stopsopa/validator');
+    ...
+    app.all('/register', async (req, res) => {
+
+        let entity              = req.body;
+
+        let id                  = entity.id;
+
+        const mode              = id ? 'edit' : 'create';
+
+        const man               = knex().model.clusters;
+
+        const validators        = man.getValidators(mode, id);
+
+        if (mode === 'create') {
+
+            entity = {
+                ...man.initial(),
+                ...entity,
+            };
+        }
+
+        const entityPrepared    = man.prepareToValidate(entity, mode);
+        
+        const errors            = await validator(entityPrepared, validators);
+
+        if ( ! errors.count() ) {
+
+            try {
+
+                if (mode === 'edit') {
+
+                    await man.update(entityPrepared, id);
+                }
+                else {
+
+                    id = await man.insert(entityPrepared);
+                }
+
+                entity = await man.find(id);
+
+                if ( ! entity ) {
+
+                    return res.jsonError("Database state conflict: updated/created entity doesn't exist");
+                }
+            }
+            catch (e) {
+
+                log.dump(e);
+
+                return res.jsonError(`Can't register: ` + JSON.stringify(req.body));
+            }
+        }
+
+        return res.jsonNoCache({
+            entity: entity,
+            errors: errors.getTree(),
+        });
+
+    });
+    ...
+```
+
 For further examples please follow [test cases](https://github.com/stopsopa/validator/tree/master/test/constraints)
 
 
