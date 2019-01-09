@@ -1776,6 +1776,10 @@ Regex.prototype.isRegex = function (reg) {
 };
 
 Regex.prototype.logic = function (value, regex, match) {
+  if (typeof value === 'number') {
+    value += '';
+  }
+
   if (typeof value === 'string') {
     var ret = regex.test(value);
     return match ? ret : !ret;
