@@ -45,6 +45,8 @@ import validator, {
     Email,
     Type,
     IsTrue,
+    Callback,
+    Regex,
 } from '@stopsopa/validator';
 
 (async () => {
@@ -103,6 +105,252 @@ import validator, {
 })();
 
 
+```
+
+# example
+
+## entity manager
+
+```javascript
+
+const abstract          = require('@stopsopa/knex-abstract');
+
+const extend            = abstract.extend;
+
+const prototype         = abstract.prototype;
+
+const log               = require('inspc');
+
+const a                 = prototype.a;
+
+const {
+    Collection,
+    All,
+    Required,
+    Optional,
+    NotBlank,
+    Length,
+    Email,
+    Type,
+    IsTrue,
+    Callback,
+    Regex,
+} = require('@stopsopa/validator');
+
+const ext = {
+    initial: async function () {
+        return {
+            updated     : this.now(),
+            created     : this.now(),
+            port        : 80,
+        }
+    },
+    toDb: row => {
+
+        return row;
+    },
+    update: function (...args) {
+
+        let [debug, trx, entity, id] = a(args);
+
+        delete entity.created;
+
+        entity.updated = this.now();
+
+        return prototype.prototype.update.call(this, debug, trx, entity, id);
+    },
+    insert: async function (...args) {
+
+        let [debug, trx, entity] = a(args);
+
+        entity.created = this.now();
+
+        delete entity.updated;
+        
+        const id = await prototype.prototype.insert.call(this, debug, trx, entity);
+
+        return id;
+    },
+    prepareToValidate: function (data = {}, mode) {
+
+        delete data.created;
+
+        delete data.updated;
+
+        return data;
+    },
+    getValidators: function (mode = null, id, entity) {
+
+        const validators = {
+            id: new Optional(),
+            cluster: new Required([
+                new NotBlank(),
+                new Length({max: 50}),
+                new Callback(
+                    (value, context, path, extra) =>
+                        new Promise(async (resolve, reject) => {
+
+                            const {
+                                cluster,
+                                node,
+                                id,
+                            } = context.rootData;
+
+                            const condition = (node === null) ? 'is' : '=';
+
+                            let c;
+
+                            log(mode);
+
+                            if (mode === 'create') {
+
+                                c = await this.queryColumn(true, `select count(*) c from :table: where cluster = :cluster and node ${condition} :node`, {
+                                    cluster,
+                                    node,
+                                });
+                            }
+                            else {
+
+                                c = await this.queryColumn(true, `select count(*) c from :table: where cluster = :cluster and node ${condition} :node and id != :id`, {
+                                    cluster,
+                                    node,
+                                    id,
+                                });
+                            }
+
+
+                            log.dump(c);
+
+                            const code = "CALLBACK-NOTUNIQUE";
+
+                            if (c > 0) {
+
+                                context
+                                    .buildViolation('Not unique')
+                                    .atPath(path)
+                                    .setParameter('{{ callback }}', 'not equal')
+                                    .setCode(code)
+                                    .setInvalidValue(`cluster: '${cluster}' and node: '${node}'`)
+                                    .addViolation()
+                                ;
+
+                                if (extra && extra.stop) {
+
+                                    return reject('reject ' + code);
+                                }
+                            }
+
+                            resolve('resolve ' + code);
+                        })
+                )
+            ]),
+            domain: new Required([
+                new NotBlank(),
+                new Length({max: 50}),
+            ]),
+            port: new Required([
+                new NotBlank(),
+                new Length({max: 8}),
+                new Regex(/^\d+$/),
+            ]),
+        };
+
+        if (typeof entity.node !== 'undefined') {
+
+            if (entity.node === null) {
+
+                validators.node = new Optional();
+            }
+            else {
+
+                validators.node = new Required([
+                    new NotBlank(),
+                    new Length({max: 50}),
+                ]);
+            }
+        }
+
+        return new Collection(validators);
+    },
+};    
+
+module.exports = knex => extend(
+    knex,
+    prototype,
+    Object.assign({}, require('./abstract'), ext),
+    'clusters',
+    'id',
+);
+```
+
+## controller
+```javascript
+
+const knex          = require('@stopsopa/knex-abstract');
+
+const log           = require('inspc');
+
+const validator     = require('@stopsopa/validator');
+    ...
+    app.all('/register', async (req, res) => {
+
+        let entity              = req.body;
+
+        let id                  = entity.id;
+
+        const mode              = id ? 'edit' : 'create';
+
+        const man               = knex().model.clusters;
+
+        const validators        = man.getValidators(mode, id);
+
+        if (mode === 'create') {
+
+            entity = {
+                ...man.initial(),
+                ...entity,
+            };
+        }
+
+        const entityPrepared    = man.prepareToValidate(entity, mode);
+        
+        const errors            = await validator(entityPrepared, validators);
+
+        if ( ! errors.count() ) {
+
+            try {
+
+                if (mode === 'edit') {
+
+                    await man.update(entityPrepared, id);
+                }
+                else {
+
+                    id = await man.insert(entityPrepared);
+                }
+
+                entity = await man.find(id);
+
+                if ( ! entity ) {
+
+                    return res.jsonError("Database state conflict: updated/created entity doesn't exist");
+                }
+            }
+            catch (e) {
+
+                log.dump(e);
+
+                return res.jsonError(`Can't register: ` + JSON.stringify(req.body));
+            }
+        }
+
+        return res.jsonNoCache({
+            entity: entity,
+            errors: errors.getTree(),
+        });
+
+    });
+    ...
 ```
 
 For further examples please follow [test cases](https://github.com/stopsopa/validator/tree/master/test/constraints)
