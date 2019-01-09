@@ -304,3 +304,27 @@ it('Regex - not string value', done => {
         done();
     });
 });
+
+it('Regex - number', done => {
+
+    return validator(87, new Regex(/^\d+$/)).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual([]);
+
+        done();
+    });
+});
+
+it('Regex - minus number', done => {
+
+    return validator(-87, new Regex(/^\d+$/)).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual([[undefined, "This value is not valid.", "REGEX_FAILED_ERROR", -87]]);
+
+        done();
+    });
+});

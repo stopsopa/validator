@@ -69,6 +69,11 @@ Regex.prototype.isRegex = function (reg) {
 }
 Regex.prototype.logic = function (value, regex, match) {
 
+    if (typeof value === 'number') {
+
+        value += '';
+    }
+
     if (typeof value === 'string') {
 
         const ret = regex.test(value);
