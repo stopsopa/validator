@@ -1776,16 +1776,10 @@ Regex.prototype.isRegex = function (reg) {
 };
 
 Regex.prototype.logic = function (value, regex, match) {
-  if (typeof value === 'number') {
-    value += '';
-  }
+  value += ''; // to make it works on value given by any type, It is good idea to use Type constraint before Regex
 
-  if (typeof value === 'string') {
-    var ret = regex.test(value);
-    return match ? ret : !ret;
-  }
-
-  return false;
+  var ret = regex.test(value);
+  return match ? ret : !ret;
 };
 
 module.exports = Regex;
