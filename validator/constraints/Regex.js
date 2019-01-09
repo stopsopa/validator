@@ -69,19 +69,11 @@ Regex.prototype.isRegex = function (reg) {
 }
 Regex.prototype.logic = function (value, regex, match) {
 
-    if (typeof value === 'number') {
+    value += ''; // to make it works on value given by any type, It is good idea to use Type constraint before Regex
 
-        value += '';
-    }
+    const ret = regex.test(value);
 
-    if (typeof value === 'string') {
-
-        const ret = regex.test(value);
-
-        return match ? ret : !ret;
-    }
-
-    return false;
+    return match ? ret : !ret;
 }
 
 module.exports = Regex;
