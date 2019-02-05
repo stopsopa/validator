@@ -38,7 +38,7 @@ _(TOC generated using [markdown-toc](https://github.com/jonschlinkert/markdown-t
 - https://symfony.com/doc/current/components/validator.html
 - https://beanvalidation.org/1.0/spec/
 
-# live example:
+# Live example:
     
 [https://codesandbox.io/s/ymwky9603j](https://codesandbox.io/s/ymwky9603j)
     
@@ -142,9 +142,9 @@ import validator, {
 
 ```
 
-# example
+# Example
 
-## entity manager
+## Entity manager
 
 ```javascript
 
@@ -318,7 +318,7 @@ module.exports = knex => extend(
 );
 ```
 
-## controller
+## Controller
 ```javascript
 
 const knex          = require('@stopsopa/knex-abstract');
@@ -391,7 +391,7 @@ const validator     = require('@stopsopa/validator');
 For further examples please follow [test cases](https://github.com/stopsopa/validator/tree/master/test/constraints)
 
 
-# validators references
+# Validators references
 
 ## Blank
 
@@ -587,7 +587,7 @@ new Type('str');
 
 
 
-# addidional tools
+# Addidional tools
     
 
     require('@stopsopa/validator/set')
