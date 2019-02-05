@@ -576,8 +576,9 @@ new Regex({
 Source code [Type.js](validator/constraints/Type.js)
 
 ```javascript
-// available values are:
-// undefined object boolean bool number str string symbol function integer int array
+// available values for field 'type' are:
+// 'undefined', 'object', 'boolean', 'bool', 'number', 'str', 'string', 
+// 'symbol', 'function', 'integer', 'int', 'array'
 new Type({
     type       : '...', // required
     message    : `This value should be of type '{{ type }}'.`,
