@@ -581,7 +581,7 @@ new Type({
 
 // or shorter syntax if ony type is given:
 
-new Type('str'); // 
+new Type('str'); 
 ```
 
 
