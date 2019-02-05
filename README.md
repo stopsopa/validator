@@ -562,7 +562,7 @@ Source code [Regex.js](validator/constraints/Regex.js)
 new Regex({
     pattern     : /abc/gi, // required, type regex
     message     : 'This value is not valid.',
-    match       : true,
+    match       : true, // true - if value match regex then validation passed
 });
 ```                                           
                                            
