@@ -34,14 +34,8 @@
 
 _(TOC generated using [markdown-toc](https://github.com/jonschlinkert/markdown-toc))_
 
-# Loosely inspired by:
-- https://symfony.com/doc/current/components/validator.html
-- https://beanvalidation.org/1.0/spec/
+# Why?
 
-# Live example:
-    
-[https://codesandbox.io/s/ymwky9603j](https://codesandbox.io/s/ymwky9603j)
-    
 
 I haven't found good enough implementation of JSR-303 Bean Validation for javascript, so here we go:
 
@@ -58,6 +52,15 @@ Feel free to contribute.
 
 -----
 -----
+
+# Loosely inspired by:
+- https://symfony.com/doc/current/components/validator.html
+- https://beanvalidation.org/1.0/spec/
+
+# Live example:
+    
+[https://codesandbox.io/s/ymwky9603j](https://codesandbox.io/s/ymwky9603j)
+    
 
 # Simple example:
 
