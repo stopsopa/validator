@@ -391,15 +391,6 @@ const validator     = require('@stopsopa/validator');
 For further examples please follow [test cases](https://github.com/stopsopa/validator/tree/master/test/constraints)
 
 
-# addidional tools
-    
-
-    require('@stopsopa/validator/set')
-    require('@stopsopa/validator/get')
-    require('@stopsopa/validator/delay')
-    require('@stopsopa/validator/each')
-    require('@stopsopa/validator/size')
-
 # validators references
 
 ## Blank
@@ -585,3 +576,13 @@ new Type({
 });
 ```
 
+
+
+# addidional tools
+    
+
+    require('@stopsopa/validator/set')
+    require('@stopsopa/validator/get')
+    require('@stopsopa/validator/delay')
+    require('@stopsopa/validator/each')
+    require('@stopsopa/validator/size')
