@@ -419,7 +419,7 @@ Source code [Choice.js](validator/constraints/Choice.js)
 
 ```javascript
 new Choice({
-    choices         : [], // required
+    choices         : ['...'], // required
 
     multiple        : false, 
     min             : 0, // only if multiple=true
@@ -430,6 +430,10 @@ new Choice({
     minMessage      : 'You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.',
     maxMessage      : 'You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.',
 });
+
+// or shorter syntax if ony min and max given and min = max:
+
+new Choice(['...']); // just choices
 ```  
 
 ## Collection
