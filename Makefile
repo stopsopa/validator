@@ -25,7 +25,7 @@ nt: # test .npmignore
 ck: # karma parameters.json
 	@/bin/bash update.sh --karma
 
-cj: # jest parameters.json
+cp: # jest parameters.json
 	@/bin/bash update.sh --prod
 
 karma: # run karma test

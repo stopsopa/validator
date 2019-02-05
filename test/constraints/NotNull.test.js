@@ -78,7 +78,7 @@ it('NotNull - stop [part 1]', done => {
             [
                 [
                     "z",
-                    "his value should be true.",
+                    "This value should be true.",
                     "IS_NULL_ERROR",
                     null
                 ],
@@ -122,7 +122,7 @@ it('NotNull - stop [part 2]', done => {
             [
                 [
                     "z",
-                    "his value should be true.",
+                    "This value should be true.",
                     "IS_NULL_ERROR",
                     null
                 ]

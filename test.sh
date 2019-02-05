@@ -21,6 +21,9 @@ fi
 
 JEST=""
 
+set -e
+set -x
+
 if [ -f node_modules/.bin/jest ]; then  # exist
 
     { green "node_modules/.bin/jest - exists"; } 2>&3
@@ -61,6 +64,7 @@ fi
 TEST="$(cat <<END
 $JEST \
 $@ \
+--roots test \
 --bail \
 --verbose \
 --runInBand \

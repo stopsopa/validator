@@ -4,7 +4,7 @@
 const Constraint        = require('../prototypes/Constraint');
 
 const def = {
-    message    : 'his value should be true.',
+    message    : 'This value should be true.',
 };
 
 const NotNull = function (opt, extra) {

@@ -144,6 +144,20 @@ it('Type - bool', done => {
     });
 });
 
+it('Type - str', done => {
+
+    return validator('test', new Type({
+        type: ['str'],
+    })).then(errors => {
+
+        const raw = errors.getRaw();
+
+        expect(raw).toEqual([]);
+
+        done();
+    });
+});
+
 it('Type - array of types - wrong type', done => {
 
     try {

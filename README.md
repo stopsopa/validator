@@ -394,6 +394,180 @@ For further examples please follow [test cases](https://github.com/stopsopa/vali
 Source code [Blank.js](validator/constraints/Blank.js)
 
 ```javascript
-{
+new Blank({
     message    : 'This value should be blank.',    
-}
+});
+```          
+
+## Callback
+
+Source code [Callback.js](validator/constraints/Callback.js)
+
+See test example [Callback.test.js](test/constraints/Callback.test.js)
+
+```javascript
+new Callback((value, context, path, extra) => {...}); // function required
+```   
+ 
+## Choice
+
+Source code [Choice.js](validator/constraints/Choice.js)
+
+```javascript
+new Choice({
+    choices         : [], // required
+
+    multiple        : false, 
+    min             : 0, // only if multiple=true
+    max             : 0, // only if multiple=true
+    
+    message         : 'The value you selected is not a valid choice.',
+    multipleMessage : 'One or more of the given values is invalid.',
+    minMessage      : 'You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.',
+    maxMessage      : 'You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.',
+});
+```  
+
+## Collection
+
+Source code [Collection.js](validator/constraints/Collection.js)
+
+```javascript
+new Collection({
+    fields                  : { // required type: non empty object
+        a: new Require(),
+        b: new Optional(),
+    }, 
+    allowExtraFields        : false,
+    allowMissingFields      : false,
+    extraFieldsMessage      : 'This field was not expected.',
+    missingFieldsMessage    : 'This field is missing.',   
+});
+
+// or shorter syntax if only fields are given:
+
+new Collection({ // required type: non empty object
+    a: new Require(),
+    b: new Optional(),
+});
+```  
+
+## Count
+
+Source code [Count.js](validator/constraints/Count.js)
+
+```javascript
+new Count({
+    // min; // min or max required (or both) - if min given then have to be > 0
+    // max, // min or max required (or both) - if max given then have to be > 0
+    
+    minMessage: 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.',
+    maxMessage: 'This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.',
+    exactMessage: 'This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements.',
+});
+
+// or shorter syntax if ony min and max given and min = max:
+
+new Count(5);
+``` 
+
+## Email
+
+Source code [Email.js](validator/constraints/Email.js)
+
+```javascript
+new Email({
+    message    : 'This value is not a valid email address.',  
+});
+```      
+
+## IsFalse
+
+Source code [IsFalse.js](validator/constraints/IsFalse.js)
+
+```javascript
+new IsFalse({
+    message    : 'This value should be false.',
+});
+```         
+
+## IsTrue
+
+Source code [IsTrue.js](validator/constraints/IsTrue.js)
+
+```javascript
+new IsTrue({
+    message    : 'This value should be true.',
+});
+```                                             
+
+## IsNull
+
+Source code [IsNull.js](validator/constraints/IsNull.js)
+
+```javascript
+new IsNull({
+    message    : 'This value should be null.',
+});
+```                                      
+                                           
+## Length
+
+Source code [Length.js](validator/constraints/Length.js)
+
+```javascript
+new Length({
+    // min; // min or max required (or both) 
+    // max, // min or max required (or both) 
+    
+    maxMessage: 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
+    minMessage: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
+    exactMessage: 'This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.',
+});
+```                                       
+                                           
+## NotBlank
+
+Source code [NotBlank.js](validator/constraints/NotBlank.js)
+
+```javascript
+new NotBlank({
+    message    : 'This value should not be blank.',
+});
+```                                        
+                                           
+## NotNull
+
+Source code [NotNull.js](validator/constraints/NotNull.js)
+
+```javascript
+new NotNull({
+    message    : 'This value should not be blank.',
+});
+```                                          
+                                           
+## Regex
+
+Source code [Regex.js](validator/constraints/Regex.js)
+
+```javascript
+new Regex({
+    pattern     : /abc/gi, // required, type regex
+    message     : 'This value is not valid.',
+    match       : true,
+});
+```                                           
+                                           
+## Type
+
+Source code [Type.js](validator/constraints/Type.js)
+
+```javascript
+// available values are:
+// undefined object boolean bool number str string symbol function integer int array
+new Type({
+    type       : '...', // required
+    message    : `This value should be of type '{{ type }}'.`,
+});
+```                                      
+
