@@ -1,23 +1,21 @@
-[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.95)](https://travis-ci.org/stopsopa/validator)
+[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.96)](https://travis-ci.org/stopsopa/validator)
 [![npm version](https://badge.fury.io/js/%40stopsopa%2Fvalidator.svg)](https://badge.fury.io/js/%40stopsopa%2Fvalidator)
-[![codecov](https://codecov.io/gh/stopsopa/validator/branch/v0.0.95/graph/badge.svg)](https://codecov.io/gh/stopsopa/validator/tree/v0.0.95/validator)
+[![codecov](https://codecov.io/gh/stopsopa/validator/branch/v0.0.96/graph/badge.svg)](https://codecov.io/gh/stopsopa/validator/tree/v0.0.96/validator)
 [![NpmLicense](https://img.shields.io/npm/l/@stopsopa/validator.svg)](https://github.com/stopsopa/validator/blob/master/LICENSE)
 
 ## Table of Contents
 
 <!-- toc -->
 
-- [debugging](#debugging)
-- [console](#console)
-- [readding closest .env](#readding-closest-env)
-- [determining "dev" || "prod"](#determining-dev--prod)
-- [express response extensions:](#express-response-extensions)
-- [access to request & response in react component (SSR):](#access-to-request--response-in-react-component-ssr)
-- [RESTful api (transport)](#restful-api-transport)
-- [Controllers](#controllers)
-- [JWT security](#jwt-security)
-  * [access to JWT payload in the controller](#access-to-jwt-payload-in-the-controller)
-  * [Router](#router)
+- [Loosely inspired by:](#loosely-inspired-by)
+- [live example:](#live-example)
+- [Simple example:](#simple-example)
+- [example](#example)
+  * [entity manager](#entity-manager)
+  * [controller](#controller)
+- [addidional tools](#addidional-tools)
+- [validators references](#validators-references)
+  * [Blank](#blank)
 
 <!-- tocstop -->
 
