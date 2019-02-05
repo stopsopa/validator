@@ -391,7 +391,7 @@ For further examples please follow [test cases](https://github.com/stopsopa/vali
 
 ## Blank
 
-Source code [](validator/constraints/Blank.js)
+Source code [Blank.js](validator/constraints/Blank.js)
 
 ```javascript
 {
