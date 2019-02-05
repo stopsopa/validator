@@ -46,7 +46,7 @@ const Type = function (opt, extra) {
         }
         else {
 
-            throw `Type constraint: Each of types have to be string one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+            throw `Type constraint: Each of types have to be string and one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
         }
 
         if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {

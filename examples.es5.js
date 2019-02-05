@@ -10912,7 +10912,7 @@ var Type = function Type(opt, extra) {
     if (typeof opt.type[i] === 'string') {
       opt.type[i] = opt.type[i].toLowerCase();
     } else {
-      throw "Type constraint: Each of types have to be string one of: " + Type.prototype.allowedTypes.map(function (a) {
+      throw "Type constraint: Each of types have to be string and one of: " + Type.prototype.allowedTypes.map(function (a) {
         return "\"".concat(a, "\"");
       }).join(', ');
     }

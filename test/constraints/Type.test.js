@@ -80,7 +80,7 @@ it('Type - not string', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Type constraint: Each of types have to be string one of: " + (Type.prototype.allowedTypes.map(t => '"' +t+ '"').join(', ')));
+        expect(e).toEqual("Type constraint: Each of types have to be string and one of: " + (Type.prototype.allowedTypes.map(t => '"' +t+ '"').join(', ')));
 
         done();
     }
