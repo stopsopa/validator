@@ -54,17 +54,23 @@ Feel free to contribute.
 
 
 import validator, {
-    Collection,
-    All,
     Required,
     Optional,
-    NotBlank,
-    Length,
-    Email,
-    Type,
-    IsTrue,
+    Collection,
+    All,
+    Blank,
     Callback,
+    Choice,
+    Count,
+    Email,
+    IsFalse,
+    IsNull,
+    IsTrue,
+    Length,
+    NotBlank,
+    NotNull,
     Regex,
+    Type,
 } from '@stopsopa/validator';
 
 (async () => {
