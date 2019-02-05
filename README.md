@@ -431,7 +431,7 @@ new Choice({
     maxMessage      : 'You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.',
 });
 
-// or shorter syntax if ony min and max given and min = max:
+// or shorter syntax if ony choices are given:
 
 new Choice(['...']); // just choices
 ```  
@@ -578,6 +578,10 @@ new Type({
     type       : '...', // required
     message    : `This value should be of type '{{ type }}'.`,
 });
+
+// or shorter syntax if ony type is given:
+
+new Type('str'); // 
 ```
 
 
