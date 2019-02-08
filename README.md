@@ -599,3 +599,7 @@ new Type('str');
     require('@stopsopa/validator/delay')
     require('@stopsopa/validator/each')
     require('@stopsopa/validator/size')
+    
+# Other similar libraries:
+
+- [express-validator](https://express-validator.github.io/docs/)    
