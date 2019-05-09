@@ -223,10 +223,10 @@ var isArray = __webpack_require__(1);
 var each = __webpack_require__(6);
 
 var connectAndSort = function connectAndSort(value, constraints, context, path) {
-  var final = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  var _final = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
   if (constraints instanceof Existence) {
-    return connectAndSort(value, constraints.getOptions(), context, path, final);
+    return connectAndSort(value, constraints.getOptions(), context, path, _final);
   }
 
   if (constraints instanceof Constraint) {
@@ -234,7 +234,7 @@ var connectAndSort = function connectAndSort(value, constraints, context, path) 
   }
 
   if (!isArray(constraints)) {
-    if (final) {
+    if (_final) {
       return context.getTriggers();
     }
 
@@ -275,7 +275,7 @@ var connectAndSort = function connectAndSort(value, constraints, context, path) 
     _loop(i, l);
   }
 
-  if (final) {
+  if (_final) {
     return context.getTriggers();
   }
 };
@@ -466,7 +466,9 @@ var Context = __webpack_require__(11);
 
 var connectAndSort = __webpack_require__(4);
 
-var delay = __webpack_require__(15); // const log               = require('../log/logn');
+var delay = __webpack_require__(15);
+
+var promiseall = __webpack_require__(16); // const log               = require('../log/logn');
 
 /**
  * import validator, { test } from '@stopsopa/validator';
@@ -486,7 +488,7 @@ var validator = function validator(value, constraints, extra, debug) {
   while (connected.length) {
     (function (list) {
       promise = promise.then(function () {
-        return Promise.all(list.map(function (c) {
+        return promiseall(list.map(function (c) {
           return c();
         }));
       });
@@ -518,21 +520,21 @@ var validator = function validator(value, constraints, extra, debug) {
 
 validator.Required = __webpack_require__(7);
 validator.Optional = __webpack_require__(8);
-validator.Collection = __webpack_require__(16);
+validator.Collection = __webpack_require__(18);
 validator.All = __webpack_require__(5);
 validator.Blank = __webpack_require__(9);
-validator.Callback = __webpack_require__(18);
-validator.Choice = __webpack_require__(19);
-validator.Count = __webpack_require__(20);
-validator.Email = __webpack_require__(21);
-validator.IsFalse = __webpack_require__(22);
-validator.IsNull = __webpack_require__(23);
-validator.IsTrue = __webpack_require__(24);
-validator.Length = __webpack_require__(25);
-validator.NotBlank = __webpack_require__(26);
-validator.NotNull = __webpack_require__(27);
-validator.Regex = __webpack_require__(28);
-validator.Type = __webpack_require__(29);
+validator.Callback = __webpack_require__(20);
+validator.Choice = __webpack_require__(21);
+validator.Count = __webpack_require__(22);
+validator.Email = __webpack_require__(23);
+validator.IsFalse = __webpack_require__(24);
+validator.IsNull = __webpack_require__(25);
+validator.IsTrue = __webpack_require__(26);
+validator.Length = __webpack_require__(27);
+validator.NotBlank = __webpack_require__(28);
+validator.NotNull = __webpack_require__(29);
+validator.Regex = __webpack_require__(30);
+validator.Type = __webpack_require__(31);
 module.exports = validator;
 
 /***/ }),
@@ -970,10 +972,67 @@ module.exports = delay;
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(17);
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+var promiseall = function promiseall(list) {
+  return new Promise(function (resolve, reject) {
+    if (!Array.isArray(list)) {
+      throw new Error("promiseall: list is not an array");
+    }
+
+    var counter = list.length;
+    var resolved = true;
+    var errors = [];
+
+    var ok = function ok(i) {
+      return function (data) {
+        counter -= 1;
+        errors[i] = {
+          resolved: true,
+          data: data
+        };
+
+        if (counter === 0) {
+          resolved ? resolve(list) : reject(errors);
+        }
+      };
+    };
+
+    var wrong = function wrong(i) {
+      return function (data) {
+        counter -= 1;
+        resolved = false;
+        errors[i] = {
+          resolved: false,
+          data: data
+        };
+
+        if (counter === 0) {
+          reject(errors);
+        }
+      };
+    };
+
+    list.forEach(function (l, i) {
+      return Promise.resolve(l).then(ok(i), wrong(i));
+    });
+  });
+};
+
+module.exports = promiseall;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-var arrayIntersect = __webpack_require__(17);
+var arrayIntersect = __webpack_require__(19);
 
 var isObject = __webpack_require__(2);
 
@@ -1074,7 +1133,7 @@ Collection.prototype.validateChildren = function (value, context, path, extra) {
 module.exports = Collection;
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1101,7 +1160,7 @@ module.exports = function (a, b) {
 };
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1132,7 +1191,7 @@ Callback.prototype.validate = function (value, context, path, extra) {
 module.exports = Callback;
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1224,7 +1283,7 @@ Choice.prototype.validate = function (value, context, path, extra) {
 module.exports = Choice;
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1328,7 +1387,7 @@ Count.prototype.validate = function (value, context, path, extra) {
 module.exports = Count;
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1384,7 +1443,7 @@ Email.prototype.logic = function (email) {
 module.exports = Email;
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1432,7 +1491,7 @@ IsFalse.prototype.validate = function (value, context, path, extra) {
 module.exports = IsFalse;
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1480,7 +1539,7 @@ IsNull.prototype.validate = function (value, context, path, extra) {
 module.exports = IsNull;
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1528,7 +1587,7 @@ IsTrue.prototype.validate = function (value, context, path, extra) {
 module.exports = IsTrue;
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1607,7 +1666,7 @@ Length.prototype.validate = function (value, context, path, extra) {
 module.exports = Length;
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1658,7 +1717,7 @@ NotBlank.prototype.validate = function (value, context, path, extra) {
 module.exports = NotBlank;
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1707,7 +1766,7 @@ NotNull.prototype.validate = function (value, context, path, extra) {
 module.exports = NotNull;
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1777,7 +1836,7 @@ Regex.prototype.logic = function (value, regex, match) {
 module.exports = Regex;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
