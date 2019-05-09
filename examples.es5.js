@@ -10208,13 +10208,7 @@ Callback.prototype.constructor = Callback;
 
 Callback.prototype.validate = function (value, context, path, extra) {
   var callback = this.getOptions();
-  var result = callback(value, context, path, extra);
-
-  if (!result || typeof result.then !== 'function') {
-    return Promise.resolve();
-  }
-
-  return result;
+  return Promise.resolve(callback(value, context, path, extra));
 };
 
 module.exports = Callback;
