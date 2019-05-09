@@ -1126,15 +1126,13 @@ Callback.prototype.constructor = Callback;
 
 Callback.prototype.validate = function (value, context, path, extra) {
   var callback = this.getOptions();
-  return new Promise(function (resolve, reject) {
-    var result = callback(value, context, path, extra);
+  var result = callback(value, context, path, extra);
 
-    if (!result || typeof result.then !== 'function') {
-      result = Promise.resolve();
-    }
+  if (!result || typeof result.then !== 'function') {
+    return Promise.resolve();
+  }
 
-    result.then(resolve, reject);
-  });
+  return result;
 };
 
 module.exports = Callback;
