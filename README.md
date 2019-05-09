@@ -604,3 +604,4 @@ new Type('str');
 # Other similar libraries:
 
 - [express-validator](https://express-validator.github.io/docs/)
+- [validators.js](https://github.com/chriso/validator.js#validators)

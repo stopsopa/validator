@@ -25,17 +25,14 @@ Callback.prototype.validate = function (value, context, path, extra) {
 
     const callback = this.getOptions();
 
-    return new Promise((resolve, reject) => {
+    let result = callback(value, context, path, extra);
 
-        let result = callback(value, context, path, extra);
+    if ( ! result || typeof result.then !== 'function') {
 
-        if ( ! result || typeof result.then !== 'function') {
+        return Promise.resolve();
+    }
 
-            result = Promise.resolve();
-        }
-
-        result.then(resolve, reject)
-    });
+    return result;
 };
 
 module.exports = Callback;
