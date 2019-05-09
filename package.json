@@ -30,5 +30,8 @@
     "collectCoverageFrom": [
       "validator/**/*.{js,jsx}"
     ]
+  },
+  "dependencies": {
+    "nlab": "^0.0.50"
   }
 }

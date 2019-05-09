@@ -7,6 +7,8 @@ const connectAndSort    = require('./logic/connectAndSort');
 
 const delay             = require('./utils/delay');
 
+const promiseall        = require('nlab/promiseall');
+
 // const log               = require('../log/logn');
 
 /**
@@ -31,7 +33,7 @@ const validator = (value, constraints, extra, debug) => {
         (function (list) {
 
             promise = promise
-                .then(() => Promise.all(list.map(c => c())))
+                .then(() => promiseall(list.map(c => c())))
             ;
 
             if (debug > 1) {
