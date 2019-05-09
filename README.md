@@ -120,27 +120,32 @@ import validator, {
         }))
     }));
 
-    console.log(JSON.stringify(errors.getFlat(), null, 4));
-    // {
-    //     "name": "This value should not be blank.",
-    //     "surname": "This value is too short. It should have 10 characters or more.",
-    //     "email": "This value is not a valid email address.",
-    //     "terms": "This value should be true.",
-    //     "comments.1.comment": "This value is too short. It should have 10 characters or more."
-    // }
+    if ( errors.count() ) {
+    
+        // ... handle errors
 
-    console.log(JSON.stringify(errors.getTree(), null, 4));
-    // {
-    //     "name": "This value should not be blank.",
-    //     "surname": "This value is too short. It should have 10 characters or more.",
-    //     "email": "This value is not a valid email address.",
-    //     "terms": "This value should be true.",
-    //     "comments": {
-    //         "1": {
-    //             "comment": "This value is too short. It should have 10 characters or more."
-    //         }
-    //     }
-    // }
+        console.log(JSON.stringify(errors.getFlat(), null, 4));
+        // {
+        //     "name": "This value should not be blank.",
+        //     "surname": "This value is too short. It should have 10 characters or more.",
+        //     "email": "This value is not a valid email address.",
+        //     "terms": "This value should be true.",
+        //     "comments.1.comment": "This value is too short. It should have 10 characters or more."
+        // }
+
+        console.log(JSON.stringify(errors.getTree(), null, 4));
+        // {
+        //     "name": "This value should not be blank.",
+        //     "surname": "This value is too short. It should have 10 characters or more.",
+        //     "email": "This value is not a valid email address.",
+        //     "terms": "This value should be true.",
+        //     "comments": {
+        //         "1": {
+        //             "comment": "This value is too short. It should have 10 characters or more."
+        //         }
+        //     }
+        // }
+    }
 
 })();
 
@@ -604,4 +609,3 @@ new Type('str');
 # Other similar libraries:
 
 - [express-validator](https://express-validator.github.io/docs/)
-- [validators.js](https://github.com/chriso/validator.js#validators)
