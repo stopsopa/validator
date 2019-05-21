@@ -31,10 +31,10 @@ md5@^2.2.1:
     crypt "~0.0.1"
     is-buffer "~1.1.1"
 
-nlab@^0.0.52:
-  version "0.0.52"
-  resolved "https://registry.yarnpkg.com/nlab/-/nlab-0.0.52.tgz#9308fc67e6f3ca44684bf90ba9dbca4c45358476"
-  integrity sha512-Ca8BWNwaITr+XBYzx8N+HkAg7jPOc8LkKF5OGWXlQo19QGZ0ETXer1my14orjGX7jupGrMCo0yjhtHuqW+6IrQ==
+nlab@^0.0.53:
+  version "0.0.53"
+  resolved "https://registry.yarnpkg.com/nlab/-/nlab-0.0.53.tgz#f84122cf82f22674de9c8193373e9b2eea22fa4b"
+  integrity sha512-+eA0DiFsZksqcn4L7qMYHI2tG5+0R7SvMuhfAludFiHadYdLQm6AvL1DCvNwbR7TJtD+dlQqmr3cXwvBXEPidw==
   dependencies:
     inspc "^0.0.16"
     md5 "^2.2.1"
