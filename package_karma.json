@@ -57,6 +57,6 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "nlab": "^0.0.52"
+    "nlab": "^0.0.53"
   }
 }
