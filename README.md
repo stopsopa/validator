@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.105)](https://travis-ci.org/stopsopa/validator)
+[![Build Status](https://travis-ci.org/stopsopa/validator.svg?branch=v0.0.106)](https://travis-ci.org/stopsopa/validator)
 [![npm version](https://badge.fury.io/js/%40stopsopa%2Fvalidator.svg)](https://badge.fury.io/js/%40stopsopa%2Fvalidator)
-[![codecov](https://codecov.io/gh/stopsopa/validator/branch/v0.0.105/graph/badge.svg)](https://codecov.io/gh/stopsopa/validator/tree/v0.0.105/validator)
+[![codecov](https://codecov.io/gh/stopsopa/validator/branch/v0.0.106/graph/badge.svg)](https://codecov.io/gh/stopsopa/validator/tree/v0.0.106/validator)
 [![NpmLicense](https://img.shields.io/npm/l/@stopsopa/validator.svg)](https://github.com/stopsopa/validator/blob/master/LICENSE)
 
 ## Table of Contents

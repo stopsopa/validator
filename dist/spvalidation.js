@@ -979,15 +979,14 @@ module.exports = __webpack_require__(17);
 /***/ (function(module, exports) {
 
 var promiseall = function promiseall(list) {
+  if (!Array.isArray(list)) {
+    throw new Error("promiseall: list is not an array");
+  }
+
+  var counter = list.length;
+  var resolved = true;
+  var errors = [];
   return new Promise(function (resolve, reject) {
-    if (!Array.isArray(list)) {
-      throw new Error("promiseall: list is not an array");
-    }
-
-    var counter = list.length;
-    var resolved = true;
-    var errors = [];
-
     var ok = function ok(i) {
       return function (data) {
         counter -= 1;
@@ -997,7 +996,7 @@ var promiseall = function promiseall(list) {
         };
 
         if (counter === 0) {
-          resolved ? resolve(list) : reject(errors);
+          resolved ? Promise.all(list).then(resolve) : reject(errors);
         }
       };
     };
