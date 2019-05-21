@@ -984,6 +984,11 @@ var promiseall = function promiseall(list) {
   }
 
   var counter = list.length;
+
+  if (counter === 0) {
+    return Promise.resolve([]);
+  }
+
   var resolved = true;
   var errors = [];
   return new Promise(function (resolve, reject) {
@@ -996,7 +1001,9 @@ var promiseall = function promiseall(list) {
         };
 
         if (counter === 0) {
-          resolved ? Promise.all(list).then(resolve) : reject(errors);
+          resolved ? resolve(errors.map(function (x) {
+            return x.data;
+          })) : reject(errors);
         }
       };
     };
