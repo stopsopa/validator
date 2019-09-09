@@ -13,6 +13,7 @@ cat << EOF
 
     /bin/bash $0 --help
     /bin/bash $0 --watchAll
+    /bin/bash $0 path/to/test/file -t filter
 
 EOF
 
