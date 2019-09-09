@@ -106,7 +106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 function Constraint() {
   if (!(this instanceof Constraint)) {
@@ -167,12 +167,12 @@ module.exports = Constraint;
 "use strict";
 
 
-function isArray(obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
+function isObject(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]';
 }
 
 ;
-module.exports = isArray;
+module.exports = isObject;
 
 /***/ }),
 /* 2 */
@@ -181,12 +181,12 @@ module.exports = isArray;
 "use strict";
 
 
-function isObject(obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]';
+function isArray(obj) {
+  return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
 ;
-module.exports = isObject;
+module.exports = isArray;
 
 /***/ }),
 /* 3 */
@@ -218,7 +218,7 @@ var Constraint = __webpack_require__(0);
 
 var All = __webpack_require__(5);
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
 var each = __webpack_require__(6);
 
@@ -309,9 +309,9 @@ module.exports = All;
 "use strict";
 
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 module.exports = function each(obj, fn, context) {
   var r;
@@ -344,8 +344,20 @@ var Existence = __webpack_require__(3);
 
 var Constraint = __webpack_require__(0);
 
+var isObject = __webpack_require__(1);
+
 var Required = function Required(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
+
+  if (isObject(extra)) {
+    if (extra instanceof Existence) {
+      throw new Error("Required: extra can't be instance of Existence");
+    }
+
+    if (extra instanceof Constraint) {
+      throw new Error("Required: extra can't be instance of Constraint");
+    }
+  }
 
   this.setExtra(extra);
   this.setOptions(opt);
@@ -366,8 +378,20 @@ var Existence = __webpack_require__(3);
 
 var Constraint = __webpack_require__(0);
 
+var isObject = __webpack_require__(1);
+
 var Optional = function Optional(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
+
+  if (isObject(extra)) {
+    if (extra instanceof Existence) {
+      throw new Error("Optional: extra can't be instance of Existence");
+    }
+
+    if (extra instanceof Constraint) {
+      throw new Error("Optional: extra can't be instance of Constraint");
+    }
+  }
 
   this.setExtra(extra);
   this.setOptions(opt);
@@ -384,9 +408,9 @@ module.exports = Optional;
 "use strict";
 
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
 var Constraint = __webpack_require__(0);
 
@@ -710,7 +734,7 @@ module.exports = ViolationBuilder;
 
 var set = __webpack_require__(14);
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 /**
  * https://stackoverflow.com/a/14438954
  */
@@ -824,9 +848,9 @@ module.exports = ConstraintViolationList;
 "use strict";
 
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 function set(source, key, value) {
   if (typeof key === 'string') {
@@ -1040,7 +1064,7 @@ module.exports = promiseall;
 
 var arrayIntersect = __webpack_require__(19);
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 var Constraint = __webpack_require__(0);
 
@@ -1052,7 +1076,7 @@ var Optional = __webpack_require__(8);
 
 var connectAndSort = __webpack_require__(4);
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
 var each = __webpack_require__(6);
 
@@ -1145,7 +1169,7 @@ module.exports = Collection;
 "use strict";
 
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
 module.exports = function (a, b) {
   if (!isArray(a)) {
@@ -1203,9 +1227,9 @@ module.exports = Callback;
 "use strict";
 
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
 var Constraint = __webpack_require__(0);
 
@@ -1297,9 +1321,9 @@ module.exports = Choice;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 var Constraint = __webpack_require__(0);
 
@@ -1601,7 +1625,7 @@ module.exports = IsTrue;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 var Constraint = __webpack_require__(0);
 
@@ -1780,7 +1804,7 @@ module.exports = NotNull;
 
 var Constraint = __webpack_require__(0);
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
 var def = {
   message: 'This value is not valid.',
@@ -1850,9 +1874,9 @@ module.exports = Regex;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var isObject = __webpack_require__(2);
+var isObject = __webpack_require__(1);
 
-var isArray = __webpack_require__(1);
+var isArray = __webpack_require__(2);
 
 var Constraint = __webpack_require__(0);
 
