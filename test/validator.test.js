@@ -53,7 +53,7 @@ it('context message not specified', done => {
     }
     catch (e) {
 
-        expect((e + '')).toBe("new Context(message).buildViolation(message): message not specified");
+        expect((String(e))).toBe("new Context(message).buildViolation(message): message not specified");
 
         done();
     }

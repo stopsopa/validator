@@ -161,7 +161,7 @@ it('key - Collection - no options', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("Collection accept only plain object as a first argument");
+        expect(String(e)).toBe("Collection accept only plain object as a first argument");
 
         done();
     }
@@ -175,7 +175,7 @@ it('key - Collection - array option', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("Collection accept only plain object as a first argument");
+        expect(String(e)).toBe("Collection accept only plain object as a first argument");
 
         done();
     }
@@ -189,7 +189,7 @@ it('key - Collection - empty object option', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("Describe at least one field in \"fields\" parameter");
+        expect(String(e)).toBe("Describe at least one field in \"fields\" parameter");
 
         done();
     }

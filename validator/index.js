@@ -24,7 +24,13 @@ const validator = (value, constraints, extra, debug) => {
 
     const context       = new Context(value, extra);
 
-    const connected     = connectAndSort(value, constraints, context, extra ? extra.path : undefined, true);
+    const connected     = connectAndSort({
+        value,
+        constraints,
+        context,
+        path: extra ? extra.path : undefined,
+        final: true
+    });
 
     let promise = Promise.resolve();
 

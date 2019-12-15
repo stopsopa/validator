@@ -18,7 +18,7 @@ it('new Context().buildViolation() ', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("new Context(message).buildViolation(message): message not specified");
+        expect(String(e)).toBe("new Context(message).buildViolation(message): message not specified");
 
         done();
     }
@@ -32,7 +32,7 @@ it('new Context().buildViolation(false) ', done => {
     }
     catch (e) {
 
-        expect(e + '').toBe("new Context(message).buildViolation(message): message arg must be string");
+        expect(String(e)).toBe("new Context(message).buildViolation(message): message arg must be string");
 
         done();
     }

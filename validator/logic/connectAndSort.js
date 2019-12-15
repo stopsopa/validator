@@ -11,11 +11,23 @@ const isArray           = require('../utils/isArray');
 
 const each              = require('../utils/each');
 
-const connectAndSort = function (value, constraints, context, path, final = false) {
+const connectAndSort = function ({
+    value,
+    constraints,
+    context,
+    path,
+    final = false
+}) {
 
     if ( constraints instanceof Existence ) {
 
-        return connectAndSort(value, constraints.getOptions(), context, path, final);
+        return connectAndSort({
+            value,
+            constraints: constraints.getOptions(),
+            context,
+            path,
+            final,
+        });
     }
 
     if (constraints instanceof Constraint) {
@@ -33,13 +45,16 @@ const connectAndSort = function (value, constraints, context, path, final = fals
         return;
     }
 
-    let extra;
-
     for (let i = 0, l = constraints.length ; i < l ; i += 1 ) {
 
         if (constraints[i] instanceof Existence) {
 
-            connectAndSort(value, constraints[i].getOptions(), context, path)
+            connectAndSort({
+                value,
+                constraints: constraints[i].getOptions(),
+                context,
+                path,
+            })
         }
         else if (constraints[i] instanceof All) {
 
@@ -49,7 +64,12 @@ const connectAndSort = function (value, constraints, context, path, final = fals
 
             each(value, (v, name) => {
 
-                connectAndSort(v, allConstraints, context, combine(name));
+                connectAndSort({
+                    value: v,
+                    constraints: allConstraints,
+                    context,
+                    path: combine(name),
+                });
             });
         }
         else {

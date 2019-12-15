@@ -130,13 +130,15 @@ Collection.prototype.validateChildren = function (value, context, path, extra) {
     let tmp;
 
     each(value,(v, name) => {
+
         if (tmp = opt.fields[name]) {
-            connectAndSort(
-                value[name],
-                tmp.getOptions(),
+
+            connectAndSort({
+                value: value[name],
+                constraints: tmp.getOptions(),
                 context,
-                path ? (path + '.' + name) : name,
-            );
+                path: path ? (path + '.' + name) : name,
+            });
         }
     });
 }
