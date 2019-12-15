@@ -29,7 +29,7 @@ const validator = (value, constraints, extra, debug) => {
         constraints,
         context,
         path: extra ? extra.path : undefined,
-        final: true
+        final: true,
     });
 
     let promise = Promise.resolve();
