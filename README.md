@@ -36,7 +36,7 @@
 
 _(TOC generated using [markdown-toc](https://github.com/jonschlinkert/markdown-toc))_
 
-# Why?
+# Motivation
 
 
 I haven't found good enough implementation of JSR-303 Bean Validation for javascript, so here we go:
@@ -609,3 +609,8 @@ new Type('str');
 # Other similar libraries:
 
 - [express-validator](https://express-validator.github.io/docs/)
+
+# next generation
+- or validator
+- condition validator
+- respecting order of validators - executing in the same order as declared
