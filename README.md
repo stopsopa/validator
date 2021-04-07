@@ -48,7 +48,6 @@ Main goals during implementation of this library was:
 - extendability (custom asynchronous validator)
 - validation of any data structure and easyness in use (guaranteed by following JSR-303)
 - well tested (different node versions and browsers - done with "jest" and "karma") for polymorphic use on server and in the browser
-- no dependencies 
 
 Feel free to contribute. 
 
