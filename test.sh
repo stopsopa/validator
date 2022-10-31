@@ -32,35 +32,10 @@ if [ -f node_modules/.bin/jest ]; then  # exist
     JEST="node node_modules/.bin/jest"
 else
 
-    { green "node_modules/.bin/jest - doesn't exist"; } 2>&3
+    { red "node_modules/.bin/jest - doesn't exist"; } 2>&3
+
+    exit 1
 fi
-
-if [ "$JEST" = "" ]; then
-
-    { green "local jest - not found"; } 2>&3
-
-    jest -v > /dev/null
-
-    STAT="$?"
-
-    { green "(jest -v) status: $STAT"; } 2>&3
-
-    if [ "$STAT" = "0" ]; then
-
-        { green "global jest - found"; } 2>&3
-
-        JEST="jest"
-    else
-
-        { red "\n    Can't detect jest, install globally: \n   npm install jest -g\n\n"; } 2>&3
-
-        exit 1;
-    fi
-else
-
-    { green "local jest - found"; } 2>&3
-fi
-
 
 TEST="$(cat <<END
 $JEST \
@@ -72,7 +47,6 @@ $@ \
 --modulePathIgnorePatterns test/examples test/minefield test/project test/puppeteer karma_build
 END
 )";
-
 
 { green "\n\n    executing tests:\n        $TEST\n\n"; } 2>&3
 

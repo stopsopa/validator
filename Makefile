@@ -40,3 +40,7 @@ examples:
 	node node_modules/.bin/webpack --config webpack-EXAMPLES.config.js
 	node examples.es5.js
 
+yarn:
+	/bin/bash bash/swap-files-v2.sh package.json package_karma.json -- yarn --production=false
+
+
