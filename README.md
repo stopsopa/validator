@@ -613,3 +613,61 @@ new Type('str');
 - or validator
 - condition validator
 - respecting order of validators - executing in the same order as declared
+
+# Conclusions:
+
+1)
+
+Always use types for primitives and collections:
+
+example cases:
+- Length validator fires only if given data type is string (use Type('str') to avoid issues)
+- Collection validator validates only if given data is object (use Type('object') to avoid issues)
+```
+
+(async function () {
+    const errors = await validator(6, new Collection({
+        a: new Type('str'),
+        b: new Required([
+            new Type('str'),
+            new Length({ // length fires only if it's string
+                min: 1,
+                max: 2,
+            })
+        ])
+    }));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual([]);
+    // we would expect at least that
+
+    done();
+})();
+
+```
+
+last)
+
+Don't trust this library if it comes to Optional or Required on the main level
+
+(This though should be rare problem)
+
+Dev note: Problem is caused by the fact that the only place where distinguishing Require from Optional is done is logic of Collection validator type. On the main level Require or Optional is just a "bag" for collection of validators.
+
+example:
+
+```
+
+(async function () {
+    const errors = await validator(null, new Optional(new Type("str")));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual([[undefined, "This value should be of type 'str'.", "INVALID_TYPE_ERROR", null]]);
+    // above shouldn't happen but it is happening
+
+    done();
+})();
+
+```
