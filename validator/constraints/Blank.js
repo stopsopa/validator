@@ -68,7 +68,7 @@ Blank.prototype.logic = function (value) {
         case (value === '0'): // covers: '0'
         case (isArray(value) && value.length === 0):
         case (isObject(value) && Object.keys(value).length === 0):
-            blank true;
+            blank = true;
             break;
     }
 
