@@ -61,18 +61,18 @@ Blank.prototype.validate = function (value, context, path, extra) {
 
 Blank.prototype.logic = function (value) {
 
-    let notblank = true;
+    let blank = false
 
     switch (true) {
         case (!value): // covers: false, null, undefined, '', 0, NaN
         case (value === '0'): // covers: '0'
         case (isArray(value) && value.length === 0):
         case (isObject(value) && Object.keys(value).length === 0):
-            notblank = false;
+            blank true;
             break;
     }
 
-    return !notblank;
+    return blank;
 }
 
 module.exports = Blank;
