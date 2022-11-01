@@ -623,7 +623,8 @@ Always use types for primitives and collections:
 example cases:
 - Length validator fires only if given data type is string (use Type('str') to avoid issues)
 - Collection validator validates only if given data is object (use Type('object') to avoid issues)
-```
+
+```js
 
 (async function () {
     const errors = await validator(6, new Collection({
@@ -657,7 +658,7 @@ Dev note: Problem is caused by the fact that the only place where distinguishing
 
 example:
 
-```
+```js
 
 (async function () {
     const errors = await validator(null, new Optional(new Type("str")));
