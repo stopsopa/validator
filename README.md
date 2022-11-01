@@ -31,6 +31,7 @@
   * [Type](#type)
 - [Addidional tools](#addidional-tools)
 - [Other similar libraries:](#other-similar-libraries)
+- [Conclusions:](#conclusions)
 
 <!-- tocstop -->
 
