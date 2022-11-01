@@ -670,7 +670,14 @@ fixed:
 
   const raw = errors.getRaw();
 
-  expect(raw).toEqual([[undefined, "This value should be of type 'object'.", "INVALID_TYPE_ERROR", undefined]]);
+  expect(raw).toEqual([
+    [
+      undefined, 
+      "This value should be of type 'object'.", 
+      "INVALID_TYPE_ERROR", 
+      undefined
+    ]
+  ]);
 
   done();
 })();
