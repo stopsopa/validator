@@ -628,11 +628,39 @@ example cases:
 ```js
 
 (async function () {
-    const errors = await validator(6, new Collection({
+    const errors = await validator(6, new Collection({ 
+    // collection fires only if given data is object
+    // here it is integer
+        a: new Type('str'),
+        b: new Length({
+             min: 1,
+             max: 2,
+          })
+        ])
+    }));
+
+    const raw = errors.getRaw();
+
+    expect(raw).toEqual([]);
+    // 
+
+    done();
+})();
+
+```
+fixed:
+
+
+```js
+
+(async function () {
+    const errors = await validator(6, new Collection({ 
+    // collection fires only if given data is object
+    // here it is integer
         a: new Type('str'),
         b: new Required([
-            new Type('str'),
-            new Length({ // length fires only if it's string
+            new Type('str'), // this will do ...
+            new Length({ // ... because length fires only if it's string
                 min: 1,
                 max: 2,
             })
@@ -642,7 +670,7 @@ example cases:
     const raw = errors.getRaw();
 
     expect(raw).toEqual([]);
-    // we would expect at least that
+    // 
 
     done();
 })();
