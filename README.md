@@ -39,7 +39,6 @@ _(TOC generated using [markdown-toc](https://github.com/jonschlinkert/markdown-t
 
 # Motivation
 
-
 I haven't found good enough implementation of JSR-303 Bean Validation for javascript, so here we go:
 
 Main goals during implementation of this library was:
@@ -50,25 +49,24 @@ Main goals during implementation of this library was:
 - validation of any data structure and easyness in use (guaranteed by following JSR-303)
 - well tested (different node versions and browsers - done with "jest" and "karma") for polymorphic use on server and in the browser
 
-Feel free to contribute. 
+Feel free to contribute.
 
------
------
+---
+
+---
 
 # Loosely inspired by:
+
 - https://symfony.com/doc/current/components/validator.html
 - https://beanvalidation.org/1.0/spec/
 
 # Live example:
-    
+
 [https://codesandbox.io/s/ymwky9603j](https://codesandbox.io/s/ymwky9603j)
-    
 
 # Simple example:
 
 ```javascript
-
-
 import validator, {
     Required,
     Optional,
@@ -329,6 +327,7 @@ module.exports = knex => extend(
 ```
 
 ## Controller
+
 ```javascript
 
 const knex          = require('@stopsopa/knex-abstract');
@@ -358,7 +357,7 @@ const validator     = require('@stopsopa/validator');
         }
 
         const entityPrepared    = man.prepareToValidate(entity, mode);
-        
+
         const errors            = await validator(entityPrepared, validators);
 
         if ( ! errors.count() ) {
@@ -400,7 +399,6 @@ const validator     = require('@stopsopa/validator');
 
 For further examples please follow [test cases](https://github.com/stopsopa/validator/tree/master/test/constraints)
 
-
 # Validators references
 
 ## Blank
@@ -409,9 +407,9 @@ Source code [Blank.js](validator/constraints/Blank.js)
 
 ```javascript
 new Blank({
-    message    : 'This value should be blank.',    
+  message: "This value should be blank.",
 });
-```          
+```
 
 ## Callback
 
@@ -421,30 +419,30 @@ See test example [Callback.test.js](test/constraints/Callback.test.js)
 
 ```javascript
 new Callback((value, context, path, extra) => {...}); // function required
-```   
- 
+```
+
 ## Choice
 
 Source code [Choice.js](validator/constraints/Choice.js)
 
 ```javascript
 new Choice({
-    choices         : ['...'], // required
+  choices: ["..."], // required
 
-    multiple        : false, 
-    min             : 0, // only if multiple=true
-    max             : 0, // only if multiple=true
-    
-    message         : 'The value you selected is not a valid choice.',
-    multipleMessage : 'One or more of the given values is invalid.',
-    minMessage      : 'You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.',
-    maxMessage      : 'You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.',
+  multiple: false,
+  min: 0, // only if multiple=true
+  max: 0, // only if multiple=true
+
+  message: "The value you selected is not a valid choice.",
+  multipleMessage: "One or more of the given values is invalid.",
+  minMessage: "You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.",
+  maxMessage: "You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.",
 });
 
 // or shorter syntax if ony choices are given:
 
-new Choice(['...']); // just choices
-```  
+new Choice(["..."]); // just choices
+```
 
 ## Collection
 
@@ -468,7 +466,7 @@ new Collection({ // required type: non empty object
     a: new Require(),
     b: new Optional(),
 });
-```  
+```
 
 ## Count
 
@@ -487,7 +485,7 @@ new Count({
 // or shorter syntax if ony min and max given and min = max:
 
 new Count(5);
-``` 
+```
 
 ## Email
 
@@ -495,9 +493,9 @@ Source code [Email.js](validator/constraints/Email.js)
 
 ```javascript
 new Email({
-    message    : 'This value is not a valid email address.',  
+  message: "This value is not a valid email address.",
 });
-```      
+```
 
 ## IsFalse
 
@@ -505,9 +503,9 @@ Source code [IsFalse.js](validator/constraints/IsFalse.js)
 
 ```javascript
 new IsFalse({
-    message    : 'This value should be false.',
+  message: "This value should be false.",
 });
-```         
+```
 
 ## IsTrue
 
@@ -515,9 +513,9 @@ Source code [IsTrue.js](validator/constraints/IsTrue.js)
 
 ```javascript
 new IsTrue({
-    message    : 'This value should be true.',
+  message: "This value should be true.",
 });
-```                                             
+```
 
 ## IsNull
 
@@ -525,10 +523,10 @@ Source code [IsNull.js](validator/constraints/IsNull.js)
 
 ```javascript
 new IsNull({
-    message    : 'This value should be null.',
+  message: "This value should be null.",
 });
-```                                      
-                                           
+```
+
 ## Length
 
 Source code [Length.js](validator/constraints/Length.js)
@@ -542,28 +540,28 @@ new Length({
     minMessage: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
     exactMessage: 'This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.',
 });
-```                                       
-                                           
+```
+
 ## NotBlank
 
 Source code [NotBlank.js](validator/constraints/NotBlank.js)
 
 ```javascript
 new NotBlank({
-    message    : 'This value should not be blank.',
+  message: "This value should not be blank.",
 });
-```                                        
-                                           
+```
+
 ## NotNull
 
 Source code [NotNull.js](validator/constraints/NotNull.js)
 
 ```javascript
 new NotNull({
-    message    : 'This value should not be blank.',
+  message: "This value should not be blank.",
 });
-```                                          
-                                           
+```
+
 ## Regex
 
 Source code [Regex.js](validator/constraints/Regex.js)
@@ -575,15 +573,15 @@ new Regex({
     match       : true, // true     - if value match regex then validation passed
                         // false    - if value NOT match regex then validation passed
 });
-```                                           
-                                           
+```
+
 ## Type
 
 Source code [Type.js](validator/constraints/Type.js)
 
 ```javascript
 // available values for field 'type' are:
-// 'undefined', 'object', 'boolean', 'bool', 'number', 'str', 'string', 
+// 'undefined', 'object', 'boolean', 'bool', 'number', 'str', 'string',
 // 'symbol', 'function', 'integer', 'int', 'array'
 new Type({
     type       : '...', // required
@@ -592,43 +590,42 @@ new Type({
 
 // or shorter syntax if ony type is given:
 
-new Type('str'); 
+new Type("str");
 ```
 
-
-
 # Addidional tools
-    
 
     require('@stopsopa/validator/set')
     require('@stopsopa/validator/get')
     require('@stopsopa/validator/delay')
     require('@stopsopa/validator/each')
     require('@stopsopa/validator/size')
-    
+
 # Other similar libraries:
 
 - [express-validator](https://express-validator.github.io/docs/)
 
 # next generation
+
 - or validator
 - condition validator
 - respecting order of validators - executing in the same order as declared
 
 # Conclusions:
 
-1)
+1.
 
 Always use types for primitives and collections:
 
 example cases:
+
 - Length validator fires only if given data type is string (use Type('str') to avoid issues)
 - Collection validator validates only if given data is object (use Type('object') to avoid issues)
 
 ```js
 
 (async function () {
-    const errors = await validator(6, new Collection({ 
+    const errors = await validator(6, new Collection({
     // collection fires only if given data is object
     // here it is integer
         a: new Type('str'),
@@ -642,42 +639,44 @@ example cases:
     const raw = errors.getRaw();
 
     expect(raw).toEqual([]);
-    // 
+    //
 
     done();
 })();
 
 ```
+
 fixed:
 
-
 ```js
-
 (async function () {
-    const errors = await validator(6, new Collection({ 
-    // collection fires only if given data is object
-    // here it is integer
-        a: new Type('str'),
+  const errors = await validator(
+    undefined, // will generate error: "This value should be of type 'object'."
+    // {a: '', b: 7}, // will generate error: "This value should be of type 'str'." on field "b"
+    new Required([
+      new Type("object"), // this solves the problem on that level
+      new Collection({
+        a: new Type("str"),
         b: new Required([
-            new Type('str'), // this will do ...
-            new Length({ // ... because length fires only if it's string
-                min: 1,
-                max: 2,
-            })
-        ])
-    }));
+          new Type("str"), // this solves the problem on that level
+          new Length({
+            min: 1,
+            max: 2,
+          }),
+        ]),
+      }),
+    ])
+  );
 
-    const raw = errors.getRaw();
+  const raw = errors.getRaw();
 
-    expect(raw).toEqual([]);
-    // 
+  expect(raw).toEqual([[undefined, "This value should be of type 'object'.", "INVALID_TYPE_ERROR", undefined]]);
 
-    done();
+  done();
 })();
-
 ```
 
-2)
+2.
 
 Don't trust this library if it comes to Optional or Required on the main level
 
@@ -688,16 +687,14 @@ Dev note: Problem is caused by the fact that the only place where distinguishing
 example:
 
 ```js
-
 (async function () {
-    const errors = await validator(null, new Optional(new Type("str")));
+  const errors = await validator(null, new Optional(new Type("str")));
 
-    const raw = errors.getRaw();
+  const raw = errors.getRaw();
 
-    expect(raw).toEqual([[undefined, "This value should be of type 'str'.", "INVALID_TYPE_ERROR", null]]);
-    // above shouldn't happen but it is happening
+  expect(raw).toEqual([[undefined, "This value should be of type 'str'.", "INVALID_TYPE_ERROR", null]]);
+  // above shouldn't happen but it is happening
 
-    done();
+  done();
 })();
-
 ```

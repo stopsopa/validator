@@ -2,9 +2,6 @@
 
 const validator = require("../../validator");
 
-const Email = require("../../validator/constraints/Email");
-
-const Count = require("../../validator/constraints/Count");
 const Length = require("../../validator/constraints/Length");
 
 const Collection = require("../../validator/constraints/Collection");
@@ -80,6 +77,34 @@ describe("main level with object", () => {
       const raw = errors.getRaw();
 
       expect(raw).toEqual([[undefined, "This value should be of type 'object'.", "INVALID_TYPE_ERROR", 6]]);
+
+      done();
+    })();
+  });
+
+  it("001  - correctd", (done) => {
+    (async function () {
+      const errors = await validator(
+        undefined, // will generate error: "This value should be of type 'object'."
+        // {a: '', b: 7}, // will generate error: "This value should be of type 'str'." on field "b"
+        new Required([
+          new Type("object"), // this solves the problem on that level
+          new Collection({
+            a: new Type("str"),
+            b: new Required([
+              new Type("str"), // this solves the problem on that level
+              new Length({
+                min: 1,
+                max: 2,
+              }),
+            ]),
+          }),
+        ])
+      );
+
+      const raw = errors.getRaw();
+
+      expect(raw).toEqual([[undefined, "This value should be of type 'object'.", "INVALID_TYPE_ERROR", undefined]]);
 
       done();
     })();
