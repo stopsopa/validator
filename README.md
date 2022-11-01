@@ -649,7 +649,7 @@ example cases:
 
 ```
 
-last)
+2)
 
 Don't trust this library if it comes to Optional or Required on the main level
 
