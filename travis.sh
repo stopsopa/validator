@@ -19,9 +19,7 @@ if [ "$MODE" = "karma" ]; then
         sh -e /etc/init.d/xvfb start
     fi
 
-    make ck
-
-    yarn add karma
+    /bin/bash bash/swap-files-v2.sh package.json package_karma.json -- yarn add -D karma
 
 EXECUTE="$(cat <<END
 make karma
@@ -32,7 +30,7 @@ fi
 if [ "$MODE" = "jest" ]; then
 
     #yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
-    yarn add codecov "jest"@"^23.6.0"
+    yarn add "jest"@"^23.6.0"
 
     EXECUTE="/bin/bash test.sh"
 fi
@@ -49,11 +47,5 @@ fi
 $EXECUTE
 
 STATUS=$?
-
-if [ "$MODE" = "jest" ]; then
-
-    # cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js -v | grep -v "@"
-    node node_modules/.bin/codecov
-fi
 
 exit $?

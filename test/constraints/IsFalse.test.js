@@ -1,147 +1,132 @@
-'use strict';
+"use strict";
 
-try {require("karma_polyfill")}catch(e){}
+try {
+  require("karma_polyfill");
+} catch (e) {}
 
-const validator     = require('../../validator');
+const validator = require("../../validator");
 
-const IsFalse        = require('../../validator/constraints/IsFalse');
+const IsFalse = require("../../validator/constraints/IsFalse");
 
-const Count         = require('../../validator/constraints/Count');
+const Count = require("../../validator/constraints/Count");
 
-const Collection    = require('../../validator/constraints/Collection');
+const Collection = require("../../validator/constraints/Collection");
 
-it('IsFalse', () => {
+it("IsFalse", () => {
+  var k = new IsFalse();
 
-    var k = new IsFalse();
-
-    expect(k.errorNames()).toEqual({
-        NOT_FALSE_ERROR: IsFalse.prototype.NOT_FALSE_ERROR
-    });
+  expect(k.errorNames()).toEqual({
+    NOT_FALSE_ERROR: IsFalse.prototype.NOT_FALSE_ERROR,
+  });
 });
 
-it('IsFalse() - used as a function', done => {
+it("IsFalse() - used as a function", (done) => {
+  try {
+    validator(
+      "test",
+      new Collection({
+        test: IsFalse(),
+      })
+    );
+  } catch (e) {
+    expect(e).toBe("It is necessary to use operator 'new' with all constraints");
 
-    try {
-        validator('test', new Collection({
-            test: IsFalse()
-        }))
-    }
-    catch (e) {
-
-        expect(e).toBe("It is necessary to use operator 'new' with all constraints");
-
-        done();
-    }
+    done();
+  }
 });
 
-it('IsFalse - is actually null', done => {
+it("IsFalse - is actually null", (done) => {
+  validator(false, new IsFalse()).then(
+    (errors) => {
+      errors = errors.getRaw();
 
-    return validator(false, new IsFalse()).then(errors => {
+      expect(errors).toEqual([]);
 
-        errors = errors.getRaw();
-
-        expect(errors).toEqual([]);
-
-        done();
-    });
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
-it('IsFalse - custom message', done => {
+it("IsFalse - custom message", (done) => {
+  validator("test", new IsFalse("custom message")).then(
+    (errors) => {
+      errors = errors.getRaw();
 
-    return validator('test', new IsFalse('custom message')).then(errors => {
+      expect(errors).toEqual([[undefined, "custom message", "NOT_FALSE_ERROR", "test"]]);
 
-        errors = errors.getRaw();
-
-        expect(errors).toEqual(
-            [
-                [
-                    undefined,
-                    "custom message",
-                    "NOT_FALSE_ERROR",
-                    "test"
-                ]
-            ]
-        );
-
-        done();
-    });
+      done();
+    },
+    (e) => done({ e })
+  );
 });
-it('IsFalse - stop [part 1]', done => {
+it("IsFalse - stop [part 1]", (done) => {
+  validator(
+    {
+      z: true,
+      b: {
+        a: {
+          a: "b",
+          c: "d",
+          d: "f",
+        },
+      },
+    },
+    new Collection({
+      z: new IsFalse(),
+      b: new Collection({
+        a: new Count({ min: 2, max: 2 }),
+      }),
+    })
+  ).then(
+    (errors) => {
+      const raw = errors.getRaw();
 
-    return validator({
-        z: true,
-        b: {
-            a: {
-                a: 'b',
-                c: 'd',
-                d: 'f'
-            }
-        }
-    }, new Collection({
-        z: new IsFalse(),
-        b: new Collection({
-            a: new Count({min: 2, max: 2}),
-        })
-    })).then(errors => {
+      expect(raw).toEqual([
+        ["z", "This value should be false.", "NOT_FALSE_ERROR", true],
+        [
+          "b.a",
+          "This collection should contain exactly 2 elements.",
+          "TOO_MANY_ERROR",
+          {
+            a: "b",
+            c: "d",
+            d: "f",
+          },
+        ],
+      ]);
 
-        const raw = errors.getRaw();
-
-        expect(raw).toEqual(
-            [
-                [
-                    "z",
-                    "This value should be false.",
-                    "NOT_FALSE_ERROR",
-                    true
-                ],
-                [
-                    "b.a",
-                    "This collection should contain exactly 2 elements.",
-                    "TOO_MANY_ERROR",
-                    {
-                        "a": "b",
-                        "c": "d",
-                        "d": "f"
-                    }
-                ]
-            ]
-        );
-
-        done();
-    });
+      done();
+    },
+    (e) => done({ e })
+  );
 });
-it('IsFalse - stop [part 2]', done => {
+it("IsFalse - stop [part 2]", (done) => {
+  validator(
+    {
+      z: true,
+      b: {
+        a: {
+          a: "b",
+          c: "d",
+          d: "f",
+        },
+      },
+    },
+    new Collection({
+      z: new IsFalse(undefined, { async: -1, stop: true }),
+      b: new Collection({
+        a: new Count({ min: 2, max: 2 }),
+      }),
+    })
+  ).then(
+    (errors) => {
+      const raw = errors.getRaw();
 
-    return validator({
-        z: true,
-        b: {
-            a: {
-                a: 'b',
-                c: 'd',
-                d: 'f'
-            }
-        }
-    }, new Collection({
-        z: new IsFalse(undefined, {async: -1, stop: true}),
-        b: new Collection({
-            a: new Count({min: 2, max: 2}),
-        })
-    })).then(errors => {
+      expect(raw).toEqual([["z", "This value should be false.", "NOT_FALSE_ERROR", true]]);
 
-        const raw = errors.getRaw();
-
-        expect(raw).toEqual(
-            [
-                [
-                    "z",
-                    "This value should be false.",
-                    "NOT_FALSE_ERROR",
-                    true
-                ]
-            ]
-        );
-
-        done();
-    });
+      done();
+    },
+    (e) => done({ e })
+  );
 });
-

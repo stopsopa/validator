@@ -1,102 +1,74 @@
-'use strict';
+"use strict";
 
-try {require("karma_polyfill")}catch(e){}
+try {
+  require("karma_polyfill");
+} catch (e) {}
 
-const validator     = require('../../validator');
+const validator = require("../../validator");
 
-const Collection    = require('../../validator/constraints/Collection');
+const Collection = require("../../validator/constraints/Collection");
 
-const Required      = require('../../validator/constraints/Required');
+const Required = require("../../validator/constraints/Required");
 
-const Optional      = require('../../validator/constraints/Optional');
+const Optional = require("../../validator/constraints/Optional");
 
-const Length        = require('../../validator/constraints/Length');
+const Length = require("../../validator/constraints/Length");
 
-const IsNull        = require('../../validator/constraints/IsNull');
+const IsNull = require("../../validator/constraints/IsNull");
 
-const NotBlank      = require('../../validator/constraints/NotBlank');
+const NotBlank = require("../../validator/constraints/NotBlank");
 
-const Context       = require('../../validator/logic/Context');
+const Context = require("../../validator/logic/Context");
 
-it('new ConstraintViolationList() ', done => {
-
-    return validator({
+it("new ConstraintViolationList() ", (done) => {
+  validator(
+    {
+      a: {
         a: {
-            a: {
-                a: {
-                    a: 'a',
-                    z: 'a'
-                },
-                z: 'a'
-            },
-            z: 'a'
+          a: {
+            a: "a",
+            z: "a",
+          },
+          z: "a",
         },
-        z: ''
-    }, new Collection({
+        z: "a",
+      },
+      z: "",
+    },
+    new Collection({
+      a: new Collection({
         a: new Collection({
-            a: new Collection({
-                a: new Collection({
-                    a: new IsNull(),
-                    z: new Length(3),
-                }),
-                z: new IsNull(),
-            }),
+          a: new Collection({
+            a: new IsNull(),
             z: new Length(3),
+          }),
+          z: new IsNull(),
         }),
-        z: new NotBlank(),
-    })).then(errors => {
+        z: new Length(3),
+      }),
+      z: new NotBlank(),
+    })
+  ).then(
+    (errors) => {
+      const result = [
+        ["a.a.a.a", "This value should be null.", "NOT_NULL_ERROR", "a"],
+        ["a.a.z", "This value should be null.", "NOT_NULL_ERROR", "a"],
+      ];
 
-        const result = [
-            [
-                "a.a.a.a",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                "a"
-            ],
-            [
-                "a.a.z",
-                "This value should be null.",
-                "NOT_NULL_ERROR",
-                "a"
-            ]
-        ];
+      expect(errors.findByCodes(IsNull.prototype.NOT_NULL_ERROR)).toEqual(result);
 
-        expect(errors.findByCodes(IsNull.prototype.NOT_NULL_ERROR)).toEqual(result);
+      expect(errors.findByCodes([IsNull.prototype.NOT_NULL_ERROR, IsNull.prototype.NOT_NULL_ERROR])).toEqual(result);
 
-        expect(errors.findByCodes([
-            IsNull.prototype.NOT_NULL_ERROR,
-            IsNull.prototype.NOT_NULL_ERROR
-        ])).toEqual(result);
+      expect(errors.findByCodes([IsNull.prototype.NOT_NULL_ERROR, NotBlank.prototype.IS_BLANK_ERROR])).toEqual([
+        ["a.a.a.a", "This value should be null.", "NOT_NULL_ERROR", "a"],
+        ["a.a.z", "This value should be null.", "NOT_NULL_ERROR", "a"],
+        ["z", "This value should not be blank.", "IS_BLANK_ERROR", ""],
+      ]);
 
-        expect(errors.findByCodes([
-            IsNull.prototype.NOT_NULL_ERROR,
-            NotBlank.prototype.IS_BLANK_ERROR,
-        ])).toEqual(
-            [
-                [
-                    "a.a.a.a",
-                    "This value should be null.",
-                    "NOT_NULL_ERROR",
-                    "a"
-                ],
-                [
-                    "a.a.z",
-                    "This value should be null.",
-                    "NOT_NULL_ERROR",
-                    "a"
-                ],
-                [
-                    "z",
-                    "This value should not be blank.",
-                    "IS_BLANK_ERROR",
-                    ""
-                ]
-            ]
-        );
+      expect(errors.count()).toBe(5);
 
-        expect(errors.count()).toBe(5);
-
-        done();
-    });
+      done();
+    },
+    (e) => done({ e })
+  );
 });
-

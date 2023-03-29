@@ -18,7 +18,7 @@ const Context       = require('../../validator/logic/Context');
 
 it('key - flat', done => {
 
-    return validator('test', new Length(6)).then(errors => {
+     validator('test', new Length(6)).then(errors => {
 
         errors = errors.getRaw();
 
@@ -32,12 +32,12 @@ it('key - flat', done => {
         ]);
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - valid collection', done => {
 
-    return validator({
+     validator({
         test: 'abcdef'
     }, new Collection({
         test: new Length(6)
@@ -48,12 +48,12 @@ it('key - valid collection', done => {
         expect(errors).toEqual([]);
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 1st level key', done => {
 
-    return validator({
+     validator({
         test: 'abcde'
     }, new Collection({
         test: new Length(6)
@@ -73,12 +73,12 @@ it('key - invalid collection, 1st level key', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 2st level key', done => {
 
-    return validator({
+     validator({
         test: {
             test2: 'abcde'
         }
@@ -102,12 +102,12 @@ it('key - invalid collection, 2st level key', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 2st level key - behind Require 1', done => {
 
-    return validator({
+     validator({
         test: {
             test2: 'abcde'
         }
@@ -131,12 +131,12 @@ it('key - invalid collection, 2st level key - behind Require 1', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 2st level key - behind Require 2', done => {
 
-    return validator({
+     validator({
         test: {
             test2: 'abcde'
         }
@@ -160,12 +160,12 @@ it('key - invalid collection, 2st level key - behind Require 2', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 2st level key - behind Require 3', done => {
 
-    return validator({
+     validator({
         test: {
             test2: 'abcde'
         }
@@ -191,12 +191,12 @@ it('key - invalid collection, 2st level key - behind Require 3', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 2st level key - behind Require 4', done => {
 
-    return validator({
+     validator({
         test: {
             test2: 'abcde'
         }
@@ -224,12 +224,12 @@ it('key - invalid collection, 2st level key - behind Require 4', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 3st level key - behind Require 5', done => {
 
-    return validator({
+     validator({
         test: {
             test2: {
                 test3: 'abcde'
@@ -261,12 +261,12 @@ it('key - invalid collection, 3st level key - behind Require 5', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 3st level key - behind Require 4 - extra field', done => {
 
-    return validator({
+     validator({
         test: {
             extra: null,
             test2: {
@@ -310,12 +310,12 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field', d
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - invalid collection, 3st level key - behind Require 4 - extra field, allowExtraFields', done => {
 
-    return validator({
+     validator({
         test: {
             extra: null,
             test2: {
@@ -351,12 +351,12 @@ it('key - invalid collection, 3st level key - behind Require 4 - extra field, al
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - add prefix', done => {
 
-    return validator({
+     validator({
         a: 'te',
         test: {
             extra: null,
@@ -402,12 +402,12 @@ it('key - add prefix', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('key - add prefix (empty string)', done => {
 
-    return validator({
+     validator({
         a: 'te',
         test: {
             extra: null,
@@ -453,5 +453,5 @@ it('key - add prefix (empty string)', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });

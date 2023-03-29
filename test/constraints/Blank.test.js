@@ -36,7 +36,7 @@ it('Blank() - used as a function', done => {
 
 it('Blank - custom message', done => {
 
-    return validator('test', new Blank('custom message')).then(errors => {
+     validator('test', new Blank('custom message')).then(errors => {
 
         errors = errors.getRaw();
 
@@ -52,12 +52,12 @@ it('Blank - custom message', done => {
         );
 
         done()
-    });
+    }, e => done({e}));
 
 });
 it('Blank - stop [part 1]', done => {
 
-    return validator({
+     validator({
         z: 'string',
         b: {
             a: {
@@ -97,11 +97,11 @@ it('Blank - stop [part 1]', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 it('Blank - stop [part 2]', done => {
 
-    return validator({
+     validator({
         z: '0d',
         b: {
             a: {
@@ -131,11 +131,11 @@ it('Blank - stop [part 2]', done => {
         );
 
         done()
-    });
+    }, e => done({e}));
 });
 it('Blank - not empty array', done => {
 
-    return validator({
+     validator({
         z: ['test']
     }, new Collection({
         z: new Blank(),
@@ -155,12 +155,12 @@ it('Blank - not empty array', done => {
         );
 
         done()
-    });
+    }, e => done({e}));
 
 });
 it('Blank - not empty object', done => {
 
-    return validator({
+     validator({
         z: {test:'test'}
     }, new Collection({
         z: new Blank(),
@@ -180,13 +180,13 @@ it('Blank - not empty object', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 
 it('Blank - blank', done => {
 
-    return validator({
+     validator({
         z: null
     }, new Collection({
         z: new Blank(),
@@ -199,6 +199,6 @@ it('Blank - blank', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 

@@ -20,7 +20,7 @@ it('Callback - main arg', done => {
 
     const start = time();
 
-    return validator(
+     validator(
         'test',
         new Callback(
             (value, context, path, extra) =>
@@ -65,7 +65,7 @@ it('Callback - main arg', done => {
         expect(time() - start).toBeGreaterThan(30);
 
         done();
-    });
+    }, e => done({e}));
 });
 
 
@@ -85,7 +85,7 @@ it('Callback - not function', done => {
 
 it('Callback - not promise', done => {
 
-    return validator('test', new Callback((value, context, path, extra) => {
+     validator('test', new Callback((value, context, path, extra) => {
         if (value.length !== 5) {
 
             context
@@ -113,7 +113,7 @@ it('Callback - not promise', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 // it('Callback - race 1', done => {

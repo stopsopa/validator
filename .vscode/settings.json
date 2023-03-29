@@ -1,0 +1,26 @@
+{
+  "search.exclude": {
+    ".git/": true,
+    ".vscode/": true,
+    "build/": true,
+    "designer/": true,
+    "docker/": true,
+    "docs/": true,
+    "migrations/": true,
+    "/dist/": true,
+    "/var/": true,
+    "var/": true
+  },
+  "files.watcherExclude": {
+    ".git/": true,
+    ".vscode/": true,
+    "build/": true,
+    "designer/": true,
+    "docker/": true,
+    "docs/": true,
+    "migrations/": true,
+    "/dist/": true,
+    "/var/": true,
+    "var/": true
+  }
+}

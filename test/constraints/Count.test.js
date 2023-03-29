@@ -39,7 +39,7 @@ it('Count() - used as a function', done => {
 
 it('Count - custom message exact', done => {
 
-    return validator(['one', 'two'], new Count(4)).then(errors => {
+     validator(['one', 'two'], new Count(4)).then(errors => {
 
         const raw = errors.getRaw();
 
@@ -58,12 +58,12 @@ it('Count - custom message exact', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - custom message more', done => {
 
-    return validator(['one', 'two'], new Count({
+     validator(['one', 'two'], new Count({
         min: 4,
         max: 5
     })).then(errors => {
@@ -85,12 +85,12 @@ it('Count - custom message more', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - custom message less', done => {
 
-    return validator(['one', 'two'], new Count({
+     validator(['one', 'two'], new Count({
         min: 0,
         max: 1
     })).then(errors => {
@@ -112,7 +112,7 @@ it('Count - custom message less', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - no args', done => {
@@ -215,55 +215,55 @@ it('Count - max < 0', done => {
 
 it('Count - not object|array', done => {
 
-    return validator(false, new Count({max: 1})).then(errors => {
+     validator(false, new Count({max: 1})).then(errors => {
 
         const raw = errors.getRaw();
 
         expect(raw).toEqual([]);
 
         done()
-    });
+    }, e => done({e}));
 });
 
 it('Count - object', done => {
 
-    return validator({}, new Count({max: 1})).then(errors => {
+     validator({}, new Count({max: 1})).then(errors => {
 
         const raw = errors.getRaw();
 
         expect(raw).toEqual([]);
 
         done()
-    });
+    }, e => done({e}));
 });
 
 it('Count - object working', done => {
 
-    return validator({a:'b', c: 'd'}, new Count(2)).then(errors => {
+     validator({a:'b', c: 'd'}, new Count(2)).then(errors => {
 
         const raw = errors.getRaw();
 
         expect(raw).toEqual([]);
 
         done()
-    });
+    }, e => done({e}));
 });
 
 it('Count - object working part 2', done => {
 
-    return validator({a:'b', c: 'd'}, new Count({min: 1, max: 2})).then(errors => {
+     validator({a:'b', c: 'd'}, new Count({min: 1, max: 2})).then(errors => {
 
         const raw = errors.getRaw();
 
         expect(raw).toEqual([]);
 
         done()
-    });
+    }, e => done({e}));
 });
 
 it('Count - object working part 3', done => {
 
-    return validator({a:'b', c: 'd'}, new Count({min: 2, max: 2})).then(errors => {
+     validator({a:'b', c: 'd'}, new Count({min: 2, max: 2})).then(errors => {
 
 
         const raw = errors.getRaw();
@@ -271,12 +271,12 @@ it('Count - object working part 3', done => {
         expect(raw).toEqual([]);
 
         done()
-    });
+    }, e => done({e}));
 });
 
 it('Count - object working part 4', done => {
 
-    return validator({a:'b', c: 'd'}, new Count({min: 3, max: 4})).then(errors => {
+     validator({a:'b', c: 'd'}, new Count({min: 3, max: 4})).then(errors => {
 
         const raw = errors.getRaw();
 
@@ -295,13 +295,13 @@ it('Count - object working part 4', done => {
         );
 
         done()
-    });
+    }, e => done({e}));
 
 });
 
 it('Count - stop [part 1]', done => {
 
-    return validator({
+     validator({
         z: {
             a: 'b',
             c: 'd'
@@ -339,12 +339,12 @@ it('Count - stop [part 1]', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - stop [part 2]', done => {
 
-    return validator({
+     validator({
         z: {
             a: 'b',
             c: 'd'
@@ -376,12 +376,12 @@ it('Count - stop [part 2]', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - stop [part 3]', done => {
 
-    return validator({
+     validator({
         z: {
             a: 'b',
             c: 'd'
@@ -413,12 +413,12 @@ it('Count - stop [part 3]', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - stop [part 4]', done => {
 
-    return validator({
+     validator({
         z: {
         },
         b: {
@@ -445,12 +445,12 @@ it('Count - stop [part 4]', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - stop [part 5]', done => {
 
-    return validator({
+     validator({
         z: {
             a: 'b',
             c: 'd',
@@ -484,12 +484,12 @@ it('Count - stop [part 5]', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
 
 it('Count - extra is string', done => {
 
-    return validator({
+     validator({
         z: 'abc',
     }, new Collection({
         z: new Callback(
@@ -525,5 +525,5 @@ it('Count - extra is string', done => {
         );
 
         done();
-    });
+    }, e => done({e}));
 });
