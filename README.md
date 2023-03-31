@@ -6,7 +6,7 @@
 
 <!-- toc -->
 
-- [Why?](#why)
+- [Motivation](#motivation)
 - [Loosely inspired by:](#loosely-inspired-by)
 - [Live example:](#live-example)
 - [Simple example:](#simple-example)
@@ -30,6 +30,7 @@
   * [Type](#type)
 - [Addidional tools](#addidional-tools)
 - [Other similar libraries:](#other-similar-libraries)
+- [next generation](#next-generation)
 - [Conclusions:](#conclusions)
 
 <!-- tocstop -->
