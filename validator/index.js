@@ -65,7 +65,7 @@ const validator = (value, constraints, extra, debug) => {
         return end();
       }
 
-      return Promise.reject(e.filter((e) => e.resolved === false).map(e => e.data));
+      return Promise.reject(new Error(JSON.stringify(e.filter((e) => e.resolved === false).map(e => e.data))));
     }
 
     return Promise.reject(e);
