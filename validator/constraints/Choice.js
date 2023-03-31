@@ -7,6 +7,8 @@ const isArray           = require('../utils/isArray');
 
 const Constraint        = require('../prototypes/Constraint');
 
+const ValidationStopError = require('../ValidationStopError');
+
 const def = {
     message         : 'The value you selected is not a valid choice.',
     multipleMessage : 'One or more of the given values is invalid.',
@@ -49,7 +51,14 @@ Choice.prototype.NO_SUCH_CHOICE_ERROR   = 'NO_SUCH_CHOICE_ERROR';
 Choice.prototype.TOO_FEW_ERROR          = 'TOO_FEW_ERROR';
 Choice.prototype.TOO_MANY_ERROR         = 'TOO_MANY_ERROR';
 
-const promise = (extra, f) => (extra && extra.stop) ? Promise.reject('stop Choice'+f) : Promise.resolve('resolve Choice'+f);
+const promise = (extra, f) => {
+    if (extra && extra.stop) {
+
+        return Promise.reject(new ValidationStopError('stop Choice'+f));
+    }
+
+    return Promise.resolve('resolve Choice'+f);
+};
 
 Choice.prototype.validate = function (value, context, path, extra) {
 

@@ -1,123 +1,186 @@
-"use strict";
 
-try {
-  require("karma_polyfill");
-} catch (e) {}
+'use strict';
 
-const validator = require("../validator");
+try {require("karma_polyfill")}catch(e){}
 
-const Collection = require("../validator/constraints/Collection");
+const validator     = require('../validator');
 
-const Required = require("../validator/constraints/Required");
+const Collection    = require('../validator/constraints/Collection');
 
-const Optional = require("../validator/constraints/Optional");
+const Required      = require('../validator/constraints/Required');
 
-const Length = require("../validator/constraints/Length");
+const Optional      = require('../validator/constraints/Optional');
 
-const IsNull = require("../validator/constraints/IsNull");
+const Length        = require('../validator/constraints/Length');
 
-const Context = require("../validator/logic/Context");
+const IsNull        = require('../validator/constraints/IsNull');
 
-it("validator", (done) => {
-  validator("test", new IsNull()).then(
-    (errors) => {
-      errors = errors.getRaw();
+const Context       = require('../validator/logic/Context');
 
-      expect(JSON.stringify(errors)).toBe(
-        JSON.stringify([[null, "This value should be null.", IsNull.prototype.NOT_NULL_ERROR, "test"]])
-      );
+it('validator', done => {
 
-      done();
-    },
-    (e) => done({ e })
-  );
+     validator('test', new IsNull()).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(
+            JSON.stringify(
+                errors
+            )
+        ).toBe(
+            JSON.stringify(
+                [
+                    [
+                        null,
+                        "This value should be null.",
+                        IsNull.prototype.NOT_NULL_ERROR,
+                        'test',
+                    ]
+                ]
+            )
+        );
+
+        done();
+    }, e => done({e}));
 });
-it("context message not specified", (done) => {
-  try {
-    const context = new Context();
+it('context message not specified', done => {
 
-    context.buildViolation();
-  } catch (e) {
-    expect(String(e)).toBe("new Context(message).buildViolation(message): message not specified");
+    try {
 
-    done();
-  }
+        const context = new Context();
+
+        context.buildViolation();
+    }
+    catch (e) {
+
+        expect((String(e))).toBe("new Context(message).buildViolation(message): message not specified");
+
+        done();
+    }
 });
-it("validator", (done) => {
-  validator("test", [new IsNull(), new Length(3)]).then(
-    (errors) => {
-      errors = errors.getRaw();
+it('validator', done => {
 
-      expect(JSON.stringify(errors)).toBe(
-        JSON.stringify([
-          [null, "This value should be null.", IsNull.prototype.NOT_NULL_ERROR, "test"],
-          [null, "This value should have exactly 3 characters.", Length.prototype.TOO_LONG_ERROR, "test"],
-        ])
-      );
+     validator('test', [
+        new IsNull(),
+        new Length(3),
+    ]).then(errors => {
 
-      done();
-    },
-    (e) => done({ e })
-  );
+        errors = errors.getRaw();
+
+        expect(
+            JSON.stringify(
+                errors
+            )
+        ).toBe(
+            JSON.stringify(
+                [
+                    [
+                        null,
+                        "This value should be null.",
+                        IsNull.prototype.NOT_NULL_ERROR,
+                        "test"
+                    ],
+                    [
+                        null,
+                        "This value should have exactly 3 characters.",
+                        Length.prototype.TOO_LONG_ERROR,
+                        "test"
+                    ]
+                ]
+            )
+        );
+
+        done();
+    }, e => done({e}));
 });
-it("groups", (done) => {
-  validator("test", [
-    new IsNull({
-      async: -20,
-    }),
-    new Length({
-      min: 3,
-      max: 3,
-      async: 10,
-    }),
-  ]).then(
-    (errors) => {
-      errors = errors.getRaw();
+it('groups', done => {
 
-      expect(JSON.stringify(errors)).toBe(
-        JSON.stringify([
-          [null, "This value should be null.", IsNull.prototype.NOT_NULL_ERROR, "test"],
-          [null, "This value should have exactly 3 characters.", Length.prototype.TOO_LONG_ERROR, "test"],
-        ])
-      );
+     validator('test', [
+        new IsNull({
+            async: -20,
+        }),
+        new Length({
+            min: 3,
+            max: 3,
+            async: 10,
+        }),
+    ]).then(errors => {
 
-      done();
-    },
-    (e) => done({ e })
-  );
+        errors = errors.getRaw();
+
+        expect(
+            JSON.stringify(
+                errors
+            )
+        ).toBe(
+            JSON.stringify(
+                [
+                    [
+                        null,
+                        "This value should be null.",
+                        IsNull.prototype.NOT_NULL_ERROR,
+                        "test"
+                    ],
+                    [
+                        null,
+                        "This value should have exactly 3 characters.",
+                        Length.prototype.TOO_LONG_ERROR,
+                        "test"
+                    ]
+                ]
+            )
+        );
+
+        done();
+    }, e => done({e}));
 });
 
-it("debug", (done) => {
-  validator("test", [new IsNull()], undefined, 2).then(
-    (errors) => {
-      errors = errors.getRaw();
+it('debug', done => {
 
-      expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
+     validator('test', [
+        new IsNull(),
+    ], undefined, 2).then(errors => {
 
-      done();
-    },
-    (e) => done({ e })
-  );
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    undefined,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        );
+
+        done();
+    }, e => done({e}));
 });
 
-it("false", (done) => {
-  validator(
-    "test",
-    [
-      new IsNull(undefined, {
-        stop: 1,
-      }),
-    ],
-    undefined,
-    2
-  ).then(
-    (errors) => {
-      errors = errors.getRaw();
 
-      expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
+it('false', done => {
 
-      done();
-    },
-    (e) => done({ e })
-  );
+     validator('test', [
+        new IsNull(undefined, {
+            stop: 1
+        }),
+    ], undefined, 2).then(errors => {
+
+        errors = errors.getRaw();
+
+        expect(errors).toEqual(
+            [
+                [
+                    undefined,
+                    "This value should be null.",
+                    "NOT_NULL_ERROR",
+                    "test"
+                ]
+            ]
+        );
+
+        done();
+    }, e => done({e}));
 });
+

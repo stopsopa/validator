@@ -1,13 +1,14 @@
+"use strict";
 
-'use strict';
+const Context = require("./logic/Context");
 
-const Context           = require('./logic/Context');
+const connectAndSort = require("./logic/connectAndSort");
 
-const connectAndSort    = require('./logic/connectAndSort');
+const delay = require("./utils/delay");
 
-const delay             = require('./utils/delay');
+const promiseall = require("nlab/promiseall");
 
-const promiseall        = require('nlab/promiseall');
+const ValidationStopError = require("./ValidationStopError");
 
 // const log               = require('../log/logn');
 
@@ -21,71 +22,74 @@ const promiseall        = require('nlab/promiseall');
  */
 
 const validator = (value, constraints, extra, debug) => {
+  const context = new Context(value, extra);
 
-    const context       = new Context(value, extra);
+  const connected = connectAndSort({
+    value,
+    constraints,
+    context,
+    path: extra ? extra.path : undefined,
+    final: true,
+  });
 
-    const connected     = connectAndSort({
-        value,
-        constraints,
-        context,
-        path: extra ? extra.path : undefined,
-        final: true,
-    });
+  let promise = Promise.resolve();
 
-    let promise = Promise.resolve();
+  while (connected.length) {
+    (function (list) {
+      promise = promise.then(() => promiseall(list.map((c) => c())));
 
-    while (connected.length) {
+      if (debug > 1) {
+        promise = promise.then(...delay.then(2500));
+      }
 
-        (function (list) {
+      if (debug > 0) {
+        promise = promise.then(
+          (a) => {
+            console.log("debug resolved:", JSON.stringify(a));
+            return a;
+          },
+          (a) => {
+            console.log("debug rejected:", JSON.stringify(a));
+            return Promise.reject(a);
+          }
+        );
+      }
+    })(connected.shift());
+  }
 
-            promise = promise
-                .then(() => promiseall(list.map(c => c())))
-            ;
+  const end = () => context.getViolations();
 
-            if (debug > 1) {
+  return promise.then(end, (e) => {
+    if (Array.isArray(e)) {
+      if (e.find((e) => e.resolved === false && e.data instanceof ValidationStopError)) {
+        return end();
+      }
 
-                promise = promise
-                    .then(...delay.then(2500))
-                ;
-            }
-
-            if (debug > 0) {
-
-                promise = promise
-                    .then(a => {
-                        console.log('debug resolved:', JSON.stringify(a));
-                        return a;
-                    }, a => {
-                        console.log('debug rejected:', JSON.stringify(a));
-                        return a;
-                    })
-                ;
-            }
-
-        }(connected.shift()));
+      return Promise.reject(e.filter((e) => e.resolved === false).map(e => e.data));
     }
 
-    const end = () => context.getViolations();
+    return Promise.reject(e);
+  });
+};
 
-    return promise.then(end, end);
-}
+validator.Required = require("./constraints/Required");
+validator.Optional = require("./constraints/Optional");
+validator.Collection = require("./constraints/Collection");
+validator.All = require("./constraints/All");
+validator.Blank = require("./constraints/Blank");
+validator.Callback = require("./constraints/Callback");
+validator.Choice = require("./constraints/Choice");
+validator.Count = require("./constraints/Count");
+validator.Email = require("./constraints/Email");
+validator.IsFalse = require("./constraints/IsFalse");
+validator.IsNull = require("./constraints/IsNull");
+validator.IsTrue = require("./constraints/IsTrue");
+validator.Length = require("./constraints/Length");
+validator.NotBlank = require("./constraints/NotBlank");
+validator.NotNull = require("./constraints/NotNull");
+validator.Regex = require("./constraints/Regex");
+validator.Type = require("./constraints/Type");
 
-validator.Required      = require('./constraints/Required');
-validator.Optional      = require('./constraints/Optional');
-validator.Collection    = require('./constraints/Collection');
-validator.All           = require('./constraints/All');
-validator.Blank         = require('./constraints/Blank');
-validator.Callback      = require('./constraints/Callback');
-validator.Choice        = require('./constraints/Choice');
-validator.Count         = require('./constraints/Count');
-validator.Email         = require('./constraints/Email');
-validator.IsFalse       = require('./constraints/IsFalse');
-validator.IsNull        = require('./constraints/IsNull');
-validator.IsTrue        = require('./constraints/IsTrue');
-validator.Length        = require('./constraints/Length');
-validator.NotBlank      = require('./constraints/NotBlank');
-validator.NotNull       = require('./constraints/NotNull');
-validator.Regex         = require('./constraints/Regex');
-validator.Type          = require('./constraints/Type');
+validator.ValidationStopError = ValidationStopError;
 
-module.exports  = validator;
+module.exports = validator;

@@ -3,6 +3,8 @@
 
 const Constraint        = require('../prototypes/Constraint');
 
+const ValidationStopError = require('../ValidationStopError');
+
 const def = {
     message    : 'This value is not a valid email address.',
 };
@@ -45,7 +47,7 @@ Email.prototype.validate = function (value, context, path, extra) {
 
         if (extra && extra.stop) {
 
-            return Promise.reject('stop Email');
+            return Promise.reject(new ValidationStopError('stop Email'));
         }
     }
 

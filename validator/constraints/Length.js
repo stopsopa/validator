@@ -5,6 +5,8 @@ const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');
 
+const ValidationStopError = require('../ValidationStopError');
+
 const def = {
     maxMessage: 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
     minMessage: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
@@ -81,7 +83,12 @@ Length.prototype.validate = function (value, context, path, extra) {
                 .addViolation()
             ;
 
-            return (extra && extra.stop) ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
+            if (extra && extra.stop) {
+
+                return Promise.reject(new ValidationStopError('stop Length'));
+            }
+
+            return Promise.resolve('resolve Length');
         }
 
         if (typeof opt.min !== 'undefined' && length < opt.min) {
@@ -98,7 +105,12 @@ Length.prototype.validate = function (value, context, path, extra) {
                 .addViolation()
             ;
 
-            return (extra && extra.stop) ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
+            if (extra && extra.stop) {
+
+                return Promise.reject(new ValidationStopError('stop Length'));
+            }
+
+            return Promise.resolve('resolve Length');
         }
     }
 

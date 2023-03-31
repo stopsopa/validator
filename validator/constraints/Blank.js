@@ -7,6 +7,8 @@ const isArray           = require('../utils/isArray');
 
 const Constraint        = require('../prototypes/Constraint');
 
+const ValidationStopError = require('../ValidationStopError');
+
 const def = {
     message    : 'This value should be blank.',
 };
@@ -52,7 +54,7 @@ Blank.prototype.validate = function (value, context, path, extra) {
 
         if (extra && extra.stop) {
 
-            return Promise.reject('stop Blank');
+            return Promise.reject(new ValidationStopError('stop Blank'));
         }
     }
 
