@@ -1085,11 +1085,11 @@ var validator = function validator(value, constraints, extra, debug) {
       })) {
         return end();
       }
-      return Promise.reject(e.filter(function (e) {
+      return Promise.reject(new Error(JSON.stringify(e.filter(function (e) {
         return e.resolved === false;
       }).map(function (e) {
         return e.data;
-      }));
+      }))));
     }
     return Promise.reject(e);
   });
