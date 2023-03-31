@@ -8811,6 +8811,19 @@ try {
 
 /***/ }),
 
+/***/ 6293:
+/***/ ((module) => {
+
+function ValidationStopError() {
+  Error.apply(this, arguments);
+  this.name = "ValidationStopError";
+}
+ValidationStopError.prototype = Object.create(Error.prototype);
+ValidationStopError.prototype.constructor = ValidationStopError;
+module.exports = ValidationStopError;
+
+/***/ }),
+
 /***/ 569:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -8839,6 +8852,7 @@ module.exports = All;
 var isObject = __webpack_require__(5228);
 var isArray = __webpack_require__(7759);
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value should be blank.'
 };
@@ -8864,7 +8878,7 @@ Blank.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(Blank.prototype.NOT_BLANK_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Blank');
+      return Promise.reject(new ValidationStopError('stop Blank'));
     }
   }
   return Promise.resolve('resolve Blank');
@@ -8920,6 +8934,7 @@ module.exports = Callback;
 var isObject = __webpack_require__(5228);
 var isArray = __webpack_require__(7759);
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'The value you selected is not a valid choice.',
   multipleMessage: 'One or more of the given values is invalid.',
@@ -8952,7 +8967,10 @@ Choice.prototype.NO_SUCH_CHOICE_ERROR = 'NO_SUCH_CHOICE_ERROR';
 Choice.prototype.TOO_FEW_ERROR = 'TOO_FEW_ERROR';
 Choice.prototype.TOO_MANY_ERROR = 'TOO_MANY_ERROR';
 var promise = function promise(extra, f) {
-  return extra && extra.stop ? Promise.reject('stop Choice' + f) : Promise.resolve('resolve Choice' + f);
+  if (extra && extra.stop) {
+    return Promise.reject(new ValidationStopError('stop Choice' + f));
+  }
+  return Promise.resolve('resolve Choice' + f);
 };
 Choice.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
@@ -9088,6 +9106,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 var isArray = __webpack_require__(7759);
 var isObject = __webpack_require__(5228);
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   minMessage: 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.',
   maxMessage: 'This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.',
@@ -9149,11 +9168,17 @@ Count.prototype.validate = function (value, context, path, extra) {
   if (count !== false) {
     if (typeof opt.max !== 'undefined' && count > opt.max) {
       context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage).atPath(path).setParameter('{{ count }}', count).setParameter('{{ limit }}', opt.max).setInvalidValue(value).setPlural(opt.max === 1 ? 0 : 1).setCode(Count.prototype.TOO_MANY_ERROR).addViolation();
-      return extra && extra.stop ? Promise.reject('stop Count') : Promise.resolve('resolve Count');
+      if (extra && extra.stop) {
+        return Promise.reject(new ValidationStopError('stop Count'));
+      }
+      return Promise.resolve('resolve Count');
     }
     if (typeof opt.min !== 'undefined' && count < opt.min) {
       context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage).atPath(path).setParameter('{{ count }}', count).setParameter('{{ limit }}', opt.min).setInvalidValue(value).setPlural(opt.min === 1 ? 0 : 1).setCode(Count.prototype.TOO_FEW_ERROR).addViolation();
-      return extra && extra.stop ? Promise.reject('stop Count') : Promise.resolve('resolve Count');
+      if (extra && extra.stop) {
+        return Promise.reject(new ValidationStopError('stop Count'));
+      }
+      return Promise.resolve('resolve Count');
     }
   }
   return Promise.resolve('Count');
@@ -9169,6 +9194,7 @@ module.exports = Count;
 
 
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value is not a valid email address.'
 };
@@ -9193,7 +9219,7 @@ Email.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(Email.prototype.INVALID_EMAIL_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Email');
+      return Promise.reject(new ValidationStopError('stop Email'));
     }
   }
   return Promise.resolve('resolve Email');
@@ -9215,6 +9241,7 @@ module.exports = Email;
 
 
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value should be false.'
 };
@@ -9239,7 +9266,7 @@ IsFalse.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(IsFalse.prototype.NOT_FALSE_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop IsFalse');
+      return Promise.reject(new ValidationStopError('stop IsFalse'));
     }
   }
   return Promise.resolve('resolve IsFalse');
@@ -9255,6 +9282,7 @@ module.exports = IsFalse;
 
 
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value should be null.'
 };
@@ -9279,7 +9307,7 @@ IsNull.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(IsNull.prototype.NOT_NULL_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop IsNull');
+      return Promise.reject(new ValidationStopError('stop IsNull'));
     }
   }
   return Promise.resolve('resolve IsNull');
@@ -9295,6 +9323,7 @@ module.exports = IsNull;
 
 
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value should be true.'
 };
@@ -9319,7 +9348,7 @@ IsTrue.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(IsTrue.prototype.NOT_TRUE_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop IsTrue');
+      return Promise.reject(new ValidationStopError('stop IsTrue'));
     }
   }
   return Promise.resolve('resolve IsTrue');
@@ -9337,6 +9366,7 @@ module.exports = IsTrue;
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 var isObject = __webpack_require__(5228);
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   maxMessage: 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
   minMessage: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
@@ -9380,11 +9410,17 @@ Length.prototype.validate = function (value, context, path, extra) {
     var length = value.length;
     if (typeof opt.max !== 'undefined' && length > opt.max) {
       context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage).atPath(path).setPlural(opt.max === 1 ? 0 : 1).setParameter('{{ value }}', value).setParameter('{{ limit }}', opt.max).setInvalidValue(value).setCode(Length.prototype.TOO_LONG_ERROR).setExtra(extra).addViolation();
-      return extra && extra.stop ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
+      if (extra && extra.stop) {
+        return Promise.reject(new ValidationStopError('stop Length'));
+      }
+      return Promise.resolve('resolve Length');
     }
     if (typeof opt.min !== 'undefined' && length < opt.min) {
       context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage).atPath(path).setPlural(opt.min === 1 ? 0 : 1).setParameter('{{ value }}', value).setParameter('{{ limit }}', opt.min).setInvalidValue(value).setCode(Length.prototype.TOO_SHORT_ERROR).setExtra(extra).addViolation();
-      return extra && extra.stop ? Promise.reject('stop Length') : Promise.resolve('resolve Length');
+      if (extra && extra.stop) {
+        return Promise.reject(new ValidationStopError('stop Length'));
+      }
+      return Promise.resolve('resolve Length');
     }
   }
   return Promise.resolve('Length');
@@ -9401,6 +9437,7 @@ module.exports = Length;
 
 var Constraint = __webpack_require__(6588);
 var Blank = __webpack_require__(9614);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value should not be blank.'
 };
@@ -9426,7 +9463,7 @@ NotBlank.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(NotBlank.prototype.IS_BLANK_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop NotBlank');
+      return Promise.reject(new ValidationStopError('stop NotBlank'));
     }
   }
   return Promise.resolve('resolve NotBlank');
@@ -9442,6 +9479,7 @@ module.exports = NotBlank;
 
 
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value should be true.'
 };
@@ -9466,8 +9504,7 @@ NotNull.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(NotNull.prototype.IS_NULL_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      // return reject('stop Type');
-      return Promise.reject('stop NotNull');
+      return Promise.reject(new ValidationStopError('stop NotNull'));
     }
   }
   return Promise.resolve('resolve NotNull');
@@ -9513,6 +9550,7 @@ module.exports = Optional;
 
 var Constraint = __webpack_require__(6588);
 var isObject = __webpack_require__(5228);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: 'This value is not valid.',
   match: true
@@ -9544,7 +9582,7 @@ Regex.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(Regex.prototype.REGEX_FAILED_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Regex');
+      return Promise.reject(new ValidationStopError('stop Regex'));
     }
   }
   return Promise.resolve('resolve Regex');
@@ -9601,6 +9639,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 var isObject = __webpack_require__(5228);
 var isArray = __webpack_require__(7759);
 var Constraint = __webpack_require__(6588);
+var ValidationStopError = __webpack_require__(6293);
 var def = {
   message: "This value should be of type '{{ type }}'."
 };
@@ -9646,8 +9685,7 @@ Type.prototype.validate = function (value, context, path, extra) {
   if (!Type.prototype.logic(value, opt.type)) {
     context.buildViolation(opt.message).atPath(path).setParameter('{{ type }}', opt.type.join(', ')).setCode(Type.prototype.INVALID_TYPE_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      // return reject('stop Type');
-      return Promise.reject('stop Type');
+      return Promise.reject(new ValidationStopError('stop Type'));
     }
   }
   return Promise.resolve('resolve Type');
@@ -9708,6 +9746,7 @@ var Context = __webpack_require__(4186);
 var connectAndSort = __webpack_require__(9764);
 var delay = __webpack_require__(3351);
 var promiseall = __webpack_require__(7219);
+var ValidationStopError = __webpack_require__(6293);
 
 // const log               = require('../log/logn');
 
@@ -9743,11 +9782,11 @@ var validator = function validator(value, constraints, extra, debug) {
       }
       if (debug > 0) {
         promise = promise.then(function (a) {
-          console.log('debug resolved:', JSON.stringify(a));
+          console.log("debug resolved:", JSON.stringify(a));
           return a;
         }, function (a) {
-          console.log('debug rejected:', JSON.stringify(a));
-          return a;
+          console.log("debug rejected:", JSON.stringify(a));
+          return Promise.reject(a);
         });
       }
     })(connected.shift());
@@ -9755,7 +9794,21 @@ var validator = function validator(value, constraints, extra, debug) {
   var end = function end() {
     return context.getViolations();
   };
-  return promise.then(end, end);
+  return promise.then(end, function (e) {
+    if (Array.isArray(e)) {
+      if (e.find(function (e) {
+        return e.resolved === false && e.data instanceof ValidationStopError;
+      })) {
+        return end();
+      }
+      return Promise.reject(e.filter(function (e) {
+        return e.resolved === false;
+      }).map(function (e) {
+        return e.data;
+      }));
+    }
+    return Promise.reject(e);
+  });
 };
 validator.Required = __webpack_require__(2161);
 validator.Optional = __webpack_require__(288);
@@ -9774,6 +9827,7 @@ validator.NotBlank = __webpack_require__(2234);
 validator.NotNull = __webpack_require__(857);
 validator.Regex = __webpack_require__(7146);
 validator.Type = __webpack_require__(6457);
+validator.ValidationStopError = ValidationStopError;
 module.exports = validator;
 
 /***/ }),
@@ -10246,7 +10300,6 @@ module.exports = delay;
 var isArray = __webpack_require__(7759);
 var isObject = __webpack_require__(5228);
 module.exports = function each(obj, fn, context) {
-  var r;
   if (isArray(obj)) {
     for (var i = 0, l = obj.length; i < l; ++i) {
       if (fn.call(context, obj[i], i) === false) {
