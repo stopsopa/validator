@@ -73,7 +73,6 @@ if [ "$DIFF" != "" ] || [ "$1" = "force" ]; then
     cat comment.txt dist/spvalidation.min.js > dist/test.js
     mv dist/test.js dist/spvalidation.min.js
 
-                            # node update-badge.js
                             npx markdown-toc -i README.md
                             git add README.md
 
