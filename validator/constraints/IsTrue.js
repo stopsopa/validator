@@ -3,7 +3,7 @@
 
 const Constraint        = require('../prototypes/Constraint');
 
-const ValidationStopError = require('../ValidationStopError');
+
 
 const def = {
     message    : 'This value should be true.',
@@ -47,7 +47,7 @@ IsTrue.prototype.validate = function (value, context, path, extra) {
 
         if (extra && extra.stop) {
 
-            return Promise.reject(new ValidationStopError('stop IsTrue'));
+            return Promise.reject('stop IsTrue');
         }
     }
 

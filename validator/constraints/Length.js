@@ -5,7 +5,7 @@ const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');
 
-const ValidationStopError = require('../ValidationStopError');
+
 
 const def = {
     maxMessage: 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
@@ -85,7 +85,7 @@ Length.prototype.validate = function (value, context, path, extra) {
 
             if (extra && extra.stop) {
 
-                return Promise.reject(new ValidationStopError('stop Length'));
+                return Promise.reject('stop Length');
             }
 
             return Promise.resolve('resolve Length');
@@ -107,7 +107,7 @@ Length.prototype.validate = function (value, context, path, extra) {
 
             if (extra && extra.stop) {
 
-                return Promise.reject(new ValidationStopError('stop Length'));
+                return Promise.reject('stop Length');
             }
 
             return Promise.resolve('resolve Length');

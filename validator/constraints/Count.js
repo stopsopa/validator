@@ -7,7 +7,7 @@ const isObject          = require('../utils/isObject');
 
 const Constraint        = require('../prototypes/Constraint');
 
-const ValidationStopError = require('../ValidationStopError');
+
 
 const def = {
     minMessage: 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.',
@@ -116,7 +116,7 @@ Count.prototype.validate = function (value, context, path, extra) {
 
             if (extra && extra.stop) {
 
-                return Promise.reject(new ValidationStopError('stop Count'));
+                return Promise.reject('stop Count');
             }
 
             return Promise.resolve('resolve Count');
@@ -137,7 +137,7 @@ Count.prototype.validate = function (value, context, path, extra) {
 
             if (extra && extra.stop) {
 
-                return Promise.reject(new ValidationStopError('stop Count'));
+                return Promise.reject('stop Count');
             }
 
             return Promise.resolve('resolve Count');

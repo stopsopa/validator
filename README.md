@@ -85,6 +85,7 @@ import validator, {
     NotNull,
     Regex,
     Type,
+    ValidatorLogicError,
 } from '@stopsopa/validator';
 
 (async () => {

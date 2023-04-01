@@ -5,7 +5,7 @@ const Constraint        = require('../prototypes/Constraint');
 
 const Blank             = require('./Blank');
 
-const ValidationStopError = require('../ValidationStopError');
+
 
 const def = {
     message    : 'This value should not be blank.',
@@ -52,7 +52,7 @@ NotBlank.prototype.validate = function (value, context, path, extra) {
 
         if (extra && extra.stop) {
 
-            return Promise.reject(new ValidationStopError('stop NotBlank'));
+            return Promise.reject('stop NotBlank');
         }
     }
 
