@@ -156,6 +156,8 @@ import validator, {
 - validator() don't care if some validation errors will occur or not, it will just count them and return two methods to extract them in different formats (which is visible above)
 - validator() always return a promise. Rejected promise returned when special ValidatorLogicError() is thrown in Callback type validator only. Only this kind of error is different because it's not "validation error" but actual error in the process of validation - that's a different thing. Usually it's not something user can "fix" in his form or in his UI -> this is rather system error that should be logged and addressed by developers.
 - normally all validators are executed in single [Promise.allSettled()](https://github.com/stopsopa/validator/blob/fa760a89089cfe5e5b10770ace849ebf7adb08e5/validator/index.js#L57) but there is a way to group sets of validators into separate Promise.allSettled() (using integer "[async](https://github.com/stopsopa/validator/blob/fa760a89089cfe5e5b10770ace849ebf7adb08e5/test/validator.test.js#L141)" extra flag) and execute those groups one by one. This is where another "extra" flag called "stop" of individual validators comes handy because turning it ON on particular validator will result in not executing next Promise.allSettled() in case when error was detected by that single validator -> so returning resolved or rejected promise from individual validators together with stearing it through flag "stop" serves rather as an flow control mechanizm.
+- read [Conclusions](https://github.com/stopsopa/validator/blob/master/README.md#conclusions) section of this readme
+
 
 # Example
 
