@@ -203,7 +203,7 @@ var Callback = function Callback(opt, extra) {
 
   this.setExtra(extra);
   if (typeof opt !== 'function') {
-    throw "Callback constraint first arg should be function";
+    throw new Error("Callback constraint first arg should be function");
   }
   this.setOptions(opt);
 };
@@ -248,7 +248,7 @@ var Choice = function Choice(opt, extra) {
   }
   opt = Object.assign({}, def, opt);
   if (!isArray(opt.choices) || opt.choices.length === 0) {
-    throw "Choice: choices have to be non empty list";
+    throw new Error("Choice: choices have to be non empty list");
   }
   this.setOptions(opt);
 };
@@ -323,7 +323,7 @@ var Collection = function Collection(opt, extra) {
 
   this.setExtra(extra);
   if (!isObject(opt) || opt instanceof Constraint) {
-    throw "Collection accept only plain object as a first argument";
+    throw new Error("Collection accept only plain object as a first argument");
   }
   if (isObject(opt) && arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0) {
     opt = Object.assign({}, def, {
@@ -333,7 +333,7 @@ var Collection = function Collection(opt, extra) {
     opt = Object.assign({}, def, opt);
   }
   if (Object.keys(opt.fields).length === 0) {
-    throw "Describe at least one field in \"fields\" parameter";
+    throw new Error("Describe at least one field in \"fields\" parameter");
   }
   opt.fields = Object.keys(opt.fields).reduce(function (acc, field) {
     if (opt.fields[field] instanceof Existence) {
@@ -410,7 +410,7 @@ function Count() {
   Constraint.apply(this, args); // call super constructor.
 
   if (args.length === 0) {
-    throw "Count: options must be given for this constraint";
+    throw new Error("Count: options must be given for this constraint");
   }
   var opt = args[0];
   this.setExtra(args[1]);
@@ -423,22 +423,22 @@ function Count() {
   if (isObject(opt)) {
     opt = Object.assign({}, def, opt);
   } else {
-    throw "Count: Wrong parameter type have been given to this constraint, typeof: " + _typeof(opt);
+    throw new Error("Count: Wrong parameter type have been given to this constraint, typeof: " + _typeof(opt));
   }
   if (typeof opt.min === 'undefined' && typeof opt.max === 'undefined') {
-    throw "Count: Either option \"min\" or \"max\" must be given for constraint";
+    throw new Error("Count: Either option \"min\" or \"max\" must be given for constraint");
   }
   if (typeof opt.min !== 'undefined' && !Number.isInteger(opt.min)) {
-    throw "Count: min should be integer";
+    throw new Error("Count: min should be integer");
   }
   if (typeof opt.max !== 'undefined' && !Number.isInteger(opt.max)) {
-    throw "Count: max should be integer";
+    throw new Error("Count: max should be integer");
   }
   if (opt.min < 0) {
-    throw "Count: min should be greater than 0";
+    throw new Error("Count: min should be greater than 0");
   }
   if (opt.max < 0) {
-    throw "Count: max should be greater than 0";
+    throw new Error("Count: max should be greater than 0");
   }
   this.setOptions(opt);
 }
@@ -665,7 +665,7 @@ function Length() {
   Constraint.apply(this, args); // call super constructor.
 
   if (args.length === 0) {
-    throw "Length: options must be given for this constraint";
+    throw new Error("Length: options must be given for this constraint");
   }
   var opt = args[0];
   this.setExtra(args[1]);
@@ -678,10 +678,10 @@ function Length() {
   if (isObject(opt)) {
     opt = Object.assign({}, def, opt);
   } else {
-    throw "Length: Wrong parameter type have been given to this constraint, typeof: " + _typeof(opt);
+    throw new Error("Length: Wrong parameter type have been given to this constraint, typeof: " + _typeof(opt));
   }
   if (typeof opt.min === 'undefined' && typeof opt.max === 'undefined') {
-    throw "Length: Either option \"min\" or \"max\" must be given for constraint";
+    throw new Error("Length: Either option \"min\" or \"max\" must be given for constraint");
   }
   this.setOptions(opt);
 }
@@ -847,10 +847,10 @@ var Regex = function Regex(opt, extra) {
     };
   }
   if (!isObject(opt)) {
-    throw "Regex: first argument must be regex or object";
+    throw new Error("Regex: first argument must be regex or object");
   }
   if (!Regex.prototype.isRegex(opt.pattern)) {
-    throw "Regex: 'pattern' is not specified";
+    throw new Error("Regex: 'pattern' is not specified");
   }
   this.setOptions(Object.assign({}, def, opt));
 };
@@ -946,14 +946,14 @@ var Type = function Type(opt, extra) {
     if (typeof opt.type[i] === 'string') {
       opt.type[i] = opt.type[i].toLowerCase();
     } else {
-      throw "Type constraint: Each of types have to be string and one of: " + Type.prototype.allowedTypes.map(function (a) {
+      throw new Error("Type constraint: Each of types have to be string and one of: " + Type.prototype.allowedTypes.map(function (a) {
         return "\"".concat(a, "\"");
-      }).join(', ');
+      }).join(', '));
     }
     if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {
-      throw "Type constraint: One of types is string but is not one of: " + Type.prototype.allowedTypes.map(function (a) {
+      throw new Error("Type constraint: One of types is string but is not one of: " + Type.prototype.allowedTypes.map(function (a) {
         return "\"".concat(a, "\"");
-      }).join(', ');
+      }).join(', '));
     }
   }
   this.setOptions(opt);
@@ -1090,42 +1090,34 @@ var validator = function validator(value, constraints, extra, debug) {
 
   /**
    * Other modes are:
-   * 'exceptionalThrow' (default) -
    *
-   * 'justStop' - this will return list like in success mode (list of violations) as resolved promise
-   *          the only side effect will be that it will not execute next promiseall
-   *          (this was old default behaviour)
+   * 'raw'    - will return all promises of the all executed promiseall's if any promise in all promiseall groups will be rejected
+   *          - next promiseall will not be triggered
+   *          - will result in validator() returning rejected promise
+   *
+   * 'errors' - will extract just error payloads from rejected promises of the all executed promiseall's
+   *          - all resolved promises will be filtered out
+   *          - next promiseall will not be triggered
+   *          - will result in validator() returning rejected promise
+   *
+   * 'firstError' - the same as above but it will return just first error from the list above
    *          next promiseall will not be triggered
    *
-   * 'raw' - just raw list of results from last promiseall as rejected promise
-   *          next promiseall will not be triggered
-   *
-   * 'errors' - just error from last result of last promiseall as rejected promise
-   *          if last list have other resolved=true then those will be filtered out
-   *          next promiseall will not be triggered
-   *
-   * 'firstError' - return first error and don't run next promiseall as rejected promise
-   *          next promiseall will not be triggered
+   * 'justStop' - this will make validator() always return resolved promise
+   *            - turning "stop" flag for any validator which will result in rejected promise in any promiseall will only cause 
+   *              not triggering next batch of promiseall, but all errors generated by all executed promiseall will be still gathered
+   *            - NOTICE: this is how this entire library worked before introducing ValidatorLogicError error type
+   * 
+   * 'exceptionalThrow' (default) - in case of detecting any ValidatorLogicError the first one found will be returned
+   *          - next promiseall will not be triggered
+   *          - will result in validator() returning rejected promise
    *
    * NOTICE:
    *
-   *  Generally all above options (including default 'first') will stop processing next promiseall
-   *  and result in rejected promise in case when any Callback validator return rejected promise.
-   *
-   *  If you wish to run all promiseall then simply don't throw any errors from any defined Callback validator
+   *  If you wish to run all promiseall then simply don't use extra "stop" flag, or don't throw ValidatorLogicError in callbacks
    */
 
   return promise.then(end, function (e) {
-    /**
-     * This catch generally means that something really returned rejected promise
-     * and it needs to be handled somehow.
-     * Another thing that could also happen is not triggering "next" promiseall.
-     * Either way this block defines what should happen next.
-     *
-     * By default (in case of mode 'exceptionalThrow') this block will just return violations using end() internal function
-     * or throw when Callback type validators throws at least one ValidatorLogicError type error.
-     * In that case first error of this type will be rethrown.
-     */
     try {
       if (errorMode === modes.justStop) {
         return end();
@@ -1299,10 +1291,10 @@ var Context = function Context(rootData) {
 Context.prototype.buildViolation = function () {
   var args = Array.prototype.slice.call(arguments);
   if (args.length === 0) {
-    throw "new Context(message).buildViolation(message): message not specified";
+    throw new Error("new Context(message).buildViolation(message): message not specified");
   }
   if (typeof args[0] !== 'string') {
-    throw "new Context(message).buildViolation(message): message arg must be string";
+    throw new Error("new Context(message).buildViolation(message): message arg must be string");
   }
   return new ViolationBuilder(args[0], this);
 };
@@ -1375,7 +1367,7 @@ ViolationBuilder.prototype.atPath = function (path) {
 };
 ViolationBuilder.prototype.setPlural = function (plural) {
   if (!Number.isInteger(plural) || plural < 0) {
-    throw "ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty";
+    throw new Error("ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty");
   }
   this.plural = plural;
   return this;
@@ -1391,7 +1383,7 @@ ViolationBuilder.prototype.setExtra = function (extra) {
 ViolationBuilder.prototype.addViolation = function () {
   var _this = this;
   if (this.code === undefined) {
-    throw "ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)";
+    throw new Error("ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)");
   }
   var message = this.message;
   if (typeof message === 'string' && message.indexOf('|') > -1 && this.plural !== false && this.plural > -1) {
@@ -1506,7 +1498,7 @@ module.exports = connectAndSort;
 var isObject = __webpack_require__(228);
 function Constraint() {
   if (!(this instanceof Constraint)) {
-    throw "It is necessary to use operator 'new' with all constraints";
+    throw new Error("It is necessary to use operator 'new' with all constraints");
   }
 }
 ;
@@ -1742,7 +1734,7 @@ function set(source, key, value) {
       if (first) {
         first = false;
         if (ar && !/^\d+$/.test(kt) && kt !== '') {
-          throw "if source is array and key is not integer nor empty string then its not possible to add to array, given key: " + JSON.stringify(kt);
+          throw new Error("if source is array and key is not integer nor empty string then its not possible to add to array, given key: " + JSON.stringify(kt));
         }
       }
       tmp = tmp2;

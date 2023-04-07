@@ -10,6 +10,7 @@
 - [Loosely inspired by:](#loosely-inspired-by)
 - [Live example:](#live-example)
 - [Simple example:](#simple-example)
+- [Some basic facts about functioning of the validator](#some-basic-facts-about-functioning-of-the-validator)
 - [Example](#example)
   * [Entity manager](#entity-manager)
   * [Controller](#controller)
