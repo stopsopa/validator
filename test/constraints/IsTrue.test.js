@@ -29,7 +29,7 @@ it("IsTrue() - used as a function", (done) => {
       })
     );
   } catch (e) {
-    expect(e).toBe("It is necessary to use operator 'new' with all constraints");
+    expect(String(e)).toBe("Error: It is necessary to use operator 'new' with all constraints");
 
     done();
   }

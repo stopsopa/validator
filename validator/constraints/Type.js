@@ -48,12 +48,12 @@ const Type = function (opt, extra) {
         }
         else {
 
-            throw `Type constraint: Each of types have to be string and one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+            throw new Error(`Type constraint: Each of types have to be string and one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', '));
         }
 
         if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {
 
-            throw `Type constraint: One of types is string but is not one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', ');
+            throw new Error(`Type constraint: One of types is string but is not one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', '));
         }
     }
 

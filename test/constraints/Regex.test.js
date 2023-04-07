@@ -27,7 +27,7 @@ it("Regex() - used as a function", (done) => {
       })
     );
   } catch (e) {
-    expect(String(e)).toBe("It is necessary to use operator 'new' with all constraints");
+    expect(String(e)).toBe("Error: It is necessary to use operator 'new' with all constraints");
 
     done();
   }
@@ -37,7 +37,7 @@ it("Regex - wrong arg", (done) => {
   try {
     validator("test", new Regex("custom message"));
   } catch (e) {
-    expect(e).toEqual("Regex: first argument must be regex or object");
+    expect(String(e)).toEqual("Error: Regex: first argument must be regex or object");
 
     done();
   }
@@ -52,7 +52,7 @@ it("Regex - no regex given", (done) => {
       })
     );
   } catch (e) {
-    expect(e).toEqual("Regex: 'pattern' is not specified");
+    expect(String(e)).toEqual("Error: Regex: 'pattern' is not specified");
 
     done();
   }

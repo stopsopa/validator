@@ -20,7 +20,7 @@ it('new ViolationBuilder() - no code', done => {
     }
     catch (e) {
 
-        expect(String(e)).toBe("ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)");
+        expect(String(e)).toBe("Error: ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)");
 
         done();
     }
@@ -40,7 +40,7 @@ it('new ViolationBuilder() - not integer plural', done => {
     }
     catch (e) {
 
-        expect(String(e)).toBe("ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty");
+        expect(String(e)).toBe("Error: ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty");
 
         done();
     }

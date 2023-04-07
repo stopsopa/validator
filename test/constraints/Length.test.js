@@ -25,7 +25,7 @@ it("Length - no arg", (done) => {
   try {
     const k = new Length();
   } catch (e) {
-    expect(String(e)).toBe("Length: options must be given for this constraint");
+    expect(String(e)).toBe("Error: Length: options must be given for this constraint");
 
     done();
   }
@@ -35,7 +35,7 @@ it("Length - wrong arg type", (done) => {
   try {
     const k = new Length(false);
   } catch (e) {
-    expect(String(e)).toBe("Length: Wrong parameter type have been given to this constraint, typeof: boolean");
+    expect(String(e)).toBe("Error: Length: Wrong parameter type have been given to this constraint, typeof: boolean");
 
     done();
   }
@@ -45,7 +45,7 @@ it("Length - no min & no max", (done) => {
   try {
     const k = new Length({});
   } catch (e) {
-    expect(String(e)).toBe('Length: Either option "min" or "max" must be given for constraint');
+    expect(String(e)).toBe('Error: Length: Either option "min" or "max" must be given for constraint');
 
     done();
   }

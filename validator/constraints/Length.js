@@ -23,7 +23,7 @@ function Length() {
 
     if ( args.length === 0) {
 
-        throw `Length: options must be given for this constraint`;
+        throw new Error(`Length: options must be given for this constraint`);
     }
 
     let opt = args[0];
@@ -44,12 +44,12 @@ function Length() {
     }
     else {
 
-        throw `Length: Wrong parameter type have been given to this constraint, typeof: ` + (typeof opt);
+        throw new Error(`Length: Wrong parameter type have been given to this constraint, typeof: ` + (typeof opt));
     }
 
     if ( typeof opt.min === 'undefined' && typeof opt.max === 'undefined') {
 
-        throw `Length: Either option "min" or "max" must be given for constraint`;
+        throw new Error(`Length: Either option "min" or "max" must be given for constraint`);
     }
 
     this.setOptions(opt);

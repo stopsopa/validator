@@ -70,9 +70,8 @@ it("Type - not string", (done) => {
       })
     );
   } catch (e) {
-    expect(e).toEqual(
-      "Type constraint: Each of types have to be string and one of: " +
-        Type.prototype.allowedTypes.map((t) => '"' + t + '"').join(", ")
+    expect(String(e)).toEqual(
+      `Error: Type constraint: Each of types have to be string and one of: "undefined", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "array"`
     );
 
     done();
@@ -88,9 +87,9 @@ it("Type - string", (done) => {
       })
     );
   } catch (e) {
-    expect(e).toEqual(
-      "Type constraint: One of types is string but is not one of: " +
-        Type.prototype.allowedTypes.map((t) => '"' + t + '"').join(", ")
+
+    expect(String(e)).toEqual(
+      `Error: Type constraint: One of types is string but is not one of: "undefined", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "array"`
     );
 
     done();
@@ -178,9 +177,8 @@ it("Type - array of types - wrong type", (done) => {
       })
     );
   } catch (e) {
-    expect(e).toEqual(
-      "Type constraint: One of types is string but is not one of: " +
-        Type.prototype.allowedTypes.map((t) => '"' + t + '"').join(", ")
+    expect(String(e)).toEqual(
+      `Error: Type constraint: One of types is string but is not one of: "undefined", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "array"`
     );
 
     done();

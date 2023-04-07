@@ -22,12 +22,12 @@ Context.prototype.buildViolation = function () {
 
     if ( args.length === 0 ) {
 
-        throw `new Context(message).buildViolation(message): message not specified`;
+        throw new Error(`new Context(message).buildViolation(message): message not specified`);
     }
 
     if (typeof args[0] !== 'string') {
 
-        throw `new Context(message).buildViolation(message): message arg must be string`;
+        throw new Error(`new Context(message).buildViolation(message): message arg must be string`);
     }
 
     return new ViolationBuilder(args[0], this);

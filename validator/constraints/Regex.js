@@ -27,12 +27,12 @@ const Regex = function (opt, extra) {
 
     if ( ! isObject(opt) ) {
 
-        throw `Regex: first argument must be regex or object`;
+        throw new Error(`Regex: first argument must be regex or object`);
     }
 
     if ( ! Regex.prototype.isRegex(opt.pattern) ) {
 
-        throw `Regex: 'pattern' is not specified`;
+        throw new Error(`Regex: 'pattern' is not specified`);
     }
 
     this.setOptions(Object.assign({}, def, opt));

@@ -37,7 +37,7 @@ const Choice = function (opt, extra) {
 
     if ( ! isArray(opt.choices) || opt.choices.length === 0) {
 
-        throw `Choice: choices have to be non empty list`;
+        throw new Error(`Choice: choices have to be non empty list`);
     }
 
     this.setOptions(opt);

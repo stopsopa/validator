@@ -31,7 +31,7 @@ it('Count() - used as a function', done => {
     }
     catch (e) {
 
-        expect(e).toBe("It is necessary to use operator 'new' with all constraints");
+        expect(String(e)).toBe("Error: It is necessary to use operator 'new' with all constraints");
 
         done();
     }
@@ -123,7 +123,7 @@ it('Count - no args', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: options must be given for this constraint");
+        expect(String(e)).toEqual("Error: Count: options must be given for this constraint");
 
         done()
     }
@@ -137,7 +137,7 @@ it('Count - wrong arg', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: Wrong parameter type have been given to this constraint, typeof: boolean");
+        expect(String(e)).toEqual("Error: Count: Wrong parameter type have been given to this constraint, typeof: boolean");
 
         done()
     }
@@ -151,7 +151,7 @@ it('Count - empty obj arg', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: Either option \"min\" or \"max\" must be given for constraint");
+        expect(String(e)).toEqual("Error: Count: Either option \"min\" or \"max\" must be given for constraint");
 
         done()
     }
@@ -165,7 +165,7 @@ it('Count - min not int', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: min should be integer");
+        expect(String(e)).toEqual("Error: Count: min should be integer");
 
         done()
     }
@@ -179,7 +179,7 @@ it('Count - max not int', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: max should be integer");
+        expect(String(e)).toEqual("Error: Count: max should be integer");
 
         done()
     }
@@ -193,7 +193,7 @@ it('Count - min < 0', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: min should be greater than 0");
+        expect(String(e)).toEqual("Error: Count: min should be greater than 0");
 
         done()
     }
@@ -207,7 +207,7 @@ it('Count - max < 0', done => {
     }
     catch (e) {
 
-        expect(e).toEqual("Count: max should be greater than 0");
+        expect(String(e)).toEqual("Error: Count: max should be greater than 0");
 
         done()
     }

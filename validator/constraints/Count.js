@@ -25,7 +25,7 @@ function Count() {
 
     if ( args.length === 0) {
 
-        throw `Count: options must be given for this constraint`;
+        throw new Error(`Count: options must be given for this constraint`);
     }
 
     let opt = args[0];
@@ -46,32 +46,32 @@ function Count() {
     }
     else {
 
-        throw `Count: Wrong parameter type have been given to this constraint, typeof: ` + (typeof opt);
+        throw new Error(`Count: Wrong parameter type have been given to this constraint, typeof: ` + (typeof opt));
     }
 
     if ( typeof opt.min === 'undefined' && typeof opt.max === 'undefined') {
 
-        throw `Count: Either option "min" or "max" must be given for constraint`;
+        throw new Error(`Count: Either option "min" or "max" must be given for constraint`);
     }
 
     if ( typeof opt.min !== 'undefined' && ! Number.isInteger(opt.min) ) {
 
-        throw `Count: min should be integer`
+        throw new Error(`Count: min should be integer`)
     }
 
     if ( typeof opt.max !== 'undefined' &&  ! Number.isInteger(opt.max) ) {
 
-        throw `Count: max should be integer`
+        throw new Error(`Count: max should be integer`)
     }
 
     if ( opt.min < 0 ) {
 
-        throw `Count: min should be greater than 0`;
+        throw new Error(`Count: min should be greater than 0`);
     }
 
     if ( opt.max < 0 ) {
 
-        throw `Count: max should be greater than 0`;
+        throw new Error(`Count: max should be greater than 0`);
     }
 
     this.setOptions(opt);

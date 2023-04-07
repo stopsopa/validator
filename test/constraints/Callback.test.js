@@ -63,7 +63,7 @@ it("Callback - not function", (done) => {
   try {
     validator("test", new Callback());
   } catch (e) {
-    expect(e).toEqual("Callback constraint first arg should be function");
+    expect(String(e)).toEqual("Error: Callback constraint first arg should be function");
 
     done();
   }

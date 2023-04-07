@@ -33,7 +33,7 @@ ViolationBuilder.prototype.setPlural = function (plural) {
 
     if ( ! Number.isInteger(plural) || plural < 0 ) {
 
-        throw `ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty`
+        throw new Error(`ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty`)
     }
 
     this.plural = plural;
@@ -56,7 +56,7 @@ ViolationBuilder.prototype.addViolation = function() {
 
     if ( this.code === undefined ) {
 
-        throw `ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)`;
+        throw new Error(`ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)`);
     }
 
     let message = this.message;

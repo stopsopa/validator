@@ -29,7 +29,7 @@ it("NotNull() - used as a function", (done) => {
       })
     );
   } catch (e) {
-    expect(e).toEqual("It is necessary to use operator 'new' with all constraints");
+    expect(String(e)).toEqual("Error: It is necessary to use operator 'new' with all constraints");
 
     done();
   }

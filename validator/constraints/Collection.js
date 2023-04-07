@@ -35,7 +35,7 @@ const Collection = function (opt, extra) {
 
     if ( ! isObject(opt) || opt instanceof Constraint) {
 
-        throw `Collection accept only plain object as a first argument`;
+        throw new Error(`Collection accept only plain object as a first argument`);
     }
 
     if (isObject(opt) && arrayIntersect(Object.keys(opt), Object.keys(def)).length === 0) {
@@ -51,7 +51,7 @@ const Collection = function (opt, extra) {
 
     if ( Object.keys(opt.fields).length === 0) {
 
-        throw `Describe at least one field in "fields" parameter`;
+        throw new Error(`Describe at least one field in "fields" parameter`);
     }
 
     opt.fields = Object.keys(opt.fields).reduce((acc, field) => {

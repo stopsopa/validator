@@ -156,7 +156,7 @@ it("key - Collection - no options", (done) => {
   try {
     validator("test", new Collection());
   } catch (e) {
-    expect(String(e)).toBe("Collection accept only plain object as a first argument");
+    expect(String(e)).toBe("Error: Collection accept only plain object as a first argument");
 
     done();
   }
@@ -166,7 +166,7 @@ it("key - Collection - array option", (done) => {
   try {
     validator("test", new Collection([]));
   } catch (e) {
-    expect(String(e)).toBe("Collection accept only plain object as a first argument");
+    expect(String(e)).toBe("Error: Collection accept only plain object as a first argument");
 
     done();
   }
@@ -176,7 +176,7 @@ it("key - Collection - empty object option", (done) => {
   try {
     validator("test", new Collection({}));
   } catch (e) {
-    expect(String(e)).toBe('Describe at least one field in "fields" parameter');
+    expect(String(e)).toBe('Error: Describe at least one field in "fields" parameter');
 
     done();
   }

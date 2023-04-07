@@ -42,7 +42,7 @@ it("Choice - no arg", (done) => {
   try {
     const k = new Choice();
   } catch (e) {
-    expect(String(e)).toBe("Choice: choices have to be non empty list");
+    expect(String(e)).toBe("Error: Choice: choices have to be non empty list");
 
     done();
   }
@@ -52,7 +52,7 @@ it("Choice - wrong arg type", (done) => {
   try {
     const k = new Choice(false);
   } catch (e) {
-    expect(String(e)).toBe("Choice: choices have to be non empty list");
+    expect(String(e)).toBe("Error: Choice: choices have to be non empty list");
 
     done();
   }
@@ -62,7 +62,7 @@ it("Choice - empty list", (done) => {
   try {
     const k = new Choice([]);
   } catch (e) {
-    expect(String(e)).toBe("Choice: choices have to be non empty list");
+    expect(String(e)).toBe("Error: Choice: choices have to be non empty list");
 
     done();
   }
@@ -72,7 +72,7 @@ it("Choice - no min & no max - (actually the case is empty choices)", (done) => 
   try {
     const k = new Choice({});
   } catch (e) {
-    expect(String(e)).toBe("Choice: choices have to be non empty list");
+    expect(String(e)).toBe("Error: Choice: choices have to be non empty list");
 
     done();
   }

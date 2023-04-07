@@ -218,9 +218,9 @@ it('set() - not empty array - key l4 [expected error]', done => {
     catch (e) {
 
         expect(
-            e
+            String(e)
         ).toEqual(
-            "if source is array and key is not integer nor empty string then its not possible to add to array, given key: \"l4\""
+            `Error: if source is array and key is not integer nor empty string then its not possible to add to array, given key: "l4"`
         );
 
         done();

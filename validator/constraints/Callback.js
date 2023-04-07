@@ -11,7 +11,7 @@ const Callback = function (opt, extra) {
 
     if (typeof opt !== 'function') {
 
-        throw `Callback constraint first arg should be function`;
+        throw new Error(`Callback constraint first arg should be function`);
     }
 
     this.setOptions(opt);
