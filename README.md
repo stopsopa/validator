@@ -659,4 +659,4 @@ fixed:
 
 2.
 
-Don't relay on new Optional on the root level, more about: /validator/blob/master/test/edge/option_require_case.test.js
+Don't relay on new Optional on the root level, more about: [option_require_case.test.js](/validator/blob/master/test/edge/option_require_case.test.js)
