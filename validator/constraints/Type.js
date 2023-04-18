@@ -1,162 +1,142 @@
+"use strict";
 
-'use strict';
+const isObject = require("../utils/isObject");
 
-const isObject          = require('../utils/isObject');
+const isArray = require("../utils/isArray");
 
-const isArray           = require('../utils/isArray');
-
-const Constraint        = require('../prototypes/Constraint');
-
-
+const Constraint = require("../prototypes/Constraint");
 
 const def = {
-    message    : `This value should be of type '{{ type }}'.`,
+  message: `This value should be of type '{{ type }}'.`,
 };
 
 const Type = function (opt, extra) {
+  Constraint.apply(this, arguments); // call super constructor.
 
-    Constraint.apply(this, arguments); // call super constructor.
+  this.setExtra(extra);
 
-    this.setExtra(extra);
+  if (isArray(opt)) {
+    opt = {
+      type: opt,
+    };
+  }
 
-    if (isArray(opt)) {
+  if (typeof opt === "string") {
+    opt = {
+      type: opt,
+    };
+  }
 
-        opt = {
-            type: opt,
-        }
+  opt = Object.assign({}, def, opt);
+
+  if (!isArray(opt.type)) {
+    opt.type = [opt.type];
+  }
+
+  for (let i = 0, l = opt.type.length; i < l; i += 1) {
+    if (typeof opt.type[i] === "string") {
+      opt.type[i] = opt.type[i].toLowerCase();
+    } else {
+      throw new Error(
+        `Type constraint: Each of types have to be string and one of: ` +
+          Type.prototype.allowedTypes.map((a) => `"${a}"`).join(", ")
+      );
     }
 
-    if (typeof opt === 'string') {
-
-        opt = {
-            type: opt,
-        }
+    if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {
+      throw new Error(
+        `Type constraint: One of types is string but is not one of: ` +
+          Type.prototype.allowedTypes.map((a) => `"${a}"`).join(", ")
+      );
     }
+  }
 
-    opt = Object.assign({}, def, opt);
-
-    if ( ! isArray(opt.type) ) {
-
-        opt.type = [opt.type];
-    }
-
-    for (let i = 0, l = opt.type.length ; i < l ; i += 1 ) {
-
-        if (typeof opt.type[i] === 'string') {
-
-            opt.type[i] = opt.type[i].toLowerCase();
-        }
-        else {
-
-            throw new Error(`Type constraint: Each of types have to be string and one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', '));
-        }
-
-        if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {
-
-            throw new Error(`Type constraint: One of types is string but is not one of: ` + Type.prototype.allowedTypes.map(a => `"${a}"`).join(', '));
-        }
-    }
-
-    this.setOptions(opt);
-}
+  this.setOptions(opt);
+};
 
 Type.prototype = Object.create(Constraint.prototype);
 
 Type.prototype.constructor = Type;
 
-Type.prototype.INVALID_TYPE_ERROR = 'INVALID_TYPE_ERROR';
+Type.prototype.INVALID_TYPE_ERROR = "INVALID_TYPE_ERROR";
 
 Type.prototype.validate = function (value, context, path, extra) {
+  const opt = this.getOptions();
 
-    const opt = this.getOptions();
+  if (!Type.prototype.logic(value, opt.type)) {
+    context
+      .buildViolation(opt.message)
+      .atPath(path)
+      .setParameter("{{ type }}", opt.type.join(", "))
+      .setCode(Type.prototype.INVALID_TYPE_ERROR)
+      .setInvalidValue(value)
+      .addViolation();
 
-    if ( ! Type.prototype.logic(value, opt.type) ) {
-
-        context
-            .buildViolation(opt.message)
-            .atPath(path)
-            .setParameter('{{ type }}', opt.type.join(', '))
-            .setCode(Type.prototype.INVALID_TYPE_ERROR)
-            .setInvalidValue(value)
-            .addViolation()
-        ;
-
-        if (extra && extra.stop) {
-
-            return Promise.reject('stop Type');
-        }
+    if (extra && extra.stop) {
+      return Promise.reject("stop Type");
     }
+  }
 
-    return Promise.resolve('resolve Type');
+  return Promise.resolve("resolve Type");
 };
 
 Type.prototype.logic = function (value, type) {
+  let valid = false;
 
-    let valid = false;
+  let arr = isArray(value);
 
-    let arr = isArray(value);
+  let obj = isObject(value);
 
-    let obj = isObject(value);
+  let t;
 
-    let t;
+  for (let i = 0, l = type.length; i < l; i += 1) {
+    t = type[i];
 
-    for (let i = 0, l = type.length ; i < l ; i += 1 ) {
-
-        t = type[i];
-
-        if (t === 'arr') {
-
-            t = 'array';
-        }
-
-        if (t === 'obj') {
-
-            t = 'object';
-        }
-
-        if (t === 'int') {
-
-            t = 'integer';
-        }
-
-        if (t === 'str') {
-
-            t = 'string';
-        }
-
-        if (t === 'bool') {
-
-            t = 'boolean';
-        }
-
-        if (t === 'array' && arr && !obj) {
-
-            valid = true;
-            break;
-        }
-
-        if (t === 'object' && !arr && obj) {
-
-            valid = true;
-            break;
-        }
-
-        if (t === 'integer' && Number.isInteger(value)) {
-
-            valid = true;
-            break;
-        }
-
-        if ( ! obj && ! arr && typeof value === t) {
-
-            valid = true;
-            break;
-        }
+    if (t === "arr") {
+      t = "array";
     }
 
-    return valid;
-}
+    if (t === "obj") {
+      t = "object";
+    }
 
-Type.prototype.allowedTypes = 'undefined obj object boolean bool number str string symbol function integer int arr array'.split(' ');
+    if (t === "int") {
+      t = "integer";
+    }
+
+    if (t === "str") {
+      t = "string";
+    }
+
+    if (t === "bool") {
+      t = "boolean";
+    }
+
+    if (t === "array" && arr && !obj) {
+      valid = true;
+      break;
+    }
+
+    if (t === "object" && !arr && obj) {
+      valid = true;
+      break;
+    }
+
+    if (t === "integer" && Number.isInteger(value)) {
+      valid = true;
+      break;
+    }
+
+    if (!obj && !arr && typeof value === t) {
+      valid = true;
+      break;
+    }
+  }
+
+  return valid;
+};
+
+Type.prototype.allowedTypes =
+  "undefined obj object boolean bool number str string symbol function integer int arr array".split(" ");
 
 module.exports = Type;

@@ -18,38 +18,42 @@ const IsNull = require("../../validator/constraints/IsNull");
 
 const Context = require("../../validator/logic/Context");
 
-it("pr", (done) => {
-   validator(
-    "test",
-    new Required([
-      new Length({
-        min: 1,
-        max: 2,
-        maxMessage: "len1",
-      }),
-      new Length({
-        min: 2,
-        max: 3,
-        maxMessage: "len2",
-      }),
-      new Length({
-        min: 5,
-        max: 6,
-        minMessage: "len3",
-      }),
-    ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+it(
+  "pr",
+  (done) => {
+    validator(
+      "test",
+      new Required([
+        new Length({
+          min: 1,
+          max: 2,
+          maxMessage: "len1",
+        }),
+        new Length({
+          min: 2,
+          max: 3,
+          maxMessage: "len2",
+        }),
+        new Length({
+          min: 5,
+          max: 6,
+          minMessage: "len3",
+        }),
+      ])
+    ).then((errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len1", "len2", "len3"] });
+      expect(data).toEqual({ "": ["len1", "len2", "len3"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len1" });
+      expect(data).toEqual({ "": "len1" });
 
-    done();
-  });
-}, e => done({e}));
+      done();
+    });
+  },
+  (e) => done({ e })
+);
 
 it("pr - 1", (done) => {
   validator(
@@ -77,21 +81,24 @@ it("pr - 1", (done) => {
         1
       ),
     ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+  ).then(
+    (errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len2", "len3", "len1"] });
+      expect(data).toEqual({ "": ["len2", "len3", "len1"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len2" });
+      expect(data).toEqual({ "": "len2" });
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("pr - 1 [order]", (done) => {
-   validator(
+  validator(
     "test",
     new Required([
       new Length({
@@ -120,21 +127,24 @@ it("pr - 1 [order]", (done) => {
         }
       ),
     ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+  ).then(
+    (errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len2", "len3", "len1"] });
+      expect(data).toEqual({ "": ["len2", "len3", "len1"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len2" });
+      expect(data).toEqual({ "": "len2" });
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("pr - 2", (done) => {
-   validator(
+  validator(
     "test",
     new Required([
       new Length({
@@ -159,21 +169,24 @@ it("pr - 2", (done) => {
         2
       ),
     ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+  ).then(
+    (errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len3", "len2", "len1"] });
+      expect(data).toEqual({ "": ["len3", "len2", "len1"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len3" });
+      expect(data).toEqual({ "": "len3" });
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("pr - 2 [order]", (done) => {
-   validator(
+  validator(
     "test",
     new Required([
       new Length({
@@ -202,21 +215,24 @@ it("pr - 2 [order]", (done) => {
         }
       ),
     ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+  ).then(
+    (errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len3", "len2", "len1"] });
+      expect(data).toEqual({ "": ["len3", "len2", "len1"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len3" });
+      expect(data).toEqual({ "": "len3" });
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("pr - 3", (done) => {
-   validator(
+  validator(
     "test",
     new Required([
       new Length({
@@ -241,21 +257,24 @@ it("pr - 3", (done) => {
         1
       ),
     ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+  ).then(
+    (errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len2", "len3", "len1"] });
+      expect(data).toEqual({ "": ["len2", "len3", "len1"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len2" });
+      expect(data).toEqual({ "": "len2" });
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("pr - 3 [order]", (done) => {
-   validator(
+  validator(
     "test",
     new Required([
       new Length({
@@ -284,17 +303,20 @@ it("pr - 3 [order]", (done) => {
         }
       ),
     ])
-  ).then((errors) => {
-    let data = errors.getFlat(true);
+  ).then(
+    (errors) => {
+      let data = errors.getFlat(true);
 
-    expect(data).toEqual({ "": ["len2", "len3", "len1"] });
+      expect(data).toEqual({ "": ["len2", "len3", "len1"] });
 
-    data = errors.getFlat();
+      data = errors.getFlat();
 
-    expect(data).toEqual({ "": "len2" });
+      expect(data).toEqual({ "": "len2" });
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("pr collection- 3", (done) => {

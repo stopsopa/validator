@@ -9,24 +9,24 @@ language: node_js
 
 matrix:
   include:
-    - node_js: '8'
+    - node_js: "8"
       env: MODE=jest
       dist: trusty
-    - node_js: '9'
+    - node_js: "9"
       env: MODE=jest
       dist: trusty
-    - node_js: '10'
+    - node_js: "10"
       env: MODE=jest
       dist: trusty
-    - node_js: '11'
+    - node_js: "11"
       env: MODE=jest
       dist: trusty
-    - node_js: '10'
+    - node_js: "10"
       env:
         - MODE=karma
         - BROWSER=Chrome
       dist: trusty
-    - node_js: '10'
+    - node_js: "10"
       env:
         - MODE=karma
         - BROWSER=Firefox
@@ -49,15 +49,12 @@ env:
     - TRAVIS=true
 
 before_script:
-#  - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
+  #  - yarn add "coveralls"@"^3.0.2" "jest"@"^23.6.0"
   - sudo apt-get install tree || true
   - tree test || true
 
 script:
   - /bin/bash travis.sh
-
 #after_success:
 #  - cat ./coverage/lcov.info | node node_modules/coveralls/bin/coveralls.js
-
-
 

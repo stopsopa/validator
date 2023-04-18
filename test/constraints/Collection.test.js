@@ -222,24 +222,27 @@ it("key - Collection - string but expect object with field [part 2] - explicit w
 });
 
 it("key - Collection - used together with other constraint array", (done) => {
-   validator("test", [
+  validator("test", [
     new IsNull(),
     new Collection({
       test: new IsNull(),
     }),
-  ]).then((errors) => {
-    errors = errors.getRaw();
+  ]).then(
+    (errors) => {
+      errors = errors.getRaw();
 
-    expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
+      expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
 
-    expect(errors[0][0]).toBeUndefined();
+      expect(errors[0][0]).toBeUndefined();
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("key - Collection - used together with other constraint require", (done) => {
-   validator(
+  validator(
     "test",
     new Required([
       new IsNull(),
@@ -247,19 +250,22 @@ it("key - Collection - used together with other constraint require", (done) => {
         test: new IsNull(),
       }),
     ])
-  ).then((errors) => {
-    errors = errors.getRaw();
+  ).then(
+    (errors) => {
+      errors = errors.getRaw();
 
-    expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
+      expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
 
-    expect(errors[0][0]).toEqual();
+      expect(errors[0][0]).toEqual();
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("key - Collection - used together with other constrain require x2", (done) => {
-   validator(
+  validator(
     "test",
     new Required(
       new Optional([
@@ -269,19 +275,22 @@ it("key - Collection - used together with other constrain require x2", (done) =>
         }),
       ])
     )
-  ).then((errors) => {
-    errors = errors.getRaw();
+  ).then(
+    (errors) => {
+      errors = errors.getRaw();
 
-    expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
+      expect(errors).toEqual([[undefined, "This value should be null.", "NOT_NULL_ERROR", "test"]]);
 
-    expect(errors[0][0]).toBeUndefined();
+      expect(errors[0][0]).toBeUndefined();
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("Collection-nested allowExtraFields = false & allowMissingFields = false: both", (done) => {
-   validator(
+  validator(
     {
       a: false, // checking existance not value
       b: {
@@ -302,51 +311,54 @@ it("Collection-nested allowExtraFields = false & allowMissingFields = false: bot
         f: new IsNull(),
       }),
     })
-  ).then((errors) => {
-    const raw = errors.getRaw();
+  ).then(
+    (errors) => {
+      const raw = errors.getRaw();
 
-    expect(raw).toEqual([
-      [
-        "b.c",
-        "This field is missing.",
-        "MISSING_FIELD_ERROR",
-        {
-          second: "level",
+      expect(raw).toEqual([
+        [
+          "b.c",
+          "This field is missing.",
+          "MISSING_FIELD_ERROR",
+          {
+            second: "level",
+          },
+        ],
+        [
+          "b.second",
+          "This field was not expected.",
+          "NO_SUCH_FIELD_ERROR",
+          {
+            second: "level",
+          },
+        ],
+        ["d.f", "This value should be null.", "NOT_NULL_ERROR", true],
+      ]);
+
+      const flat = errors.getFlat(true);
+
+      expect(flat).toEqual({
+        "b.c": ["This field is missing."],
+        "b.second": ["This field was not expected."],
+        "d.f": ["This value should be null."],
+      });
+
+      const tree = errors.getTree(true);
+
+      expect(tree).toEqual({
+        b: {
+          c: ["This field is missing."],
+          second: ["This field was not expected."],
         },
-      ],
-      [
-        "b.second",
-        "This field was not expected.",
-        "NO_SUCH_FIELD_ERROR",
-        {
-          second: "level",
+        d: {
+          f: ["This value should be null."],
         },
-      ],
-      ["d.f", "This value should be null.", "NOT_NULL_ERROR", true],
-    ]);
+      });
 
-    const flat = errors.getFlat(true);
-
-    expect(flat).toEqual({
-      "b.c": ["This field is missing."],
-      "b.second": ["This field was not expected."],
-      "d.f": ["This value should be null."],
-    });
-
-    const tree = errors.getTree(true);
-
-    expect(tree).toEqual({
-      b: {
-        c: ["This field is missing."],
-        second: ["This field was not expected."],
-      },
-      d: {
-        f: ["This value should be null."],
-      },
-    });
-
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("stack overflow", (done) => {
@@ -383,24 +395,27 @@ it("stack overflow", (done) => {
   //
   // process.stdout.write(`\n\n\n`);
 
-   validator(data, constraints).then((errors) => {
-    errors = errors.getRaw();
+  validator(data, constraints).then(
+    (errors) => {
+      errors = errors.getRaw();
 
-    expect(errors).toEqual([
-      [
-        Array(201)
-          .join(".")
-          .split(".")
-          .map(() => "test")
-          .join("."),
-        "This field is missing.",
-        "MISSING_FIELD_ERROR",
-        {},
-      ],
-    ]);
+      expect(errors).toEqual([
+        [
+          Array(201)
+            .join(".")
+            .split(".")
+            .map(() => "test")
+            .join("."),
+          "This field is missing.",
+          "MISSING_FIELD_ERROR",
+          {},
+        ],
+      ]);
 
-    done();
-  }, e => done({e}));
+      done();
+    },
+    (e) => done({ e })
+  );
 });
 
 it("Collection on array", (done) => {

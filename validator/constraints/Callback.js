@@ -1,31 +1,27 @@
+"use strict";
 
-'use strict';
-
-const Constraint        = require('../prototypes/Constraint');
+const Constraint = require("../prototypes/Constraint");
 
 const Callback = function (opt, extra) {
+  Constraint.apply(this, arguments); // call super constructor.
 
-    Constraint.apply(this, arguments); // call super constructor.
+  this.setExtra(extra);
 
-    this.setExtra(extra);
+  if (typeof opt !== "function") {
+    throw new Error(`Callback constraint first arg should be function`);
+  }
 
-    if (typeof opt !== 'function') {
-
-        throw new Error(`Callback constraint first arg should be function`);
-    }
-
-    this.setOptions(opt);
-}
+  this.setOptions(opt);
+};
 
 Callback.prototype = Object.create(Constraint.prototype);
 
 Callback.prototype.constructor = Callback;
 
 Callback.prototype.validate = function (value, context, path, extra) {
+  const callback = this.getOptions();
 
-    const callback = this.getOptions();
-
-    return Promise.resolve(callback(value, context, path, extra));
+  return Promise.resolve(callback(value, context, path, extra));
 };
 
 module.exports = Callback;

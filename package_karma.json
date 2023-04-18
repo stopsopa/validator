@@ -57,6 +57,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "nlab": "^0.0.122"
+    "nlab": "^0.0.122",
+    "prettier": "^2.8.7"
   }
 }

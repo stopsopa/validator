@@ -4,7 +4,10 @@
   "description": "",
   "main": "validator",
   "scripts": {
-    "test": "/bin/bash test.sh"
+    "test": "/bin/bash test.sh",
+    "style:check": "yarn prettier --config prettier.config.cjs --check .",
+    "style:fix": "yarn prettier --config prettier.config.cjs --write .",
+    "style:list": "yarn prettier --config prettier.config.cjs --list-different ."
   },
   "repository": {
     "type": "git",

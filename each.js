@@ -1,2 +1,1 @@
-
-module.exports = require('./validator/utils/each');
+module.exports = require("./validator/utils/each");

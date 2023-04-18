@@ -1,2 +1,1 @@
-
-module.exports = require('./validator/utils/delay');
+module.exports = require("./validator/utils/delay");

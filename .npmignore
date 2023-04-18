@@ -5,6 +5,7 @@
 /test.sh
 /update-badge.sh
 /.travis.yml
+/.prettierignore
 /coverage/
 /stopsopa-validator*
 /local.txt
@@ -17,6 +18,9 @@ yarn-error*
 /local.txt
 /karma_build/
 /dev/
+/.github/workflows/playwright.yml
+/.nvmrc
+/prettier.config.cjs
 /webpack/
 /webpack-KARMA.config.js
 

@@ -1,2 +1,1 @@
-
-module.exports = require('./validator/utils/size');
+module.exports = require("./validator/utils/size");

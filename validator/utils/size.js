@@ -1,21 +1,17 @@
+"use strict";
 
-'use strict';
+const isArray = require("./isArray");
 
-const isArray = require('./isArray');
+const isObject = require("./isObject");
 
-const isObject = require('./isObject');
+module.exports = (obj) => {
+  if (isArray(obj)) {
+    return obj.length;
+  }
 
-module.exports = obj => {
+  if (isObject(obj)) {
+    return Object.keys(obj).length;
+  }
 
-    if (isArray(obj)) {
-
-        return obj.length;
-    }
-
-    if (isObject(obj)) {
-
-        return Object.keys(obj).length;
-    }
-
-    return 0;
-}
+  return 0;
+};

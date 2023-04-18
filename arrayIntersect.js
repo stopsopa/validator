@@ -1,2 +1,1 @@
-
-module.exports = require('./validator/utils/arrayIntersect');
+module.exports = require("./validator/utils/arrayIntersect");

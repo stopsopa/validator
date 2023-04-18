@@ -1,101 +1,95 @@
-'use strict';
+"use strict";
 
-try {require("karma_polyfill")}catch(e){}
+try {
+  require("karma_polyfill");
+} catch (e) {}
 
-const each = require('../../validator/utils/each');
+const each = require("../../validator/utils/each");
 
-it('each() - array stop', done => {
+it("each() - array stop", (done) => {
+  const a = "qwertyuiop".split("");
 
-    const a = 'qwertyuiop'.split('');
+  const t = [];
 
-    const t = [];
+  each(a, (a) => {
+    t.push(a);
+    if (a === "t") {
+      return false;
+    }
+  });
 
-    each(a, a => {
-        t.push(a);
-        if (a === 't') {
-            return false;
-        }
-    });
+  expect(t.join("")).toBe("qwert");
 
-    expect(t.join('')).toBe('qwert');
-
-    done();
+  done();
 });
 
-it('each() - object stop', done => {
+it("each() - object stop", (done) => {
+  const a = "qwertyuiop".split("");
 
-    const a = 'qwertyuiop'.split('');
+  const b = a.reduce((acc, val) => {
+    acc[val] = val;
+    return acc;
+  }, {});
 
-    const b = a.reduce((acc, val) => {
-        acc[val] = val;
-        return acc;
-    }, {});
+  const t = [];
 
-    const t = [];
+  each(b, (a) => {
+    t.push(a);
+    if (a === "y") {
+      return false;
+    }
+  });
 
-    each(b, a => {
-        t.push(a);
-        if (a === 'y') {
-            return false;
-        }
-    })
+  expect(t.join("")).toBe("qwerty");
 
-    expect(t.join('')).toBe('qwerty');
-
-    done();
+  done();
 });
 
+it("each() - hasOwnProperty (else case) part 1", (done) => {
+  function abs() {}
 
-it('each() - hasOwnProperty (else case) part 1', done => {
+  function ext() {
+    this.test = "abs";
+    this.two = "ext";
+  }
 
-    function abs () {
-    }
+  ext.prototype = Object.create(abs.prototype);
+  ext.prototype.constructor = abs;
 
-    function ext() {
-        this.test   = 'abs';
-        this.two    = 'ext'
-    }
+  var k = new ext();
 
-    ext.prototype = Object.create(abs.prototype);
-    ext.prototype.constructor = abs;
+  const t = [];
 
-    var k = new ext();
+  each(k, (a) => {
+    t.push(a);
+  });
 
-    const t = [];
+  expect(t.join(" ")).toBe("abs ext");
 
-    each(k, a => {
-        t.push(a);
-    })
-
-    expect(t.join(' ')).toBe('abs ext');
-
-    done();
+  done();
 });
 
+it("each() - hasOwnProperty (else case) part 2", (done) => {
+  function abs() {
+    this.test = "abs";
+  }
 
+  function ext() {
+    this.two = "ext";
+  }
 
-it('each() - hasOwnProperty (else case) part 2', done => {
+  ext.prototype = Object.create(abs.prototype);
+  ext.prototype.constructor = abs;
 
-    function abs () {
-        this.test   = 'abs';
-    }
+  var k = new ext();
 
-    function ext() {
-        this.two    = 'ext'
-    }
+  const t = [];
 
-    ext.prototype = Object.create(abs.prototype);
-    ext.prototype.constructor = abs;
+  each(k, (a) => {
+    t.push(a);
+  });
 
-    var k = new ext();
+  expect(t.join("")).toBe("ext");
 
-    const t = [];
-
-    each(k, a => {
-        t.push(a);
-    })
-
-    expect(t.join('')).toBe('ext');
-
-    done();
+  done();
 });

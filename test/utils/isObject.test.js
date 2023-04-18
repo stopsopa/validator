@@ -1,24 +1,22 @@
-'use strict';
+"use strict";
 
-try {require("karma_polyfill")}catch(e){}
+try {
+  require("karma_polyfill");
+} catch (e) {}
 
-const isObject = require('../../validator/utils/isObject');
+const isObject = require("../../validator/utils/isObject");
 
-it('isObject()', () => {
-
-    expect(isObject()).toBe(false);
+it("isObject()", () => {
+  expect(isObject()).toBe(false);
 });
-it('isObject({})', () => {
-
-    expect(isObject({})).toBe(true);
-});
-
-it('isObject([]) - ! special case', () => {
-
-    expect(isObject([])).toBe(false);
+it("isObject({})", () => {
+  expect(isObject({})).toBe(true);
 });
 
-it('isObject(new Date)', () => {
+it("isObject([]) - ! special case", () => {
+  expect(isObject([])).toBe(false);
+});
 
-    expect(isObject(new Date())).toBe(false);
+it("isObject(new Date)", () => {
+  expect(isObject(new Date())).toBe(false);
 });

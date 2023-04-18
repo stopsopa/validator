@@ -1,83 +1,71 @@
+"use strict";
 
-'use strict';
+const ViolationBuilder = require("./ViolationBuilder");
 
-const ViolationBuilder          = require('./ViolationBuilder');
-
-const ConstraintViolationList   = require('../logic/ConstraintViolationList');
+const ConstraintViolationList = require("../logic/ConstraintViolationList");
 
 const Context = function (rootData, extra = {}) {
+  this.violations = [];
 
-    this.violations = [];
+  this.rootData = rootData;
 
-    this.rootData   = rootData;
+  this.extra = extra;
 
-    this.extra      = extra;
-
-    this.stack      = {};
+  this.stack = {};
 };
 
 Context.prototype.buildViolation = function () {
+  let args = Array.prototype.slice.call(arguments);
 
-    let args = Array.prototype.slice.call(arguments);
+  if (args.length === 0) {
+    throw new Error(`new Context(message).buildViolation(message): message not specified`);
+  }
 
-    if ( args.length === 0 ) {
+  if (typeof args[0] !== "string") {
+    throw new Error(`new Context(message).buildViolation(message): message arg must be string`);
+  }
 
-        throw new Error(`new Context(message).buildViolation(message): message not specified`);
-    }
-
-    if (typeof args[0] !== 'string') {
-
-        throw new Error(`new Context(message).buildViolation(message): message arg must be string`);
-    }
-
-    return new ViolationBuilder(args[0], this);
-}
+  return new ViolationBuilder(args[0], this);
+};
 Context.prototype.addViolation = function (path, message, code, invalidValue, extra) {
+  const violation = [path, message, code, invalidValue];
 
-    const violation = [path, message, code, invalidValue];
+  if (typeof extra !== "undefined") {
+    violation.push(extra);
+  }
 
-    if (typeof extra !== 'undefined') {
-
-        violation.push(extra);
-    }
-
-    this.violations.push(violation);
+  this.violations.push(violation);
 };
 Context.prototype.addTrigger = function (async = 0, trigger) {
+  if (this.stack[async]) {
+    this.stack[async].push(trigger);
+  } else {
+    this.stack[async] = [trigger];
+  }
 
-    if ( this.stack[async] ) {
-
-        this.stack[async].push(trigger);
-    }
-    else {
-
-        this.stack[async] = [trigger];
-    }
-
-    return this;
-}
+  return this;
+};
 Context.prototype.getTriggers = function () {
+  const list = Object.keys(this.stack)
+    .sort()
+    .reduce((acc, key) => {
+      this.stack[key].length && acc.push(this.stack[key]);
 
-    const list = Object.keys(this.stack).sort().reduce((acc, key) => {
-
-        this.stack[key].length && acc.push(this.stack[key]);
-
-        return acc;
-
+      return acc;
     }, []);
 
-    this.stack = {};
+  this.stack = {};
 
-    return list;
-}
+  return list;
+};
 Context.prototype.getViolations = function () {
-    return new ConstraintViolationList(this.violations);
-}
+  return new ConstraintViolationList(this.violations);
+};
 Context.prototype.getRoot = function () {
-    return this.rootData;
-}
+  return this.rootData;
+};
 Context.prototype.getExtra = function () {
-    return this.extra;
-}
+  return this.extra;
+};
 
 module.exports = Context;

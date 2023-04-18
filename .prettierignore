@@ -1,0 +1,8 @@
+/webpack*
+examples.es*
+/coverage/
+/dist/
+karma.config.js
+package_karma.json
+server.js
+.github/workflows/playwright.yml

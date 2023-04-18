@@ -1,14 +1,15 @@
-'use strict';
+"use strict";
 
-try {require("karma_polyfill")}catch(e){}
+try {
+  require("karma_polyfill");
+} catch (e) {}
 
-const Existence     = require('../../validator/prototypes/Existence');
+const Existence = require("../../validator/prototypes/Existence");
 
-it('Existance - just for coverage', done => {
+it("Existance - just for coverage", (done) => {
+  var k = new Existence();
 
-    var k = new Existence();
+  expect(k instanceof Existence).toBe(true);
 
-    expect(k instanceof Existence).toBe(true);
-
-    done();
+  done();
 });

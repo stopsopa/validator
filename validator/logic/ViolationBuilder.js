@@ -1,98 +1,77 @@
-
-'use strict';
+"use strict";
 
 const ViolationBuilder = function (message, context) {
-    this.parameters     = {};
-    this.code           = undefined;
-    this.path           = undefined;
-    this.plural         = false;
-    this.invalidValue   = undefined;
-    this.extra          = undefined;
-    this.message        = message;
-    this.context        = context;
-}
+  this.parameters = {};
+  this.code = undefined;
+  this.path = undefined;
+  this.plural = false;
+  this.invalidValue = undefined;
+  this.extra = undefined;
+  this.message = message;
+  this.context = context;
+};
 ViolationBuilder.prototype.setParameter = function (name, value) {
+  this.parameters[name] = value;
 
-    this.parameters[name] = value;
-
-    return this;
-}
+  return this;
+};
 ViolationBuilder.prototype.setCode = function (code) {
+  this.code = code;
 
-    this.code = code;
-
-    return this;
-}
+  return this;
+};
 ViolationBuilder.prototype.atPath = function (path) {
+  this.path = path;
 
-    this.path = path;
-
-    return this;
-}
+  return this;
+};
 ViolationBuilder.prototype.setPlural = function (plural) {
+  if (!Number.isInteger(plural) || plural < 0) {
+    throw new Error(`ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty`);
+  }
 
-    if ( ! Number.isInteger(plural) || plural < 0 ) {
+  this.plural = plural;
 
-        throw new Error(`ViolationBuilder.setPlural(plural) - plural parameter should be integer in range 0-inifinty`)
-    }
-
-    this.plural = plural;
-
-    return this;
-}
+  return this;
+};
 ViolationBuilder.prototype.setInvalidValue = function (invalidValue) {
+  this.invalidValue = invalidValue;
 
-    this.invalidValue = invalidValue;
-
-    return this;
-}
+  return this;
+};
 ViolationBuilder.prototype.setExtra = function (extra) {
+  this.extra = extra;
 
-    this.extra = extra;
+  return this;
+};
+ViolationBuilder.prototype.addViolation = function () {
+  if (this.code === undefined) {
+    throw new Error(`ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)`);
+  }
 
-    return this;
-}
-ViolationBuilder.prototype.addViolation = function() {
+  let message = this.message;
 
-    if ( this.code === undefined ) {
+  if (typeof message === "string" && message.indexOf("|") > -1 && this.plural !== false && this.plural > -1) {
+    const split = message.split("|");
 
-        throw new Error(`ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)`);
+    if (split.length > this.plural) {
+      message = split[this.plural];
     }
+  }
 
-    let message = this.message;
+  Object.keys(this.parameters).map((key) => {
+    let cp;
 
-    if (typeof message === 'string' && message.indexOf('|') > -1 && this.plural !== false && this.plural > -1) {
+    do {
+      cp = message;
 
-        const split = message.split('|');
+      message = message.replace(key, this.parameters[key]);
+    } while (cp !== message);
+  });
 
-        if (split.length > this.plural) {
+  this.context.addViolation(this.path, message, this.code, this.invalidValue, this.extra);
 
-            message = split[this.plural];
-        }
-    }
-
-    Object.keys(this.parameters).map(key => {
-
-        let cp;
-
-        do {
-
-            cp = message;
-
-            message = message.replace(key, this.parameters[key]);
-
-        } while (cp !== message);
-    });
-
-    this.context.addViolation(
-        this.path,
-        message,
-        this.code,
-        this.invalidValue,
-        this.extra,
-    );
-
-    return this;
-}
+  return this;
+};
 
 module.exports = ViolationBuilder;

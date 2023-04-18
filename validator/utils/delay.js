@@ -1,16 +1,11 @@
-
-'use strict';
+"use strict";
 
 /**
     return Promise.resolve()
         .then(() => delay(3000, 'ok'))
 
  */
-const delay = (time, data) =>
-    new Promise(
-        resolve => time ? setTimeout(resolve, time, data) : resolve(data)
-    )
-;
+const delay = (time, data) => new Promise((resolve) => (time ? setTimeout(resolve, time, data) : resolve(data)));
 /**
     return Promise.resolve()
         .then(
@@ -19,12 +14,7 @@ const delay = (time, data) =>
         )
 
  */
-const reject = (time, data) =>
-    new Promise(
-        (resolve, reject) => time ? setTimeout(reject, time, data) : reject(data)
-    )
-;
-
+const reject = (time, data) => new Promise((resolve, reject) => (time ? setTimeout(reject, time, data) : reject(data)));
 /**
  * Promise.reject('test')
  *     .then(...then(1000))
@@ -37,13 +27,10 @@ const reject = (time, data) =>
  * @param time
  */
 
-const then = time => ([
-    data => delay(time, data),
-    data => delay.reject(time, data)
-]);
+const then = (time) => [(data) => delay(time, data), (data) => delay.reject(time, data)];
 
-delay.reject    = reject;
+delay.reject = reject;
 
-delay.then      = then;
+delay.then = then;
 
 module.exports = delay;

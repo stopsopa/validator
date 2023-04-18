@@ -1,7 +1,6 @@
+"use strict";
 
-'use strict';
-
-const isArray   = require('./isArray');
+const isArray = require("./isArray");
 
 /**
  *
@@ -12,49 +11,39 @@ const isArray   = require('./isArray');
  * @returns {*}
  */
 const get = function (source, key) {
+  // log('key', key);
+  // log('source', source)
 
-    // log('key', key);
-    // log('source', source)
+  if (!key) {
+    return source;
+  }
 
-    if ( ! key ) {
+  if (typeof key === "string" && key.indexOf(".") > -1) {
+    key = key.split(".");
+  }
 
-        return source;
-    }
+  if (!isArray(key)) {
+    key = [key];
+  }
 
-    if (typeof key === 'string' && key.indexOf('.') > -1) {
+  let tmp = source,
+    k;
 
-        key = key.split('.');
-    }
-
-    if ( ! isArray(key)) {
-
-        key = [key];
-    }
-
-    let tmp = source, k;
-
-    while (k = key.shift()) {
-
-        try {
-            if (key.length) {
-
-                tmp = tmp[k];
-            }
-            else {
-
-                if (typeof tmp[k] === 'undefined') {
-
-                    return arguments[2];
-                }
-
-                return tmp[k];
-            }
+  while ((k = key.shift())) {
+    try {
+      if (key.length) {
+        tmp = tmp[k];
+      } else {
+        if (typeof tmp[k] === "undefined") {
+          return arguments[2];
         }
-        catch (e) {
 
-            return arguments[2];
-        }
+        return tmp[k];
+      }
+    } catch (e) {
+      return arguments[2];
     }
-}
+  }
+};
 
 module.exports = get;
