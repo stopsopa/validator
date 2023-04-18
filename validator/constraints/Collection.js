@@ -103,7 +103,7 @@ Collection.prototype.validate = function (value, context, path, extra) {
 
         if ( ! opt.allowExtraFields ) {
 
-            each(value, (v, field) => {
+            each(value, (_, field) => {
 
                 if (typeof opt.fields[field] === 'undefined') {
 
@@ -129,7 +129,7 @@ Collection.prototype.validateChildren = function (value, context, path, extra) {
 
     let tmp;
 
-    each(value,(v, name) => {
+    each(value,(_, name) => {
 
         if (tmp = opt.fields[name]) {
 

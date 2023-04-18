@@ -104,6 +104,16 @@ Type.prototype.logic = function (value, type) {
 
         t = type[i];
 
+        if (t === 'arr') {
+
+            t = 'array';
+        }
+
+        if (t === 'obj') {
+
+            t = 'object';
+        }
+
         if (t === 'int') {
 
             t = 'integer';
@@ -147,6 +157,6 @@ Type.prototype.logic = function (value, type) {
     return valid;
 }
 
-Type.prototype.allowedTypes = 'undefined object boolean bool number str string symbol function integer int array'.split(' ');
+Type.prototype.allowedTypes = 'undefined obj object boolean bool number str string symbol function integer int arr array'.split(' ');
 
 module.exports = Type;
