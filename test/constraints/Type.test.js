@@ -70,8 +70,9 @@ it("Type - not string", (done) => {
       })
     );
   } catch (e) {
+    
     expect(String(e)).toEqual(
-      `Error: Type constraint: Each of types have to be string and one of: "undefined", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "array"`
+      `Error: Type constraint: Each of types have to be string and one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array"`
     );
 
     done();
@@ -89,7 +90,7 @@ it("Type - string", (done) => {
   } catch (e) {
 
     expect(String(e)).toEqual(
-      `Error: Type constraint: One of types is string but is not one of: "undefined", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "array"`
+      `Error: Type constraint: One of types is string but is not one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array"`
     );
 
     done();
@@ -177,8 +178,9 @@ it("Type - array of types - wrong type", (done) => {
       })
     );
   } catch (e) {
+    
     expect(String(e)).toEqual(
-      `Error: Type constraint: One of types is string but is not one of: "undefined", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "array"`
+      `Error: Type constraint: One of types is string but is not one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array"`
     );
 
     done();
