@@ -370,4 +370,34 @@ describe("option_require_case", () => {
       }
     })();
   });
+
+  it("should be object but no warning since optional and missing", (done) => {
+    (async function () {
+      try {
+        const errors = await validator(
+          {},
+          new Required([
+            new Type("object"),
+            new Collection({
+              one: new Optional([
+                new Type("object"),
+                new Collection({
+                  // since parent is optional and it's not defined in input data, this Require is not tested, nor new Type('obj')
+                  two: new Required(new Type("obj")),
+                }),
+              ]),
+            }),
+          ])
+        );
+
+        const tree = errors.getTree();
+
+        expect(tree).toEqual({});
+
+        done();
+      } catch (e) {
+        done(`Shouldn't happen: >${e}<`);
+      }
+    })();
+  });
 });
