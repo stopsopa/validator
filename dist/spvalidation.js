@@ -146,13 +146,13 @@ var isObject = __webpack_require__(228);
 var isArray = __webpack_require__(759);
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'This value should be blank.'
+  message: "This value should be blank."
 };
 var Blank = function Blank(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -161,7 +161,7 @@ var Blank = function Blank(opt, extra) {
 };
 Blank.prototype = Object.create(Constraint.prototype);
 Blank.prototype.constructor = Blank;
-Blank.prototype.NOT_BLANK_ERROR = 'NOT_BLANK_ERROR';
+Blank.prototype.NOT_BLANK_ERROR = "NOT_BLANK_ERROR";
 Blank.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   var blank = Blank.prototype.logic(value);
@@ -170,16 +170,16 @@ Blank.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(Blank.prototype.NOT_BLANK_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Blank');
+      return Promise.reject("stop Blank");
     }
   }
-  return Promise.resolve('resolve Blank');
+  return Promise.resolve("resolve Blank");
 };
 Blank.prototype.logic = function (value) {
   var blank = false;
   switch (true) {
     case !value: // covers: false, null, undefined, '', 0, NaN
-    case value === '0': // covers: '0'
+    case value === "0": // covers: '0'
     case isArray(value) && value.length === 0:
     case isObject(value) && Object.keys(value).length === 0:
       blank = true;
@@ -202,7 +202,7 @@ var Callback = function Callback(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt !== 'function') {
+  if (typeof opt !== "function") {
     throw new Error("Callback constraint first arg should be function");
   }
   this.setOptions(opt);
@@ -227,10 +227,10 @@ var isObject = __webpack_require__(228);
 var isArray = __webpack_require__(759);
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'The value you selected is not a valid choice.',
-  multipleMessage: 'One or more of the given values is invalid.',
-  minMessage: 'You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.',
-  maxMessage: 'You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.',
+  message: "The value you selected is not a valid choice.",
+  multipleMessage: "One or more of the given values is invalid.",
+  minMessage: "You must select at least {{ limit }} choice.|You must select at least {{ limit }} choices.",
+  maxMessage: "You must select at most {{ limit }} choice.|You must select at most {{ limit }} choices.",
   multiple: false
   // choices         : []
   // max,
@@ -254,43 +254,43 @@ var Choice = function Choice(opt, extra) {
 };
 Choice.prototype = Object.create(Constraint.prototype);
 Choice.prototype.constructor = Choice;
-Choice.prototype.NO_SUCH_CHOICE_ERROR = 'NO_SUCH_CHOICE_ERROR';
-Choice.prototype.TOO_FEW_ERROR = 'TOO_FEW_ERROR';
-Choice.prototype.TOO_MANY_ERROR = 'TOO_MANY_ERROR';
+Choice.prototype.NO_SUCH_CHOICE_ERROR = "NO_SUCH_CHOICE_ERROR";
+Choice.prototype.TOO_FEW_ERROR = "TOO_FEW_ERROR";
+Choice.prototype.TOO_MANY_ERROR = "TOO_MANY_ERROR";
 var promise = function promise(extra, f) {
   if (extra && extra.stop) {
-    return Promise.reject('stop Choice' + f);
+    return Promise.reject("stop Choice" + f);
   }
-  return Promise.resolve('resolve Choice' + f);
+  return Promise.resolve("resolve Choice" + f);
 };
 Choice.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (value === null) {
-    return Promise.resolve('Choice');
+    return Promise.resolve("Choice");
   }
   if (opt.multiple) {
     if (isArray(value)) {
       var count = value.length;
       for (var i = 0, l = count; i < l; i += 1) {
         if (opt.choices.indexOf(value[i]) === -1) {
-          context.buildViolation(opt.multipleMessage).atPath(path + '.' + i).setParameter('{{ value }}', value[i]).setInvalidValue(value).setCode(Choice.prototype.NO_SUCH_CHOICE_ERROR).setExtra(extra).addViolation();
+          context.buildViolation(opt.multipleMessage).atPath(path + "." + i).setParameter("{{ value }}", value[i]).setInvalidValue(value).setCode(Choice.prototype.NO_SUCH_CHOICE_ERROR).setExtra(extra).addViolation();
           return promise(extra, 2);
         }
       }
-      if (typeof opt.min !== 'undefined' && count < opt.min) {
-        context.buildViolation(opt.minMessage).atPath(path).setParameter('{{ limit }}', opt.min).setPlural(opt.min === 1 ? 0 : 1).setInvalidValue(value).setCode(Choice.prototype.TOO_FEW_ERROR).setExtra(extra).addViolation();
+      if (typeof opt.min !== "undefined" && count < opt.min) {
+        context.buildViolation(opt.minMessage).atPath(path).setParameter("{{ limit }}", opt.min).setPlural(opt.min === 1 ? 0 : 1).setInvalidValue(value).setCode(Choice.prototype.TOO_FEW_ERROR).setExtra(extra).addViolation();
         return promise(extra, 2);
       }
-      if (typeof opt.max !== 'undefined' && count > opt.max) {
-        context.buildViolation(opt.maxMessage).atPath(path).setParameter('{{ limit }}', opt.max).setPlural(opt.max === 1 ? 0 : 1).setInvalidValue(value).setCode(Choice.prototype.TOO_MANY_ERROR).setExtra(extra).addViolation();
+      if (typeof opt.max !== "undefined" && count > opt.max) {
+        context.buildViolation(opt.maxMessage).atPath(path).setParameter("{{ limit }}", opt.max).setPlural(opt.max === 1 ? 0 : 1).setInvalidValue(value).setCode(Choice.prototype.TOO_MANY_ERROR).setExtra(extra).addViolation();
         return promise(extra, 3);
       }
     }
   } else if (opt.choices.indexOf(value) === -1) {
-    context.buildViolation(opt.message).atPath(path).setParameter('{{ value }}', value).setInvalidValue(value).setCode(Choice.prototype.NO_SUCH_CHOICE_ERROR).setExtra(extra).addViolation();
+    context.buildViolation(opt.message).atPath(path).setParameter("{{ value }}", value).setInvalidValue(value).setCode(Choice.prototype.NO_SUCH_CHOICE_ERROR).setExtra(extra).addViolation();
     return promise(extra, 4);
   }
-  return Promise.resolve('Choice1');
+  return Promise.resolve("Choice1");
 };
 module.exports = Choice;
 
@@ -315,8 +315,8 @@ var def = {
   fields: {},
   allowExtraFields: false,
   allowMissingFields: false,
-  extraFieldsMessage: 'This field was not expected.',
-  missingFieldsMessage: 'This field is missing.'
+  extraFieldsMessage: "This field was not expected.",
+  missingFieldsMessage: "This field is missing."
 };
 var Collection = function Collection(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
@@ -347,38 +347,38 @@ var Collection = function Collection(opt, extra) {
 };
 Collection.prototype = Object.create(Constraint.prototype);
 Collection.prototype.constructor = Collection;
-Collection.prototype.MISSING_FIELD_ERROR = 'MISSING_FIELD_ERROR';
-Collection.prototype.NO_SUCH_FIELD_ERROR = 'NO_SUCH_FIELD_ERROR';
+Collection.prototype.MISSING_FIELD_ERROR = "MISSING_FIELD_ERROR";
+Collection.prototype.NO_SUCH_FIELD_ERROR = "NO_SUCH_FIELD_ERROR";
 Collection.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (isObject(value) || isArray(value)) {
     Object.keys(opt.fields).forEach(function (field) {
-      if (typeof value[field] === 'undefined') {
+      if (typeof value[field] === "undefined") {
         if (!(opt.fields[field] instanceof Optional) && !opt.allowMissingFields) {
-          context.buildViolation(opt.missingFieldsMessage).atPath(typeof path === 'undefined' ? field : path + '.' + field).setParameter('{{ field }}', field).setCode(Collection.prototype.MISSING_FIELD_ERROR).setInvalidValue(value).addViolation();
+          context.buildViolation(opt.missingFieldsMessage).atPath(typeof path === "undefined" ? field : path + "." + field).setParameter("{{ field }}", field).setCode(Collection.prototype.MISSING_FIELD_ERROR).setInvalidValue(value).addViolation();
         }
       }
     });
     if (!opt.allowExtraFields) {
-      each(value, function (v, field) {
-        if (typeof opt.fields[field] === 'undefined') {
-          context.buildViolation(opt.extraFieldsMessage).atPath(typeof path === 'undefined' ? field : path + '.' + field).setParameter('{{ field }}', field).setCode(Collection.prototype.NO_SUCH_FIELD_ERROR).setInvalidValue(value).addViolation();
+      each(value, function (_, field) {
+        if (typeof opt.fields[field] === "undefined") {
+          context.buildViolation(opt.extraFieldsMessage).atPath(typeof path === "undefined" ? field : path + "." + field).setParameter("{{ field }}", field).setCode(Collection.prototype.NO_SUCH_FIELD_ERROR).setInvalidValue(value).addViolation();
         }
       });
     }
   }
-  return Promise.resolve('resolve Collection2');
+  return Promise.resolve("resolve Collection2");
 };
 Collection.prototype.validateChildren = function (value, context, path, extra) {
   var opt = this.getOptions();
   var tmp;
-  each(value, function (v, name) {
+  each(value, function (_, name) {
     if (tmp = opt.fields[name]) {
       connectAndSort({
         value: value[name],
         constraints: tmp.getOptions(),
         context: context,
-        path: path ? path + '.' + name : name
+        path: path ? path + "." + name : name
       });
     }
   });
@@ -398,9 +398,9 @@ var isArray = __webpack_require__(759);
 var isObject = __webpack_require__(228);
 var Constraint = __webpack_require__(588);
 var def = {
-  minMessage: 'This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.',
-  maxMessage: 'This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.',
-  exactMessage: 'This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements.'
+  minMessage: "This collection should contain {{ limit }} element or more.|This collection should contain {{ limit }} elements or more.",
+  maxMessage: "This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less.",
+  exactMessage: "This collection should contain exactly {{ limit }} element.|This collection should contain exactly {{ limit }} elements."
   // max,
   // min;
 };
@@ -425,13 +425,13 @@ function Count() {
   } else {
     throw new Error("Count: Wrong parameter type have been given to this constraint, typeof: " + _typeof(opt));
   }
-  if (typeof opt.min === 'undefined' && typeof opt.max === 'undefined') {
+  if (typeof opt.min === "undefined" && typeof opt.max === "undefined") {
     throw new Error("Count: Either option \"min\" or \"max\" must be given for constraint");
   }
-  if (typeof opt.min !== 'undefined' && !Number.isInteger(opt.min)) {
+  if (typeof opt.min !== "undefined" && !Number.isInteger(opt.min)) {
     throw new Error("Count: min should be integer");
   }
-  if (typeof opt.max !== 'undefined' && !Number.isInteger(opt.max)) {
+  if (typeof opt.max !== "undefined" && !Number.isInteger(opt.max)) {
     throw new Error("Count: max should be integer");
   }
   if (opt.min < 0) {
@@ -444,8 +444,8 @@ function Count() {
 }
 Count.prototype = Object.create(Constraint.prototype);
 Count.prototype.constructor = Count;
-Count.prototype.TOO_FEW_ERROR = 'TOO_FEW_ERROR';
-Count.prototype.TOO_MANY_ERROR = 'TOO_MANY_ERROR';
+Count.prototype.TOO_FEW_ERROR = "TOO_FEW_ERROR";
+Count.prototype.TOO_MANY_ERROR = "TOO_MANY_ERROR";
 Count.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   var count = false;
@@ -456,22 +456,22 @@ Count.prototype.validate = function (value, context, path, extra) {
     count = Object.keys(value).length;
   }
   if (count !== false) {
-    if (typeof opt.max !== 'undefined' && count > opt.max) {
-      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage).atPath(path).setParameter('{{ count }}', count).setParameter('{{ limit }}', opt.max).setInvalidValue(value).setPlural(opt.max === 1 ? 0 : 1).setCode(Count.prototype.TOO_MANY_ERROR).addViolation();
+    if (typeof opt.max !== "undefined" && count > opt.max) {
+      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage).atPath(path).setParameter("{{ count }}", count).setParameter("{{ limit }}", opt.max).setInvalidValue(value).setPlural(opt.max === 1 ? 0 : 1).setCode(Count.prototype.TOO_MANY_ERROR).addViolation();
       if (extra && extra.stop) {
-        return Promise.reject('stop Count');
+        return Promise.reject("stop Count");
       }
-      return Promise.resolve('resolve Count');
+      return Promise.resolve("resolve Count");
     }
-    if (typeof opt.min !== 'undefined' && count < opt.min) {
-      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage).atPath(path).setParameter('{{ count }}', count).setParameter('{{ limit }}', opt.min).setInvalidValue(value).setPlural(opt.min === 1 ? 0 : 1).setCode(Count.prototype.TOO_FEW_ERROR).addViolation();
+    if (typeof opt.min !== "undefined" && count < opt.min) {
+      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage).atPath(path).setParameter("{{ count }}", count).setParameter("{{ limit }}", opt.min).setInvalidValue(value).setPlural(opt.min === 1 ? 0 : 1).setCode(Count.prototype.TOO_FEW_ERROR).addViolation();
       if (extra && extra.stop) {
-        return Promise.reject('stop Count');
+        return Promise.reject("stop Count");
       }
-      return Promise.resolve('resolve Count');
+      return Promise.resolve("resolve Count");
     }
   }
-  return Promise.resolve('Count');
+  return Promise.resolve("Count");
 };
 module.exports = Count;
 
@@ -485,13 +485,13 @@ module.exports = Count;
 
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'This value is not a valid email address.'
+  message: "This value is not a valid email address."
 };
 var Email = function Email(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -500,7 +500,7 @@ var Email = function Email(opt, extra) {
 };
 Email.prototype = Object.create(Constraint.prototype);
 Email.prototype.constructor = Email;
-Email.prototype.INVALID_EMAIL_ERROR = 'INVALID_EMAIL_ERROR';
+Email.prototype.INVALID_EMAIL_ERROR = "INVALID_EMAIL_ERROR";
 Email.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (!Email.prototype.logic(value)) {
@@ -508,13 +508,13 @@ Email.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(Email.prototype.INVALID_EMAIL_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Email');
+      return Promise.reject("stop Email");
     }
   }
-  return Promise.resolve('resolve Email');
+  return Promise.resolve("resolve Email");
 };
 Email.prototype.logic = function (email) {
-  if (typeof email === 'string') {
+  if (typeof email === "string") {
     return /^.+\@\S+\.\S+$/.test(email);
   }
   return false;
@@ -531,13 +531,13 @@ module.exports = Email;
 
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'This value should be false.'
+  message: "This value should be false."
 };
 var IsFalse = function IsFalse(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -546,7 +546,7 @@ var IsFalse = function IsFalse(opt, extra) {
 };
 IsFalse.prototype = Object.create(Constraint.prototype);
 IsFalse.prototype.constructor = IsFalse;
-IsFalse.prototype.NOT_FALSE_ERROR = 'NOT_FALSE_ERROR';
+IsFalse.prototype.NOT_FALSE_ERROR = "NOT_FALSE_ERROR";
 IsFalse.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (value !== false) {
@@ -554,10 +554,10 @@ IsFalse.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(IsFalse.prototype.NOT_FALSE_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop IsFalse');
+      return Promise.reject("stop IsFalse");
     }
   }
-  return Promise.resolve('resolve IsFalse');
+  return Promise.resolve("resolve IsFalse");
 };
 module.exports = IsFalse;
 
@@ -571,13 +571,13 @@ module.exports = IsFalse;
 
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'This value should be null.'
+  message: "This value should be null."
 };
 var IsNull = function IsNull(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -586,7 +586,7 @@ var IsNull = function IsNull(opt, extra) {
 };
 IsNull.prototype = Object.create(Constraint.prototype);
 IsNull.prototype.constructor = IsNull;
-IsNull.prototype.NOT_NULL_ERROR = 'NOT_NULL_ERROR';
+IsNull.prototype.NOT_NULL_ERROR = "NOT_NULL_ERROR";
 IsNull.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (value !== null) {
@@ -594,10 +594,10 @@ IsNull.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(IsNull.prototype.NOT_NULL_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop IsNull');
+      return Promise.reject("stop IsNull");
     }
   }
-  return Promise.resolve('resolve IsNull');
+  return Promise.resolve("resolve IsNull");
 };
 module.exports = IsNull;
 
@@ -611,13 +611,13 @@ module.exports = IsNull;
 
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'This value should be true.'
+  message: "This value should be true."
 };
 var IsTrue = function IsTrue(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -626,7 +626,7 @@ var IsTrue = function IsTrue(opt, extra) {
 };
 IsTrue.prototype = Object.create(Constraint.prototype);
 IsTrue.prototype.constructor = IsTrue;
-IsTrue.prototype.NOT_TRUE_ERROR = 'NOT_TRUE_ERROR';
+IsTrue.prototype.NOT_TRUE_ERROR = "NOT_TRUE_ERROR";
 IsTrue.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (value !== true) {
@@ -634,10 +634,10 @@ IsTrue.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(IsTrue.prototype.NOT_TRUE_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop IsTrue');
+      return Promise.reject("stop IsTrue");
     }
   }
-  return Promise.resolve('resolve IsTrue');
+  return Promise.resolve("resolve IsTrue");
 };
 module.exports = IsTrue;
 
@@ -653,9 +653,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 var isObject = __webpack_require__(228);
 var Constraint = __webpack_require__(588);
 var def = {
-  maxMessage: 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
-  minMessage: 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
-  exactMessage: 'This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.'
+  maxMessage: "This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.",
+  minMessage: "This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.",
+  exactMessage: "This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters."
   // max,
   // min;
 };
@@ -680,35 +680,35 @@ function Length() {
   } else {
     throw new Error("Length: Wrong parameter type have been given to this constraint, typeof: " + _typeof(opt));
   }
-  if (typeof opt.min === 'undefined' && typeof opt.max === 'undefined') {
+  if (typeof opt.min === "undefined" && typeof opt.max === "undefined") {
     throw new Error("Length: Either option \"min\" or \"max\" must be given for constraint");
   }
   this.setOptions(opt);
 }
 Length.prototype = Object.create(Constraint.prototype);
 Length.prototype.constructor = Length;
-Length.prototype.TOO_SHORT_ERROR = 'TOO_SHORT_ERROR';
-Length.prototype.TOO_LONG_ERROR = 'TOO_LONG_ERROR';
+Length.prototype.TOO_SHORT_ERROR = "TOO_SHORT_ERROR";
+Length.prototype.TOO_LONG_ERROR = "TOO_LONG_ERROR";
 Length.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     var length = value.length;
-    if (typeof opt.max !== 'undefined' && length > opt.max) {
-      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage).atPath(path).setPlural(opt.max === 1 ? 0 : 1).setParameter('{{ value }}', value).setParameter('{{ limit }}', opt.max).setInvalidValue(value).setCode(Length.prototype.TOO_LONG_ERROR).setExtra(extra).addViolation();
+    if (typeof opt.max !== "undefined" && length > opt.max) {
+      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.maxMessage).atPath(path).setPlural(opt.max === 1 ? 0 : 1).setParameter("{{ value }}", value).setParameter("{{ limit }}", opt.max).setInvalidValue(value).setCode(Length.prototype.TOO_LONG_ERROR).setExtra(extra).addViolation();
       if (extra && extra.stop) {
-        return Promise.reject('stop Length');
+        return Promise.reject("stop Length");
       }
-      return Promise.resolve('resolve Length');
+      return Promise.resolve("resolve Length");
     }
-    if (typeof opt.min !== 'undefined' && length < opt.min) {
-      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage).atPath(path).setPlural(opt.min === 1 ? 0 : 1).setParameter('{{ value }}', value).setParameter('{{ limit }}', opt.min).setInvalidValue(value).setCode(Length.prototype.TOO_SHORT_ERROR).setExtra(extra).addViolation();
+    if (typeof opt.min !== "undefined" && length < opt.min) {
+      context.buildViolation(opt.min === opt.max ? opt.exactMessage : opt.minMessage).atPath(path).setPlural(opt.min === 1 ? 0 : 1).setParameter("{{ value }}", value).setParameter("{{ limit }}", opt.min).setInvalidValue(value).setCode(Length.prototype.TOO_SHORT_ERROR).setExtra(extra).addViolation();
       if (extra && extra.stop) {
-        return Promise.reject('stop Length');
+        return Promise.reject("stop Length");
       }
-      return Promise.resolve('resolve Length');
+      return Promise.resolve("resolve Length");
     }
   }
-  return Promise.resolve('Length');
+  return Promise.resolve("Length");
 };
 module.exports = Length;
 
@@ -723,13 +723,13 @@ module.exports = Length;
 var Constraint = __webpack_require__(588);
 var Blank = __webpack_require__(614);
 var def = {
-  message: 'This value should not be blank.'
+  message: "This value should not be blank."
 };
 var NotBlank = function NotBlank(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -738,7 +738,7 @@ var NotBlank = function NotBlank(opt, extra) {
 };
 NotBlank.prototype = Object.create(Constraint.prototype);
 NotBlank.prototype.constructor = NotBlank;
-NotBlank.prototype.IS_BLANK_ERROR = 'IS_BLANK_ERROR';
+NotBlank.prototype.IS_BLANK_ERROR = "IS_BLANK_ERROR";
 NotBlank.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   var blank = Blank.prototype.logic(value);
@@ -747,10 +747,10 @@ NotBlank.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(NotBlank.prototype.IS_BLANK_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop NotBlank');
+      return Promise.reject("stop NotBlank");
     }
   }
-  return Promise.resolve('resolve NotBlank');
+  return Promise.resolve("resolve NotBlank");
 };
 module.exports = NotBlank;
 
@@ -764,13 +764,13 @@ module.exports = NotBlank;
 
 var Constraint = __webpack_require__(588);
 var def = {
-  message: 'This value should be true.'
+  message: "This value should be true."
 };
 var NotNull = function NotNull(opt, extra) {
   Constraint.apply(this, arguments); // call super constructor.
 
   this.setExtra(extra);
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       message: opt
     };
@@ -779,7 +779,7 @@ var NotNull = function NotNull(opt, extra) {
 };
 NotNull.prototype = Object.create(Constraint.prototype);
 NotNull.prototype.constructor = NotNull;
-NotNull.prototype.IS_NULL_ERROR = 'IS_NULL_ERROR';
+NotNull.prototype.IS_NULL_ERROR = "IS_NULL_ERROR";
 NotNull.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (value === null) {
@@ -787,10 +787,10 @@ NotNull.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(NotNull.prototype.IS_NULL_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop NotNull');
+      return Promise.reject("stop NotNull");
     }
   }
-  return Promise.resolve('resolve NotNull');
+  return Promise.resolve("resolve NotNull");
 };
 module.exports = NotNull;
 
@@ -834,7 +834,7 @@ module.exports = Optional;
 var Constraint = __webpack_require__(588);
 var isObject = __webpack_require__(228);
 var def = {
-  message: 'This value is not valid.',
+  message: "This value is not valid.",
   match: true
 };
 var Regex = function Regex(opt, extra) {
@@ -856,7 +856,7 @@ var Regex = function Regex(opt, extra) {
 };
 Regex.prototype = Object.create(Constraint.prototype);
 Regex.prototype.constructor = Regex;
-Regex.prototype.REGEX_FAILED_ERROR = 'REGEX_FAILED_ERROR';
+Regex.prototype.REGEX_FAILED_ERROR = "REGEX_FAILED_ERROR";
 Regex.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (!Regex.prototype.logic(value, opt.pattern, opt.match)) {
@@ -864,16 +864,16 @@ Regex.prototype.validate = function (value, context, path, extra) {
     // .setParameter('{{ value }}', $this->formatValue($value))
     .setCode(Regex.prototype.REGEX_FAILED_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Regex');
+      return Promise.reject("stop Regex");
     }
   }
-  return Promise.resolve('resolve Regex');
+  return Promise.resolve("resolve Regex");
 };
 Regex.prototype.isRegex = function (reg) {
   return Object.prototype.toString.call(reg) === "[object RegExp]";
 };
 Regex.prototype.logic = function (value, regex, match) {
-  value += ''; // to make it works on value given by any type, It is good idea to use Type constraint before Regex
+  value += ""; // to make it works on value given by any type, It is good idea to use Type constraint before Regex
 
   var ret = regex.test(value);
   return match ? ret : !ret;
@@ -933,7 +933,7 @@ var Type = function Type(opt, extra) {
       type: opt
     };
   }
-  if (typeof opt === 'string') {
+  if (typeof opt === "string") {
     opt = {
       type: opt
     };
@@ -943,33 +943,33 @@ var Type = function Type(opt, extra) {
     opt.type = [opt.type];
   }
   for (var i = 0, l = opt.type.length; i < l; i += 1) {
-    if (typeof opt.type[i] === 'string') {
+    if (typeof opt.type[i] === "string") {
       opt.type[i] = opt.type[i].toLowerCase();
     } else {
       throw new Error("Type constraint: Each of types have to be string and one of: " + Type.prototype.allowedTypes.map(function (a) {
         return "\"".concat(a, "\"");
-      }).join(', '));
+      }).join(", "));
     }
     if (Type.prototype.allowedTypes.indexOf(opt.type[i]) === -1) {
       throw new Error("Type constraint: One of types is string but is not one of: " + Type.prototype.allowedTypes.map(function (a) {
         return "\"".concat(a, "\"");
-      }).join(', '));
+      }).join(", "));
     }
   }
   this.setOptions(opt);
 };
 Type.prototype = Object.create(Constraint.prototype);
 Type.prototype.constructor = Type;
-Type.prototype.INVALID_TYPE_ERROR = 'INVALID_TYPE_ERROR';
+Type.prototype.INVALID_TYPE_ERROR = "INVALID_TYPE_ERROR";
 Type.prototype.validate = function (value, context, path, extra) {
   var opt = this.getOptions();
   if (!Type.prototype.logic(value, opt.type)) {
-    context.buildViolation(opt.message).atPath(path).setParameter('{{ type }}', opt.type.join(', ')).setCode(Type.prototype.INVALID_TYPE_ERROR).setInvalidValue(value).addViolation();
+    context.buildViolation(opt.message).atPath(path).setParameter("{{ type }}", opt.type.join(", ")).setCode(Type.prototype.INVALID_TYPE_ERROR).setInvalidValue(value).addViolation();
     if (extra && extra.stop) {
-      return Promise.reject('stop Type');
+      return Promise.reject("stop Type");
     }
   }
-  return Promise.resolve('resolve Type');
+  return Promise.resolve("resolve Type");
 };
 Type.prototype.logic = function (value, type) {
   var valid = false;
@@ -978,24 +978,30 @@ Type.prototype.logic = function (value, type) {
   var t;
   for (var i = 0, l = type.length; i < l; i += 1) {
     t = type[i];
-    if (t === 'int') {
-      t = 'integer';
+    if (t === "arr") {
+      t = "array";
     }
-    if (t === 'str') {
-      t = 'string';
+    if (t === "obj") {
+      t = "object";
     }
-    if (t === 'bool') {
-      t = 'boolean';
+    if (t === "int") {
+      t = "integer";
     }
-    if (t === 'array' && arr && !obj) {
+    if (t === "str") {
+      t = "string";
+    }
+    if (t === "bool") {
+      t = "boolean";
+    }
+    if (t === "array" && arr && !obj) {
       valid = true;
       break;
     }
-    if (t === 'object' && !arr && obj) {
+    if (t === "object" && !arr && obj) {
       valid = true;
       break;
     }
-    if (t === 'integer' && Number.isInteger(value)) {
+    if (t === "integer" && Number.isInteger(value)) {
       valid = true;
       break;
     }
@@ -1006,7 +1012,7 @@ Type.prototype.logic = function (value, type) {
   }
   return valid;
 };
-Type.prototype.allowedTypes = 'undefined object boolean bool number str string symbol function integer int array'.split(' ');
+Type.prototype.allowedTypes = "undefined obj object boolean bool number str string symbol function integer int arr array".split(" ");
 module.exports = Type;
 
 /***/ }),
@@ -1104,10 +1110,10 @@ var validator = function validator(value, constraints, extra, debug) {
    *          next promiseall will not be triggered
    *
    * 'justStop' - this will make validator() always return resolved promise
-   *            - turning "stop" flag for any validator which will result in rejected promise in any promiseall will only cause 
+   *            - turning "stop" flag for any validator which will result in rejected promise in any promiseall will only cause
    *              not triggering next batch of promiseall, but all errors generated by all executed promiseall will be still gathered
    *            - NOTICE: this is how this entire library worked before introducing ValidatorLogicError error type
-   * 
+   *
    * 'exceptionalThrow' (default) - in case of detecting any ValidatorLogicError the first one found will be returned
    *          - next promiseall will not be triggered
    *          - will result in validator() returning rejected promise
@@ -1208,7 +1214,7 @@ ConstraintViolationList.prototype.getFlat = function () {
   var all = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
   var key;
   var list = this.violations.reduce(function (acc, v) {
-    key = v[0] || '';
+    key = v[0] || "";
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -1220,14 +1226,14 @@ ConstraintViolationList.prototype.getFlat = function () {
     acc[key].sort(function (aa, bb) {
       var a = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
       var b = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-      if (typeof aa[4] === 'number') {
+      if (typeof aa[4] === "number") {
         a = aa[4];
-      } else if (aa[4] && typeof aa[4].order !== 'undefined') {
+      } else if (aa[4] && typeof aa[4].order !== "undefined") {
         a = aa[4].order;
       }
-      if (typeof bb[4] === 'number') {
+      if (typeof bb[4] === "number") {
         b = bb[4];
-      } else if (bb[4] && typeof bb[4].order !== 'undefined') {
+      } else if (bb[4] && typeof bb[4].order !== "undefined") {
         b = bb[4].order;
       }
       return b - a;
@@ -1293,14 +1299,14 @@ Context.prototype.buildViolation = function () {
   if (args.length === 0) {
     throw new Error("new Context(message).buildViolation(message): message not specified");
   }
-  if (typeof args[0] !== 'string') {
+  if (typeof args[0] !== "string") {
     throw new Error("new Context(message).buildViolation(message): message arg must be string");
   }
   return new ViolationBuilder(args[0], this);
 };
 Context.prototype.addViolation = function (path, message, code, invalidValue, extra) {
   var violation = [path, message, code, invalidValue];
-  if (typeof extra !== 'undefined') {
+  if (typeof extra !== "undefined") {
     violation.push(extra);
   }
   this.violations.push(violation);
@@ -1386,8 +1392,8 @@ ViolationBuilder.prototype.addViolation = function () {
     throw new Error("ViolationBuilder: this.code === undefined, call ViolationBuilder->setCode(code)");
   }
   var message = this.message;
-  if (typeof message === 'string' && message.indexOf('|') > -1 && this.plural !== false && this.plural > -1) {
-    var split = message.split('|');
+  if (typeof message === "string" && message.indexOf("|") > -1 && this.plural !== false && this.plural > -1) {
+    var split = message.split("|");
     if (split.length > this.plural) {
       message = split[this.plural];
     }
@@ -1452,7 +1458,7 @@ var connectAndSort = function connectAndSort(_ref) {
       });
     } else if (constraints[i] instanceof All) {
       var combine = path ? function (name) {
-        return path + '.' + name;
+        return path + "." + name;
       } : function (name) {
         return name;
       };
@@ -1501,15 +1507,14 @@ function Constraint() {
     throw new Error("It is necessary to use operator 'new' with all constraints");
   }
 }
-;
-var sufix = '_ERROR';
+var sufix = "_ERROR";
 var sufix_length = sufix.length;
 Constraint.prototype.errorNames = function () {
   var _this = this;
   if (!Constraint.prototype._errorNames) {
     Constraint.prototype._errorNames = Object.keys(this.constructor.prototype).reduce(function (acc, key) {
       var val = _this.constructor.prototype[key];
-      if (typeof val === 'string' && key === key.toUpperCase() && key.substring(key.length - sufix_length) === sufix) {
+      if (typeof val === "string" && key === key.toUpperCase() && key.substring(key.length - sufix_length) === sufix) {
         acc[key] = key;
       }
       return acc;
@@ -1611,7 +1616,6 @@ var reject = function reject(time, data) {
     return time ? setTimeout(reject, time, data) : reject(data);
   });
 };
-
 /**
  * Promise.reject('test')
  *     .then(...then(1000))
@@ -1672,9 +1676,8 @@ module.exports = function each(obj, fn, context) {
 
 
 function isArray(obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
+  return Object.prototype.toString.call(obj) === "[object Array]";
 }
-;
 module.exports = isArray;
 
 /***/ }),
@@ -1686,9 +1689,8 @@ module.exports = isArray;
 
 
 function isObject(obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]';
+  return Object.prototype.toString.call(obj) === "[object Object]";
 }
-;
 module.exports = isObject;
 
 /***/ }),
@@ -1702,18 +1704,18 @@ module.exports = isObject;
 var isArray = __webpack_require__(759);
 var isObject = __webpack_require__(228);
 function set(source, key, value) {
-  if (typeof key === 'string') {
-    key = key.split('.');
+  if (typeof key === "string") {
+    key = key.split(".");
   }
-  if (typeof key === 'number') {
-    key = key + '';
+  if (typeof key === "number") {
+    key = key + "";
   }
   if (isObject(key)) {
     key = Object.values(key).map(function (a) {
-      return a += '';
+      return a += "";
     });
   }
-  if (typeof key !== 'string' && !key && key !== '0' && key !== '') {
+  if (typeof key !== "string" && !key && key !== "0" && key !== "") {
     key = [];
   }
   if (!isArray(key)) {
@@ -1733,7 +1735,7 @@ function set(source, key, value) {
       kt = key.shift();
       if (first) {
         first = false;
-        if (ar && !/^\d+$/.test(kt) && kt !== '') {
+        if (ar && !/^\d+$/.test(kt) && kt !== "") {
           throw new Error("if source is array and key is not integer nor empty string then its not possible to add to array, given key: " + JSON.stringify(kt));
         }
       }
@@ -1742,7 +1744,7 @@ function set(source, key, value) {
         obb = isObject(tmp[kt]);
         arr = isArray(tmp[kt]);
         if (!(obb || arr)) {
-          if (key[0] === '') {
+          if (key[0] === "") {
             arr || (tmp[kt] = []);
           } else {
             obb || (tmp[kt] = {});
@@ -1751,7 +1753,7 @@ function set(source, key, value) {
         tmp2 = tmp[kt];
       } else {
         if (isArray(tmp)) {
-          if (kt === '') {
+          if (kt === "") {
             tmp.push(value);
           } else {
             tmp[kt] = value;
