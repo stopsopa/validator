@@ -657,6 +657,8 @@ fixed:
 })();
 ```
 
+with above the question might come "why Collection itself don't validate if field is an object?". The thing is that Collection can be used to check object but also array element by element, so it is better to deal with checking the type and validation of that structure separately.
+
 2.
 
 Don't relay on new Optional on the root level, more about: [option_require_case.test.js](test/edge/option_require_case.test.js)
