@@ -9709,11 +9709,15 @@ Type.prototype.logic = function (value, type) {
     if (t === "bool") {
       t = "boolean";
     }
-    if (t === "array" && arr && !obj) {
+    if (t === "null" && value === null) {
       valid = true;
       break;
     }
-    if (t === "object" && !arr && obj) {
+    if (t === "array" && value !== null && arr && !obj) {
+      valid = true;
+      break;
+    }
+    if (t === "object" && value !== null && !arr && obj) {
       valid = true;
       break;
     }
@@ -9728,7 +9732,7 @@ Type.prototype.logic = function (value, type) {
   }
   return valid;
 };
-Type.prototype.allowedTypes = "undefined obj object boolean bool number str string symbol function integer int arr array".split(" ");
+Type.prototype.allowedTypes = "undefined obj object boolean bool number str string symbol function integer int arr array null".split(" ");
 module.exports = Type;
 
 /***/ }),

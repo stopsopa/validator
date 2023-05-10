@@ -71,7 +71,7 @@ it("Type - not string", (done) => {
     );
   } catch (e) {
     expect(String(e)).toEqual(
-      `Error: Type constraint: Each of types have to be string and one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array"`
+      `Error: Type constraint: Each of types have to be string and one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array", "null"`
     );
 
     done();
@@ -88,7 +88,7 @@ it("Type - string", (done) => {
     );
   } catch (e) {
     expect(String(e)).toEqual(
-      `Error: Type constraint: One of types is string but is not one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array"`
+      `Error: Type constraint: One of types is string but is not one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array", "null"`
     );
 
     done();
@@ -177,7 +177,7 @@ it("Type - array of types - wrong type", (done) => {
     );
   } catch (e) {
     expect(String(e)).toEqual(
-      `Error: Type constraint: One of types is string but is not one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array"`
+      `Error: Type constraint: One of types is string but is not one of: "undefined", "obj", "object", "boolean", "bool", "number", "str", "string", "symbol", "function", "integer", "int", "arr", "array", "null"`
     );
 
     done();
@@ -195,6 +195,42 @@ it("Type - array of types - wrong value type", (done) => {
       const raw = errors.getRaw();
 
       expect(raw).toEqual([[undefined, "This value should be of type 'string, integer'.", "INVALID_TYPE_ERROR", true]]);
+
+      done();
+    },
+    (e) => done({ e })
+  );
+});
+
+it("Type - null - is not null", (done) => {
+  validator(
+    6,
+    new Type({
+      type: ["str", "null"],
+    })
+  ).then(
+    (errors) => {
+      const raw = errors.getRaw();
+
+      expect(raw).toEqual([[undefined, "This value should be of type 'str, null'.", "INVALID_TYPE_ERROR", 6]]);
+
+      done();
+    },
+    (e) => done({ e })
+  );
+});
+
+it("Type - null - is null", (done) => {
+  validator(
+    null,
+    new Type({
+      type: ["str", "null"],
+    })
+  ).then(
+    (errors) => {
+      const raw = errors.getRaw();
+
+      expect(raw).toEqual([]);
 
       done();
     },
