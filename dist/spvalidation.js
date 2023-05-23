@@ -1472,7 +1472,7 @@ var connectAndSort = function connectAndSort(_ref) {
           value: v,
           constraints: allConstraints,
           context: context,
-          path: combine(name)
+          path: String(combine(name))
         });
       });
     } else {
