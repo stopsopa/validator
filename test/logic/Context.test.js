@@ -67,7 +67,7 @@ it("new Constraint().getExtra() ", (done) => {
     (errors) => {
       const raw = errors.getRaw();
 
-      expect(raw).toEqual([[0, '{"extra":"callback"}', "CALLBACK_5", "test"]]);
+      expect(raw).toEqual([["0", '{"extra":"callback"}', "CALLBACK_5", "test"]]);
 
       done();
     },
@@ -110,7 +110,7 @@ it("new Context().getExtra() ", (done) => {
     (errors) => {
       const raw = errors.getRaw();
 
-      expect(raw).toEqual([[0, '{"extra":"context"}', "CALLBACK_5", "test"]]);
+      expect(raw).toEqual([["0", '{"extra":"context"}', "CALLBACK_5", "test"]]);
 
       done();
     },
@@ -152,7 +152,7 @@ it("new Context().getRoot() ", (done) => {
     (errors) => {
       const raw = errors.getRaw();
 
-      expect(raw).toEqual([[0, '["test"]', "CALLBACK_5", "test"]]);
+      expect(raw).toEqual([["0", '["test"]', "CALLBACK_5", "test"]]);
 
       done();
     },

@@ -51,7 +51,7 @@ const connectAndSort = function ({ value, constraints, context, path, final = fa
           value: v,
           constraints: allConstraints,
           context,
-          path: combine(name),
+          path: String(combine(name)),
         });
       });
     } else {
