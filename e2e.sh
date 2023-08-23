@@ -113,6 +113,8 @@ while (( "$#" )); do
   esac
 done
 
+eval set -- "$PARAMS"
+
 trim() {
     local var="$*"
     # remove leading whitespace characters
@@ -201,7 +203,7 @@ done;
 echo ""
 ec "...server is working"
 
-/bin/bash playwright.sh --env "${ENVFILE}" "$@"
+/bin/bash bash/swap-files-v2.sh package.json package.dev.json -- /bin/bash playwright.sh --env "${ENVFILE}" "$@"
 
 STATUS=${?}
 
