@@ -91,10 +91,6 @@ function ec {
     echo "[${0}]: ${1}"
 }
 
-function quote {
-  echo "$1" | sed -E 's/\"/\\"/g'
-}
-
 STAY="0"
 
 ENVFILE=""
@@ -103,6 +99,9 @@ FILTER=""
 FIND='-name "*.jasmine.js" -o -name "*.jasmine.unit.js"'
 TEST=""
 _EVAL=""
+function quote {
+  echo "$1" | sed -E 's/\"/\\"/g'
+}
 function collect {
   if [ "$1" = "&&" ]; then
     PARAMS="$PARAMS \&\&"
