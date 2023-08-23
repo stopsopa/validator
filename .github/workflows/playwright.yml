@@ -30,6 +30,8 @@ jobs:
         with:
           node-version: ${{ matrix.version }}
   
+      # https://docs.github.com/en/webhooks-and-events/webhooks/webhook-events-and-payloads#push
+      # https://docs.github.com/en/actions/learn-github-actions/contexts  
       - name: Debug github.event
         run: echo '${{ toJson(github.event) }}'
       - name: Debug github
