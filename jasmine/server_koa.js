@@ -28,6 +28,9 @@ const dotenv = require("dotenv");
 
 const template = require("./lib/template.js");
 
+/**
+ * node jasmine/server_koa.js --web ../ --env .env
+ */
 const log = (function () {
   try {
     return console.log;
@@ -108,32 +111,20 @@ if (!fs.lstatSync(web).isDirectory()) {
 
 const asset_list = args.get("asset_list");
 
-if (typeof asset_list !== "string") {
-  throw th(`--asset_list arg is not defined`);
-}
+let tests_list_paths = undefined;
 
-if (!fs.existsSync(asset_list)) {
-  throw th(`file --asset_list >${asset_list}< doesn't exist`);
-}
+if (typeof asset_list === "string") {
+  if (!fs.existsSync(asset_list)) {
+    throw th(`file --asset_list >${asset_list}< doesn't exist`);
+  }
 
-const env = args.get("env");
+  tests_list_paths = fs
+    .readFileSync(asset_list, "utf8")
+    .toString()
+    .split("\n")
+    .map((p) => p.trim())
+    .filter(Boolean);
 
-if (typeof asset_list !== "string") {
-  throw th(`--env arg is not defined`);
-}
-
-if (!fs.existsSync(env)) {
-  throw th(`file ${env} doesn't exist`);
-}
-
-const tests_list_paths = fs
-  .readFileSync(asset_list, "utf8")
-  .toString()
-  .split("\n")
-  .map((p) => p.trim())
-  .filter(Boolean);
-
-{
   // checking if all listed files exist
   let i = 0;
   for (const file of tests_list_paths) {
@@ -142,17 +133,19 @@ const tests_list_paths = fs
     }
     i += 1;
   }
+
+  log(JSON.stringify(tests_list_paths, null, 4));
 }
 
-log(
-  JSON.stringify(
-    {
-      tests_list_paths,
-    },
-    null,
-    4,
-  ),
-);
+const env = args.get("env");
+
+if (typeof env !== "string") {
+  throw th(`--env arg is not defined`);
+}
+
+if (!fs.existsSync(env)) {
+  throw th(`file ${env} doesn't exist`);
+}
 
 dotenv.config({
   path: env,
@@ -174,10 +167,10 @@ const app = new Koa();
 
 const templateFile = path.resolve(__dirname, "jasmine.playwright.html");
 
-const staticFile = path.resolve(__dirname, 'index.html');
+const staticFile = path.resolve(__dirname, "index.html");
 
 app.use(async (ctx, next) => {
-  if (ctx.url === "/" || ctx.url.startsWith("/?")) {
+  if (tests_list_paths && (ctx.url === "/" || ctx.url.startsWith("/?"))) {
     log(`ctx.url (template mode) >${ctx.url}<`);
 
     const html = template(readFile(templateFile))({ tests_list_paths });

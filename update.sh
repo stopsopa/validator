@@ -2,7 +2,6 @@
 #!/bin/bash
 
 set -e
-
 set -x
 
 ORIGIN="origin"
