@@ -67,15 +67,25 @@ jobs:
 
       - name: pulling playwright docker image
         run: |
-          /bin/bash .github/pull-docker-image.sh            
+          /bin/bash .github/pull-docker-image.sh    
+
+      - name: Build for browser
+        if: matrix.version == 18
+        run: /bin/bash build.sh        
 
       - name: UNIT TESTS
         run: |
           /bin/bash jest.sh
 
       - name: JASMINE TESTS
+        if: matrix.version == 18
         run: |
           NODE_API_PORT=4273 /bin/bash jasmine/test.sh --env .env -- --target docker  
+
+      - name: IIFE TEST # https://esbuild.github.io/api/#format-iife
+        if: matrix.version == 18
+        run: |
+          NODE_API_PORT=4273 /bin/bash e2e.sh --env .env --match tests/browser/browser.js -- --target docker
 
       - name: Clean before artifact
         if: matrix.version == 18

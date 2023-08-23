@@ -1,4 +1,5 @@
-examples.es*
+*.min.js
+/dist/
 /coverage/
 /dist/
 package.dev.json

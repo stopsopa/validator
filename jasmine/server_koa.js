@@ -193,6 +193,13 @@ app.use(async (ctx, next) => {
   await next();
 });
 
+log('')
+log("serve web: ", path.resolve(web));
+
+if (tests_list_paths) {
+  log(JSON.stringify({ tests_list_paths }, null, 4));
+}
+
 app.use(
   serve(web, {
     index: false,

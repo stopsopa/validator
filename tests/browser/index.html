@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      window.ready = new Promise((resolve) => {
+        window.resolve = (data) => {
+          document.querySelector("p").innerHTML = "done";
+          resolve(data);
+        };
+      });
+    </script>
+  </head>
+  <body>
+    <h1>playwright</h1>
+    <p>loading...</p>
+    <script src="/dist/validator.iife.js"></script>
+    <script src="/tests/browser/index.js"></script>
+  </body>
+</html>

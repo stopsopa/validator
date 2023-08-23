@@ -35,3 +35,5 @@ size.js
 update.sh
 yarn-error*
 *.tgz
+build.sh
+e2e.sh
