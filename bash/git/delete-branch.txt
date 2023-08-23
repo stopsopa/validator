@@ -1,0 +1,39 @@
+
+# local
+git tag -d prod-20200310-1408
+
+# remote
+git push --delete origin prod-20200310-1408
+
+
+# examples
+
+LIST="$(/bin/bash bash/git/get-tags-of-current-branch.sh | /bin/bash bash/git/semver-filter-tags.sh "v0.0.0")"
+
+# list all tags and filter
+LIST="$(git tag | /bin/bash bash/git/semver-filter-tags.sh "v0.0.0")"
+
+# list all tags and filter (NOT version)
+LIST="$(git tag | /bin/bash bash/git/semver-filter-tags.sh --not "v0.0.0")"
+
+echo "${LIST}"
+
+
+
+# script
+
+LIST="$(git tag | /bin/bash bash/git/semver-filter-tags.sh --not "v0.0.0")"
+
+echo "${LIST}"
+
+# to clearn just run:
+#for tag in ${LIST}
+#do
+#
+#    echo "${tag}";
+#
+#    git tag -d ${tag}
+#
+#    git push --delete origin ${tag}
+#done
+

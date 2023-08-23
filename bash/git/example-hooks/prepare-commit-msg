@@ -1,0 +1,128 @@
+#!/bin/bash
+
+# this one is triggered when you merge master to any branch
+# script:.git/hooks/prepare-commit-msg args: .git/MERGE_MSG merge
+# script:.git/hooks/commit-msg args: .git/MERGE_MSG
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+echo "====== vv"
+cat ${COMMIT_MSG_FILE}
+echo "====== ^^"
+
+REMOTE=""
+
+TEST="^.* of .* into .*$"
+
+if [[ "$(cat ${COMMIT_MSG_FILE} | grep 'Merge branch')" =~ ${TEST} ]]; then
+
+    REMOTE="$(cat ${COMMIT_MSG_FILE} | grep 'Merge branch' | sed -E "s#^.*of (.*) into.*\$#\1#")"
+
+    TEST="Merge branch"
+
+    if [[ "${REMOTE}" =~ ${TEST} ]]; then
+
+        REMOTE=''
+    fi
+fi
+
+FROM="$(cat ${COMMIT_MSG_FILE} | sed -E "s#^[^']+'([^']+)'.*\$#\1#")"
+
+TO="$(git branch | grep \* | cut -d ' ' -f2)"
+
+echo "====== REMOTE vv"
+echo ">>${REMOTE}<<"
+echo "====== REMOTE ^^"
+
+echo "====== FROM vv"
+echo ">>${FROM}<<"
+echo "====== FROM ^^"
+
+echo "====== TO vv"
+echo ">>${TO}<<"
+echo "====== TO ^^"
+
+echo "script:$0 args: $@"
+
+# WHEN PULLING FROM REMOTE BRANCH THE RESULT IS: ===== VVV
+    # ====== vv
+    # Merge branch 'master' of bitbucket.org:scientificeducationsupport/hub into hub
+
+    # ====== ^^
+    # ====== REMOTE vv
+    # >>bitbucket.org:scientificeducationsupport/hub<<
+    # ====== REMOTE ^^
+    # ====== FROM vv
+    # >>master<<
+    # ====== FROM ^^
+    # ====== TO vv
+    # >>hub<<
+    # ====== TO ^^
+    # script:.git/hooks/prepare-commit-msg args: .git/MERGE_MSG merge
+# WHEN PULLING FROM REMOTE BRANCH ===== ^^^
+
+# WHEN MERGING LOCAL BRANCH THE RESULT OF ABOVE IS ===== VVV
+    # ====== vv
+    # Merge branch 'master' into hub
+
+    # ====== ^^
+    # ====== REMOTE vv
+    # >><<
+    # ====== REMOTE ^^
+    # ====== FROM vv
+    # >>master<<
+    # ====== FROM ^^
+    # ====== TO vv
+    # >>hub<<
+    # ====== TO ^^
+    # script:.git/hooks/prepare-commit-msg args: .git/MERGE_MSG merge
+# WHEN MERGING LOCAL BRANCH THE RESULT OF ABOVE IS ===== ^^^
+
+exit 1;
+
+
+
+
+#!/bin/sh
+#
+# An example hook script to prepare the commit log message.
+# Called by "git commit" with the name of the file that has the
+# commit message, followed by the description of the commit
+# message's source.  The hook's purpose is to edit the commit
+# message file.  If the hook fails with a non-zero status,
+# the commit is aborted.
+#
+# To enable this hook, rename this file to "prepare-commit-msg".
+
+# This hook includes three examples. The first one removes the
+# "# Please enter the commit message..." help message.
+#
+# The second includes the output of "git diff --name-status -r"
+# into the message, just before the "git status" output.  It is
+# commented because it doesn't cope with --amend or with squashed
+# commits.
+#
+# The third example adds a Signed-off-by line to the message, that can
+# still be edited.  This is rarely a good idea.
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+/usr/bin/perl -i.bak -ne 'print unless(m/^. Please enter the commit message/..m/^#$/)' "${COMMIT_MSG_FILE}"
+
+# case "${COMMIT_SOURCE},${SHA1}" in
+#  ,|template,)
+#    /usr/bin/perl -i.bak -pe '
+#       print "\n" . `git diff --cached --name-status -r`
+# 	 if /^#/ && $first++ == 0' "${COMMIT_MSG_FILE}" ;;
+#  *) ;;
+# esac
+
+# SOB=$(git var GIT_COMMITTER_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
+# git interpret-trailers --in-place --trailer "${SOB}" "${COMMIT_MSG_FILE}"
+# if test -z "${COMMIT_SOURCE}"
+# then
+#   /usr/bin/perl -i.bak -pe 'print "\n" if !$first_line++' "${COMMIT_MSG_FILE}"
+# fi

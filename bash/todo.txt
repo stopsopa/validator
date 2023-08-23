@@ -1,0 +1,15 @@
+# change all tools in this folder to use execution path
+# env.sh - get, delete and set mode (set mode with optional line number)
+# make requirements.sh script to check if scripts are executable in current environment
+        if [ "${?}" != "0" ]; then
+
+            { red "realpath is not installed run: brew install coreutils"; } 2>&3
+
+            exit 1;
+        fi
+# fix script to pump semver
+# handle arr errors like this:
+        echo "${0} error: number param(${NUM)} is not a number or 'all'"
+
+# replace all variable in script to contain _ at the beginning
+# mysql/export and mysql/import - add native method to remove all tables

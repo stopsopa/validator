@@ -2,6 +2,11 @@ node_modules
 yarn-error*
 /.idea/
 /local.txt
-/coverage/
 /stopsopa-validator*
-/karma_build/
+/coverage/
+*.jasmine-esbuild.js
+/trash/
+*.tgz
+yarn-error*
+/playwright-report/
+.DS_Store

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../node_modules/jasmine-core/lib/jasmine-core/jasmine.css" />
+  </head>
+  <body>
+    <!-- two dots won't harm in the browser but helps jump to files in node_modules in VSCode -->
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+    <script src="../jasmine/jasmine.js"></script>
+
+    <# for (let file of tests_list_paths) { #>
+    <script src="../<#= file #>"></script>
+    <# } #>
+
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/boot1.js"></script>
+    <!-- <script src="../jasmine/lib/boot1.js"></script> -->
+  </body>
+</html>

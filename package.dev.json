@@ -1,0 +1,48 @@
+{
+  "name": "@stopsopa/validator",
+  "version": "0.0.59",
+  "description": "",
+  "main": "validator",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stopsopa/validator.git"
+  },
+  "keywords": [
+    "validation"
+  ],
+  "author": "Szymon Działowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stopsopa/validator/issues"
+  },
+  "homepage": "https://github.com/stopsopa/validator#readme",
+  "jest": {
+    "verbose": true,
+    "bail": true,
+    "collectCoverage": true,
+    "coverageReporters": [
+      "html",
+      "lcov"
+    ],
+    "collectCoverageFrom": [
+      "validator/**/*.{js,jsx}"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
+    "@playwright/test": "1.27.1",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.19.2",
+    "husky": "^8.0.2",
+    "jasmine-core": "^5.1.0",
+    "jest": "^29.6.3",
+    "koa": "^2.14.2",
+    "koa-static": "^5.0.0",
+    "playwright": "1.27.1",
+    "prettier": "^3.0.2"
+  },
+  "dependencies": {
+    "nlab": "^0.4.0"
+  }
+}

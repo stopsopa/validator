@@ -4,6 +4,7 @@
 # you just have to call this script providing pairs of files to be swapped then -- and after that command you would like to execute
 
 # /bin/bash bash/swap-files-v2.sh package.json package.dev.json ../directory/.gitignore .npmignore -- ls -la \&\& sleep 10 \&\& echo end
+# SWAPQUIET=1 /bin/bash bash/swap-files-v2.sh package.json package.dev.json ../directory/.gitignore .npmignore -- ls -la \&\& sleep 10 \&\& echo end
 
 I="0"
 FOUND_HYPHEN_HYPHEN="0"
@@ -77,11 +78,13 @@ SWAP_BACK=();
 
 function cleanup {
 
+if [ "${SWAPQUIET}" != "1" ]; then
 cat <<EEE
 
   $(basename "${0}") swapping files back:
 
 EEE
+fi
 
   BUFF=""
   ONE=""
@@ -101,13 +104,17 @@ EEE
       # echo "ONE: ${ONE}"
       # echo "TMP: ${TMP}"
 
-      echo mv "${BUFF}" "${ONE}"
-      echo mv "${TMP}" "${BUFF}"
+      if [ "${SWAPQUIET}" != "1" ]; then
+        echo mv "${BUFF}" "${ONE}"
+        echo mv "${TMP}" "${BUFF}"
+      fi
 
       mv "${BUFF}" "${ONE}"
       mv "${TMP}" "${BUFF}"
 
-      echo ""
+      if [ "${SWAPQUIET}" != "1" ]; then
+        echo ""
+      fi
       BUFF=""
       ONE=""
   done
@@ -119,11 +126,13 @@ function quote {
   echo "$1" | sed -E 's/\"/\\"/g'
 }
 
+if [ "${SWAPQUIET}" != "1" ]; then
 cat <<EEE
 
   $(basename "${0}") swapping files:
 
 EEE
+fi
 
 PARAMS=""
 _EVAL=""
@@ -160,13 +169,17 @@ while (( "${#}" )); do
         # echo "ONE: ${1}"
         # echo "TMP: ${TMP}"
 
-        echo mv "${BUFF}" "${TMP}"
-        echo mv "${1}" "${BUFF}"
+        if [ "${SWAPQUIET}" != "1" ]; then
+          echo mv "${BUFF}" "${TMP}"
+          echo mv "${1}" "${BUFF}"
+        fi
 
         mv "${BUFF}" "${TMP}"
         mv "${1}" "${BUFF}"
 
-        echo ""
+        if [ "${SWAPQUIET}" != "1" ]; then
+          echo ""
+        fi
 
         BUFF=""
       fi
@@ -175,11 +188,13 @@ while (( "${#}" )); do
   esac
 done
 
+if [ "${SWAPQUIET}" != "1" ]; then
 cat <<EEE
 
   $(basename "${0}") executing command: >${_EVAL}<
 
 EEE
+fi
 
 set -e
 

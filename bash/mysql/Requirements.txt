@@ -1,0 +1,8 @@
+# it requires mysql client (just client)
+yum install mysql
+
+# and there might be neccessary to provide dotenv-up
+# just run in main directory of the project
+(cd bash && echo "{}" > package.json && yarn add dotenv-up)
+
+

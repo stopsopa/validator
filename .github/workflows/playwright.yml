@@ -1,24 +1,119 @@
-name: Jest Tests
+name: Tests
 on:
   push:
-    branches: [main, master]
+    branches:
+      - "**"
   pull_request:
-    branches: [main, master]
+    branches:
+      - "**"
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write # https://github.com/semantic-release/semantic-release/issues/2469#issuecomment-1158013884
+  pages: write
+  id-token: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # provided automatically by github itself https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # search in keepassx
 jobs:
-  tests:
-    timeout-minutes: 3
-    runs-on: ubuntu-20.04 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
+  test:
+    runs-on: ubuntu-22.04 # https://github.com/actions/runner-images#available-images
     strategy:
       fail-fast: false
       matrix:
         version: [14, 16, 18] # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.version }}
-      - name: make yarn
-        run: make yarn
-      - name: tests
+  
+      - name: Debug github.event
+        run: echo '${{ toJson(github.event) }}'
+      - name: Debug github
+        run: echo '${{ toJson(github) }}'  
+
+      - name: test before bringing cache
         run: |
-          /bin/bash test.sh
+          set -x
+          pwd
+          ls -la
+          ls -la node_modules || true
+
+      - uses: actions/cache/restore@v3 # https://github.com/actions/cache/blob/main/examples.md#node---yarn
+        id: restore-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: test if cache revived?
+        run: |
+          set -x
+          pwd
+          ls -la
+          ls -la node_modules || true          
+
+      - name: Yarn install
+        run: make yarn
+
+      - uses: actions/cache/save@v3 # https://github.com/actions/cache/blob/main/caching-strategies.md#reusing-primary-key-from-restore-cache-as-input-to-save-action
+        with:
+          path: node_modules
+          key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+
+      - name: pulling playwright docker image
+        run: |
+          /bin/bash .github/pull-docker-image.sh            
+
+      - name: UNIT TESTS
+        run: |
+          /bin/bash jest.sh
+
+      - name: JASMINE TESTS
+        run: |
+          NODE_API_PORT=4273 /bin/bash jasmine/test.sh --env .env -- --target docker  
+
+      - name: Clean before artifact
+        if: matrix.version == 18
+        run: /bin/bash .github/clean_before_github_pages.sh
+
+      - name: Upload artifact
+        if: matrix.version == 18
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: .    
+
+  # Deployment job
+  github-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-22.04
+    needs: test
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2    
+
+  npm:
+    needs: test # https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow#defining-prerequisite-jobs
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-22.04 # https://github.com/actions/runner-images#available-images
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install semantic-release
+        run: /bin/bash bash/swap-files-v2.sh package.json package.dev.json -- yarn add semantic-release conventional-changelog-conventionalcommits
+        # it has to be done here beacause otherwise it will crash for node@15 with error>>> error semantic-release@19.0.5: The engine "node" is incompatible with this module. Expected version ">=16 || ^14.17". Got "15.14.0"
+
+      - name: npm pack
+        run: npm pack
+      # https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/ci-configurations/github-actions.md
+      - name: Release
+        run: node node_modules/.bin/semantic-release --debug
