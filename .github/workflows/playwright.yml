@@ -66,6 +66,7 @@ jobs:
           key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
       - name: pulling playwright docker image
+        if: matrix.version == 18
         run: |
           /bin/bash .github/pull-docker-image.sh    
 
