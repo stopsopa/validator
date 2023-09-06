@@ -2,6 +2,8 @@
 [![npm version](https://badge.fury.io/js/%40stopsopa%2Fvalidator.svg)](https://badge.fury.io/js/%40stopsopa%2Fvalidator)
 [![npm version](https://shields.io/npm/v/%40stopsopa%2Fvalidator)](https://www.npmjs.com/package/%40stopsopa%2Fvalidator)
 [![NpmLicense](https://img.shields.io/npm/l/@stopsopa/validator.svg)](https://github.com/stopsopa/validator/blob/master/LICENSE)
+![jest coverage](https://stopsopa.github.io/validator/coverage/coverage-badge.svg)
+
 
 ## Table of Contents
 

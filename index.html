@@ -10,22 +10,32 @@
         width: 20px;
         margin-bottom: -7px;
       }
+      #coverage {
+        margin-top: 10px;
+      }
     </style>
   </head>
   <body>
     <a href="javascript:void(0)" id="gh"><img src="https://github.githubassets.com/favicons/favicon.svg" /></a> |
     <a href="coverage">coverage</a> | <a href="jasmine/index.html">browser tests</a>
+    <br />
+    <img id="coverage" />
     <script>
-      document.getElementById("gh").setAttribute(
-        "href",
-        (function ([_, user, repo]) {
-          const gh = `https://github.com`;
-          if (user && repo) {
-            return `${gh}/${user}/${repo}`;
-          }
-          return gh;
-        })([...location.href.match(/^https?:\/\/([^\.]+)\.github\.io\/([^\/]+).*/)]),
-      );
+      const [_, user, repo] = [...location.href.match(/^https?:\/\/([^\.]+)\.github\.io\/([^\/]+).*/)];
+
+      console.log(`user >${user}< repo >${repo}<`);
+
+      const gh = `https://github.com`;
+
+      let href = gh;
+
+      if (user && repo) {
+        href = `${gh}/${user}/${repo}`;
+      }
+
+      document.getElementById("gh").setAttribute("href", href);
+
+      document.getElementById("coverage").setAttribute("src", `/${repo}/coverage/coverage-badge.svg`);
     </script>
   </body>
 </html>
